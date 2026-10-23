@@ -1,3 +1,5 @@
+import { functionalGroupSources, groups } from "../molecules/groups";
+import { addReviewedCoverage } from "./reviewed-content";
 import { expandedArticles } from "./expanded-content";
 import { enrichExistingArticles } from "./study-guides";
 export const topics = [
@@ -86,7 +88,7 @@ export const articles: Article[] = [
     topic: "molecules",
     title: "หมู่ฟังก์ชันของสารอินทรีย์",
     intro:
-      "ชนิด โครงสร้าง และสมบัติของหมู่ฟังก์ชัน พร้อมภาพแอลกอฮอล์ กรดคาร์บอกซิลิก เอสเทอร์ และเอไมด์",
+      "ชนิด โครงสร้าง และสมบัติของหมู่หลัก 10 กลุ่ม พร้อมภาพโต้ตอบ 15 ตัวอย่างและตารางแยกความแตกต่าง",
     dek: "ชนิด โครงสร้าง และสมบัติของหมู่ฟังก์ชัน",
     visual: "alcohol",
     tags: ["หมู่ฟังก์ชัน", "อินทรีย์เคมี", "Functional groups"],
@@ -111,7 +113,7 @@ export const articles: Article[] = [
         text: "หมู่ฟังก์ชันเกี่ยวข้องกับแรงระหว่างโมเลกุล การเกิดไอออน และความไวต่อปฏิกิริยา ซึ่งเป็นส่วนหนึ่งของการพิจารณาการละลายและความคงตัวของสารยา แต่หมู่ฟังก์ชันเพียงอย่างเดียวไม่บอกว่าสารมีประสิทธิผลหรือปลอดภัยทางคลินิกหรือไม่",
       },
     ],
-    sources: [organic],
+    sources: [organic, ...functionalGroupSources],
     tool: "explorer",
   },
   {
@@ -392,8 +394,20 @@ articles.push({
   tool: "kinetics",
 });
 
-articles.push(...expandedArticles);
+// Enrichment must not mutate the imported templates across hot reloads/server requests.
+articles.push(
+  ...expandedArticles.map((a) => ({
+    ...a,
+    sections: [...a.sections],
+    sources: [...a.sources],
+    tags: [...a.tags],
+  })),
+);
 enrichExistingArticles(articles);
+addReviewedCoverage(articles);
+articles
+  .find((a) => a.id === "small-groups-big-difference")!
+  .tags.push(...groups.flatMap((g) => [g.name, g.english]));
 
 export function topicName(id: string) {
   return topics.find((t) => t.id === id)?.name || "ความรู้เคมี";

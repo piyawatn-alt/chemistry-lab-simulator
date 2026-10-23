@@ -54,8 +54,18 @@ export function MoleculeDiagram({
   function inspectBond(from: DiagramAtom, to: DiagramAtom, order: number) {
     setSelected(null);
     setFeedback(null);
+    if (
+      ["arene", "phenol"].includes(groupId) &&
+      from.element === "C" &&
+      to.element === "C"
+    ) {
+      setBondInfo(
+        "เส้นเดี่ยวและคู่ในวงนี้เป็นรูปเขียนเคคูเลของระบบอะโรมาติก อิเล็กตรอน π จริงกระจายบนวง ไม่ใช่พันธะคู่แยกอิสระแบบแอลคีนทั่วไป",
+      );
+      return;
+    }
     setBondInfo(
-      `${order === 2 ? "พันธะคู่: เส้นสองเส้น แทนอิเล็กตรอนร่วมพันธะ 2 คู่" : "พันธะเดี่ยว: เส้นหนึ่งเส้น แทนอิเล็กตรอนร่วมพันธะ 1 คู่"} ระหว่าง${elementNames[from.element]}กับ${elementNames[to.element]}`,
+      `${order === 3 ? "พันธะสาม: เส้นสามเส้น แทนอิเล็กตรอนร่วมพันธะ 3 คู่" : order === 2 ? "พันธะคู่: เส้นสองเส้น แทนอิเล็กตรอนร่วมพันธะ 2 คู่" : "พันธะเดี่ยว: เส้นหนึ่งเส้น แทนอิเล็กตรอนร่วมพันธะ 1 คู่"} ระหว่าง${elementNames[from.element]}กับ${elementNames[to.element]}`,
     );
   }
   function next(n: number) {
@@ -89,7 +99,9 @@ export function MoleculeDiagram({
           {showH ? <EyeOff size={15} /> : <Eye size={15} />}แสดง H ทุกอะตอม
         </button>
       </div>
-      <div className={`molecule-canvas stage-${stage}`}>
+      <div
+        className={`molecule-canvas stage-${stage} ${model.compact ? "compact-diagram" : ""}`}
+      >
         <span className="diagram-badge">ภาพการเชื่อมต่อ 2 มิติ</span>
         <svg
           viewBox="0 0 740 430"
@@ -121,7 +133,7 @@ export function MoleculeDiagram({
                 className={`diagram-bond ${highlight ? "highlighted" : ""}`}
                 role="button"
                 tabIndex={0}
-                aria-label={`${b.order === 2 ? "พันธะคู่" : "พันธะเดี่ยว"} ${from.element} กับ ${to.element}`}
+                aria-label={`${b.order === 3 ? "พันธะสาม" : b.order === 2 ? "พันธะคู่" : "พันธะเดี่ยว"} ${from.element} กับ ${to.element}`}
                 onClick={() => inspectBond(from, to, b.order)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
@@ -139,24 +151,20 @@ export function MoleculeDiagram({
                   stroke="transparent"
                   strokeWidth="30"
                 />
-                {b.order === 2 ? (
-                  <>
-                    <line
-                      x1={from.x + nx}
-                      y1={from.y + ny}
-                      x2={to.x + nx}
-                      y2={to.y + ny}
-                    />
-                    <line
-                      x1={from.x - nx}
-                      y1={from.y - ny}
-                      x2={to.x - nx}
-                      y2={to.y - ny}
-                    />
-                  </>
-                ) : (
-                  <line x1={from.x} y1={from.y} x2={to.x} y2={to.y} />
-                )}
+                {(b.order === 3
+                  ? [-1.4, 0, 1.4]
+                  : b.order === 2
+                    ? [-1, 1]
+                    : [0]
+                ).map((offset, lineIndex) => (
+                  <line
+                    key={lineIndex}
+                    x1={from.x + nx * offset}
+                    y1={from.y + ny * offset}
+                    x2={to.x + nx * offset}
+                    y2={to.y + ny * offset}
+                  />
+                ))}
               </g>
             );
           })}
@@ -183,7 +191,12 @@ export function MoleculeDiagram({
                   }
                 }}
               >
-                <circle className="atom-hit-area" cx={a.x} cy={a.y} r="45" />
+                <circle
+                  className="atom-hit-area"
+                  cx={a.x}
+                  cy={a.y}
+                  r={model.compact ? 30 : 45}
+                />
                 {highlighted && (
                   <circle className="atom-halo" cx={a.x} cy={a.y} r="48" />
                 )}
@@ -191,17 +204,40 @@ export function MoleculeDiagram({
                   className="atom-body"
                   cx={a.x}
                   cy={a.y}
-                  r={a.element === "H" ? 25 : 35}
+                  r={
+                    model.compact
+                      ? a.element === "H"
+                        ? 16
+                        : 27
+                      : a.element === "H"
+                        ? 25
+                        : 35
+                  }
                 />
                 <text
                   x={a.x}
-                  y={a.y + 1}
+                  y={
+                    a.y +
+                    (model.compact && !showH && a.element === "C" && h > 0
+                      ? -6
+                      : 1)
+                  }
                   textAnchor="middle"
                   dominantBaseline="middle"
                 >
                   {a.element}
                 </text>
-                {!showH && a.element === "C" && h > 0 && (
+                {model.compact && !showH && a.element === "C" && h > 0 && (
+                  <text
+                    className="hydrogen-count"
+                    x={a.x}
+                    y={a.y + 15}
+                    textAnchor="middle"
+                  >
+                    H{h > 1 ? h : ""}
+                  </text>
+                )}
+                {!model.compact && !showH && a.element === "C" && h > 0 && (
                   <g>
                     <rect
                       x={a.x - 22}
@@ -228,7 +264,7 @@ export function MoleculeDiagram({
           })}
         </svg>
         <div className="element-legend">
-          {(["C", "O", "N", "H"] as const)
+          {(["C", "O", "N", "H", "Cl", "S"] as const)
             .filter((e) => model.atoms.some((a) => a.element === e))
             .map((e) => (
               <span key={e}>
@@ -265,9 +301,9 @@ export function MoleculeDiagram({
               <p>
                 {stage === 2
                   ? feedback === "correct"
-                    ? `ใช่เลย! อะตอมนี้อยู่ในหมู่${name} ${model.explanation}`
-                    : `ลองอีกนิด อะตอมนี้อยู่ในส่วนไฮโดรคาร์บอน ${model.clue}`
-                  : `${atom.group ? `อะตอมนี้เป็นส่วนหนึ่งของหมู่${name}` : "อะตอมนี้อยู่ในส่วนไฮโดรคาร์บอน"}${atom.element === "C" && hydrogenCount(atom) > 0 ? ` · มี H ต่ออยู่ ${hydrogenCount(atom)} อะตอม กดแสดง H เพื่อดูทั้งหมด` : ""}`}
+                    ? `ใช่เลย! อะตอมนี้อยู่ในส่วนที่ใช้จำแนก${name} ${model.explanation}`
+                    : `ลองอีกนิด อะตอมนี้อยู่ในส่วนอื่นของโมเลกุล ${model.clue}`
+                  : `${atom.group ? `อะตอมนี้อยู่ในส่วนที่ใช้จำแนก${name}` : "อะตอมนี้อยู่ในส่วนอื่นของโมเลกุล"}${atom.element === "C" && hydrogenCount(atom) > 0 ? ` · มี H ต่ออยู่ ${hydrogenCount(atom)} อะตอม กดแสดง H เพื่อดูทั้งหมด` : ""}`}
               </p>
             </div>
           </>
@@ -279,7 +315,7 @@ export function MoleculeDiagram({
                 {stage === 0
                   ? "เริ่มจากสี แล้วค่อยดูการเชื่อมต่อ"
                   : stage === 1
-                    ? `วงสีเขียวคือหมู่${name}`
+                    ? `วงสีเขียวเน้นส่วนที่ใช้จำแนก${name}`
                     : "ตาคุณแล้ว: แตะอะตอมหนึ่งตัวที่อยู่ในหมู่ฟังก์ชัน"}
               </strong>
               <p>

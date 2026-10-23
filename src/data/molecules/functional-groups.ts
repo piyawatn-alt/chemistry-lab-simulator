@@ -1,6 +1,7 @@
+import generated from "./generated-diagrams.json";
 /** Curated 2D connectivity diagrams. Coordinates are layout positions, not 3D
  * coordinates, bond lengths, or bond angles. All hydrogens are explicit in data. */
-export type Element = "C" | "H" | "O" | "N";
+export type Element = "C" | "H" | "O" | "N" | "Cl" | "S";
 export type DiagramAtom = {
   id: string;
   element: Element;
@@ -8,8 +9,9 @@ export type DiagramAtom = {
   y: number;
   group?: boolean;
 };
-export type DiagramBond = { from: string; to: string; order: 1 | 2 };
+export type DiagramBond = { from: string; to: string; order: 1 | 2 | 3 };
 export type MoleculeDiagram = {
+  compact?: boolean;
   atoms: DiagramAtom[];
   bonds: DiagramBond[];
   formula: string;
@@ -142,9 +144,12 @@ export const diagrams: Record<string, MoleculeDiagram> = {
     },
   ),
 };
+Object.assign(diagrams, generated as Record<string, MoleculeDiagram>);
 export const elementNames: Record<Element, string> = {
   C: "คาร์บอน",
   H: "ไฮโดรเจน",
   O: "ออกซิเจน",
   N: "ไนโตรเจน",
+  Cl: "คลอรีน",
+  S: "กำมะถัน",
 };

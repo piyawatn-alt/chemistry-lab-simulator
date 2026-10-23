@@ -3360,3 +3360,24 @@
 @media (max-width:1100px) { .flame-workbench { grid-template-columns:220px minmax(0,1fr); } .flame-result { grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; column-gap:25px; } .flame-result .journal-kicker { grid-column:1/-1; } .flame-result h3 { margin:10px 0; } }
 @media (max-width:650px) { .flame-workbench,.flame-explanation { grid-template-columns:1fr; } .flame-sample-grid { grid-template-columns:repeat(3,1fr); } .flame-samples { padding:20px 16px; } .flame-sample-grid button { padding:10px 5px; } .flame-result { display:block; } .flame-explanation { gap:25px; padding:30px 0; } }
 @media (prefers-reduced-motion:reduce) { .flame-dance { animation:none; } .flame-probe { transition:none; } }
+
+/* Expanded functional-group reference and additional elements. */
+.explorer .tabs.wrap { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
+.explorer .tabs.wrap button { min-width:0; padding:12px 8px; font-size:13px; line-height:1.6; }
+.explorer .tabs.wrap button small { font-size:10px; }
+.group-fact,.group-pitfall { padding:16px; margin:18px 0; border-radius:10px; font-size:13px; line-height:1.9; }
+.group-fact { background:#eef4e6; border:1px solid #d9e3d0; }
+.group-pitfall { background:#fff5df; border:1px solid #eee0bb; }
+.group-fact p,.group-pitfall p { margin:7px 0 0; font-size:12px; }
+.group-reference-note { padding:23px; margin-top:28px; border:1px solid #dce5d3; background:#f5f8ee; border-radius:12px; font-size:12px; line-height:1.9; color:#6d805e; }
+.group-reference-note details { margin-top:15px; }
+.group-reference-note summary { cursor:pointer; }
+.group-reference-note a { text-decoration:underline; }
+.element-Cl .atom-body { fill:#d9eac5; stroke:#7f9e61; }
+.element-S .atom-body { fill:#f7e8ad; stroke:#b39b50; }
+.legend-Cl { background:#9aba76; }
+.legend-S { background:#e6cd70; }
+@media(max-width:850px) { .explorer .tabs.wrap { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:450px) { .explorer .tabs.wrap button { font-size:11px; padding:10px 5px; } .explorer .tabs.wrap button small { font-size:9px; } }
+.compact-diagram .diagram-atom .hydrogen-count { fill:#e6eee8; font-size:11px; }
+.diagram-atom.element-Cl text,.diagram-atom.element-S text { fill:#40552d; }

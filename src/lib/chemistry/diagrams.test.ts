@@ -6,6 +6,17 @@ const expected: Record<string, Record<string, number>> = {
   acid: { C: 2, H: 4, O: 2 },
   ester: { C: 4, H: 8, O: 2 },
   amide: { C: 2, H: 5, O: 1, N: 1 },
+  phenol: { C: 6, H: 6, O: 1 },
+  ether: { C: 2, H: 6, O: 1 },
+  aldehyde: { C: 2, H: 4, O: 1 },
+  ketone: { C: 3, H: 6, O: 1 },
+  amine: { C: 1, H: 5, N: 1 },
+  haloalkane: { C: 2, H: 5, Cl: 1 },
+  alkene: { C: 2, H: 4 },
+  alkyne: { C: 2, H: 2 },
+  arene: { C: 6, H: 6 },
+  nitrile: { C: 2, H: 3, N: 1 },
+  thiol: { C: 2, H: 6, S: 1 },
 };
 for (const [name, model] of Object.entries(diagrams)) {
   test(`${name}: curated graph has the correct molecular composition, bonds and connectivity`, () => {
@@ -29,7 +40,7 @@ for (const [name, model] of Object.entries(diagrams)) {
         .reduce((total, b) => total + b.order, 0);
       assert.equal(
         sum,
-        { C: 4, H: 1, O: 2, N: 3 }[a.element],
+        { C: 4, H: 1, O: 2, N: 3, Cl: 1, S: 2 }[a.element],
         `${a.id} neutral valence`,
       );
     }
@@ -53,4 +64,27 @@ test("highlighted groups distinguish alcohol, acid, ester and amide connectivity
   assert.equal(diagrams.alcohol.bonds.filter((b) => b.order === 2).length, 0);
   for (const id of ["acid", "ester", "amide"])
     assert.equal(diagrams[id].bonds.filter((b) => b.order === 2).length, 1);
+});
+
+test("catalog and verified diagrams cover the same 15 examples, with accurate triple bonds", () => {
+  assert.equal(Object.keys(diagrams).length, 15);
+  for (const id of ["alkyne", "nitrile"])
+    assert.equal(diagrams[id].bonds.filter((b) => b.order === 3).length, 1);
+  assert.equal(diagrams.arene.bonds.filter((b) => b.order === 2).length, 3);
+  for (const id of ["arene", "alkene", "alkyne"])
+    assert.ok(
+      diagrams[id].atoms.filter((a) => a.group).every((a) => a.element === "C"),
+    );
+  assert.equal(
+    diagrams.ether.atoms.filter((a) => a.group && a.element === "O").length,
+    1,
+  );
+  assert.equal(
+    diagrams.amine.atoms.filter((a) => a.group && a.element === "N").length,
+    1,
+  );
+  assert.equal(
+    diagrams.phenol.atoms.filter((a) => a.group && a.element === "O").length,
+    1,
+  );
 });

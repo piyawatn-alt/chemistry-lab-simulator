@@ -1,0 +1,239 @@
+{
+  "toolkit": "RDKit.js",
+  "version": "2026.09.1",
+  "structures": [
+    {
+      "id": "alcohol",
+      "smiles": "CCO",
+      "smarts": "[OX2H][CX4]",
+      "counts": {
+        "C": 2,
+        "O": 1,
+        "H": 6
+      },
+      "matchedAtoms": [
+        2,
+        1
+      ],
+      "generated": false
+    },
+    {
+      "id": "acid",
+      "smiles": "CC(=O)O",
+      "smarts": "[CX3](=[OX1])[OX2H]",
+      "counts": {
+        "C": 2,
+        "O": 2,
+        "H": 4
+      },
+      "matchedAtoms": [
+        1,
+        2,
+        3
+      ],
+      "generated": false
+    },
+    {
+      "id": "ester",
+      "smiles": "CC(=O)OCC",
+      "smarts": "[CX3](=[OX1])[OX2][#6]",
+      "counts": {
+        "C": 4,
+        "O": 2,
+        "H": 8
+      },
+      "matchedAtoms": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "generated": false
+    },
+    {
+      "id": "amide",
+      "smiles": "CC(=O)N",
+      "smarts": "[CX3](=[OX1])[NX3]",
+      "counts": {
+        "C": 2,
+        "O": 1,
+        "N": 1,
+        "H": 5
+      },
+      "matchedAtoms": [
+        1,
+        2,
+        3
+      ],
+      "generated": false
+    },
+    {
+      "id": "phenol",
+      "smiles": "Oc1ccccc1",
+      "smarts": "[c][OX2H]",
+      "counts": {
+        "O": 1,
+        "C": 6,
+        "H": 6
+      },
+      "matchedAtoms": [
+        1,
+        0
+      ],
+      "generated": true
+    },
+    {
+      "id": "ether",
+      "smiles": "COC",
+      "smarts": "[#6][OX2][#6]",
+      "counts": {
+        "C": 2,
+        "O": 1,
+        "H": 6
+      },
+      "matchedAtoms": [
+        0,
+        1,
+        2
+      ],
+      "generated": true
+    },
+    {
+      "id": "aldehyde",
+      "smiles": "CC=O",
+      "smarts": "[CX3H1](=[OX1])[#6]",
+      "counts": {
+        "C": 2,
+        "O": 1,
+        "H": 4
+      },
+      "matchedAtoms": [
+        1,
+        2,
+        0
+      ],
+      "generated": true
+    },
+    {
+      "id": "ketone",
+      "smiles": "CC(=O)C",
+      "smarts": "[#6][CX3](=[OX1])[#6]",
+      "counts": {
+        "C": 3,
+        "O": 1,
+        "H": 6
+      },
+      "matchedAtoms": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "generated": true
+    },
+    {
+      "id": "amine",
+      "smiles": "CN",
+      "smarts": "[NX3;!$(N-C=O)]",
+      "counts": {
+        "C": 1,
+        "N": 1,
+        "H": 5
+      },
+      "matchedAtoms": [
+        1
+      ],
+      "generated": true
+    },
+    {
+      "id": "haloalkane",
+      "smiles": "CCCl",
+      "smarts": "[CX4][Cl]",
+      "counts": {
+        "C": 2,
+        "Cl": 1,
+        "H": 5
+      },
+      "matchedAtoms": [
+        1,
+        2
+      ],
+      "generated": true
+    },
+    {
+      "id": "alkene",
+      "smiles": "C=C",
+      "smarts": "[CX3]=[CX3]",
+      "counts": {
+        "C": 2,
+        "H": 4
+      },
+      "matchedAtoms": [
+        0,
+        1
+      ],
+      "generated": true
+    },
+    {
+      "id": "alkyne",
+      "smiles": "C#C",
+      "smarts": "[CX2]#[CX2]",
+      "counts": {
+        "C": 2,
+        "H": 2
+      },
+      "matchedAtoms": [
+        0,
+        1
+      ],
+      "generated": true
+    },
+    {
+      "id": "arene",
+      "smiles": "c1ccccc1",
+      "smarts": "c1ccccc1",
+      "counts": {
+        "C": 6,
+        "H": 6
+      },
+      "matchedAtoms": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "generated": true
+    },
+    {
+      "id": "nitrile",
+      "smiles": "CC#N",
+      "smarts": "[CX2]#[NX1]",
+      "counts": {
+        "C": 2,
+        "N": 1,
+        "H": 3
+      },
+      "matchedAtoms": [
+        1,
+        2
+      ],
+      "generated": true
+    },
+    {
+      "id": "thiol",
+      "smiles": "CCS",
+      "smarts": "[SX2H]",
+      "counts": {
+        "C": 2,
+        "S": 1,
+        "H": 6
+      },
+      "matchedAtoms": [
+        2
+      ],
+      "generated": true
+    }
+  ]
+}

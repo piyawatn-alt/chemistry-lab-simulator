@@ -12,7 +12,8 @@ import {
 } from "recharts";
 import { Button } from "@/components/ui/button";
 import { MoleculeDiagram } from "./molecule-diagram";
-import { groups } from "@/data/molecules/groups";
+import { ScientificFormula } from "@/components/ui/scientific-formula";
+import { groups, functionalGroupSources } from "@/data/molecules/groups";
 import { firstOrder } from "@/lib/chemistry/models";
 export function Explorer() {
   const [index, setIndex] = useState(0);
@@ -28,8 +29,8 @@ export function Explorer() {
         <div>
           <h3>เห็นอะตอม เข้าใจพันธะ แล้วลองหาหมู่ฟังก์ชัน</h3>
           <p>
-            เลือกตัวอย่างด้านล่าง แล้วสำรวจภาพทีละขั้น
-            แตะอะตอมหรือพันธะเพื่อดูคำอธิบาย
+            เลือกจาก 10 กลุ่มหลัก, 3 ชนิดพันธะและโครงสร้าง และ 2 กลุ่มเพิ่มเติม
+            แล้วสำรวจภาพทีละขั้น แตะอะตอมหรือพันธะเพื่อดูคำอธิบาย
           </p>
         </div>
       </div>
@@ -54,14 +55,30 @@ export function Explorer() {
           example={g.example}
         />
         <div className="explorer-details">
-          <span className="pill">{g.english}</span>
+          <span className="pill">
+            {g.category} · {g.english}
+          </span>
           <h3>{g.name}</h3>
           <details className="formula-disclosure">
             <summary>เทียบกับสูตรโครงสร้างแบบย่อ</summary>
-            <code>{g.structure}</code>
-            <p>สูตรทั่วไป: {g.formula} โดย R และ R′ แทนหมู่ไฮโดรคาร์บอน</p>
+            <ScientificFormula text={g.structure} explain={false} />
+            <p>รูปแบบทั่วไป</p>
+            <ScientificFormula text={g.formula} explain={false} />
+            <p>
+              R, R′ และ R″ แทนส่วนอินทรีย์ตามบริบท; Ar แทนหมู่อะโรมาติก สูตรกรด
+              แอลดีไฮด์ เอสเทอร์ และเอไมด์บางชนิดอาจมี H แทน R
+              ที่ต่อคาร์บอนิลได้
+            </p>
           </details>
           <p>{g.description}</p>
+          <div className="group-fact">
+            <strong>พันธะไฮโดรเจน</strong>
+            <p>{g.hbond}</p>
+          </div>
+          <div className="group-pitfall">
+            <strong>จุดที่มักสับสน</strong>
+            <p>{g.pitfall}</p>
+          </div>
           <div className="callout">
             <Sparkles size={18} />
             <div>
@@ -82,6 +99,24 @@ export function Explorer() {
             </Button>
           </div>
         </div>
+      </div>
+      <div className="group-reference-note">
+        <p>
+          ชุดนี้ครอบคลุมหมู่หลัก 10 กลุ่มที่กำหนดไว้ในคลังนี้
+          พร้อมโครงสร้างไฮโดรคาร์บอนและกลุ่มเพิ่มเติม
+          ไม่ใช่รายชื่อหมู่ฟังก์ชันทุกชนิดในเคมีอินทรีย์
+          วงเบนซีนแสดงรูปเขียนเคคูเล อิเล็กตรอนจริงกระจายบนวง
+        </p>
+        <details>
+          <summary>แหล่งอ้างอิงและขอบเขต</summary>
+          {functionalGroupSources.map((s) => (
+            <p key={s.url}>
+              <a href={s.url} target="_blank" rel="noreferrer">
+                {s.name} ↗
+              </a>
+            </p>
+          ))}
+        </details>
       </div>
     </div>
   );

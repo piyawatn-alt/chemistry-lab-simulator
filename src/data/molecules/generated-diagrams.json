@@ -1,0 +1,1159 @@
+{
+  "phenol": {
+    "atoms": [
+      {
+        "id": "o1",
+        "element": "O",
+        "x": 516.5,
+        "y": 215,
+        "group": true
+      },
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 432.79,
+        "y": 215,
+        "group": true
+      },
+      {
+        "id": "c2",
+        "element": "C",
+        "x": 390.93,
+        "y": 142.5,
+        "group": false
+      },
+      {
+        "id": "c3",
+        "element": "C",
+        "x": 307.21,
+        "y": 142.5,
+        "group": false
+      },
+      {
+        "id": "c4",
+        "element": "C",
+        "x": 265.36,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "c5",
+        "element": "C",
+        "x": 307.21,
+        "y": 287.5,
+        "group": false
+      },
+      {
+        "id": "c6",
+        "element": "C",
+        "x": 390.93,
+        "y": 287.5,
+        "group": false
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 558.36,
+        "y": 287.5,
+        "group": true
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 432.79,
+        "y": 70,
+        "group": false
+      },
+      {
+        "id": "h3",
+        "element": "H",
+        "x": 265.36,
+        "y": 70,
+        "group": false
+      },
+      {
+        "id": "h4",
+        "element": "H",
+        "x": 181.64,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "h5",
+        "element": "H",
+        "x": 265.36,
+        "y": 360,
+        "group": false
+      },
+      {
+        "id": "h6",
+        "element": "H",
+        "x": 432.79,
+        "y": 360,
+        "group": false
+      }
+    ],
+    "bonds": [
+      {
+        "from": "o1",
+        "to": "c1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "c2",
+        "order": 2
+      },
+      {
+        "from": "c2",
+        "to": "c3",
+        "order": 1
+      },
+      {
+        "from": "c3",
+        "to": "c4",
+        "order": 2
+      },
+      {
+        "from": "c4",
+        "to": "c5",
+        "order": 1
+      },
+      {
+        "from": "c5",
+        "to": "c6",
+        "order": 2
+      },
+      {
+        "from": "c6",
+        "to": "c1",
+        "order": 1
+      },
+      {
+        "from": "o1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h2",
+        "order": 1
+      },
+      {
+        "from": "c3",
+        "to": "h3",
+        "order": 1
+      },
+      {
+        "from": "c4",
+        "to": "h4",
+        "order": 1
+      },
+      {
+        "from": "c5",
+        "to": "h5",
+        "order": 1
+      },
+      {
+        "from": "c6",
+        "to": "h6",
+        "order": 1
+      }
+    ],
+    "formula": "C₆H₆O",
+    "clue": "C₆H₅–CH₂–OH เป็นแอลกอฮอล์ ไม่ใช่ฟีนอล เพราะมี CH₂ คั่น",
+    "explanation": "–OH ต่อกับคาร์บอนของวงอะโรมาติกโดยตรง ฟีนอลโดยทั่วไปเป็นกรดกว่าแอลกอฮอล์ทั่วไป เพราะฟีนอกไซด์มีการกระจายประจุบนระบบอะโรมาติก",
+    "compact": true
+  },
+  "ether": {
+    "atoms": [
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 401.53,
+        "y": 156.16,
+        "group": false
+      },
+      {
+        "id": "o1",
+        "element": "O",
+        "x": 401.53,
+        "y": 242.31,
+        "group": true
+      },
+      {
+        "id": "c2",
+        "element": "C",
+        "x": 326.92,
+        "y": 285.39,
+        "group": false
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 487.69,
+        "y": 156.16,
+        "group": false
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 315.38,
+        "y": 156.16,
+        "group": false
+      },
+      {
+        "id": "h3",
+        "element": "H",
+        "x": 401.53,
+        "y": 70,
+        "group": false
+      },
+      {
+        "id": "h4",
+        "element": "H",
+        "x": 370,
+        "y": 360,
+        "group": false
+      },
+      {
+        "id": "h5",
+        "element": "H",
+        "x": 283.84,
+        "y": 210.78,
+        "group": false
+      },
+      {
+        "id": "h6",
+        "element": "H",
+        "x": 252.31,
+        "y": 328.47,
+        "group": false
+      }
+    ],
+    "bonds": [
+      {
+        "from": "c1",
+        "to": "o1",
+        "order": 1
+      },
+      {
+        "from": "o1",
+        "to": "c2",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h2",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h3",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h4",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h5",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h6",
+        "order": 1
+      }
+    ],
+    "formula": "C₂H₆O",
+    "clue": "R–C(=O)–O–R′ เป็นเอสเทอร์ ไม่จัด O ตัวนั้นเป็นอีเทอร์แยกอีกหมู่",
+    "explanation": "O ต่อกับคาร์บอนสองด้านด้วยพันธะเดี่ยว โดยไม่มีคาร์บอนิลติด O ในหมู่นี้ ไม่มี O–H",
+    "compact": true
+  },
+  "aldehyde": {
+    "atoms": [
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 316.93,
+        "y": 176.15,
+        "group": false
+      },
+      {
+        "id": "c2",
+        "element": "C",
+        "x": 423.07,
+        "y": 237.43,
+        "group": true
+      },
+      {
+        "id": "o1",
+        "element": "O",
+        "x": 423.07,
+        "y": 360,
+        "group": true
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 255.64,
+        "y": 282.29,
+        "group": false
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 378.21,
+        "y": 70,
+        "group": false
+      },
+      {
+        "id": "h3",
+        "element": "H",
+        "x": 210.78,
+        "y": 114.86,
+        "group": false
+      },
+      {
+        "id": "h4",
+        "element": "H",
+        "x": 529.22,
+        "y": 176.15,
+        "group": true
+      }
+    ],
+    "bonds": [
+      {
+        "from": "c1",
+        "to": "c2",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "o1",
+        "order": 2
+      },
+      {
+        "from": "c1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h2",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h3",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h4",
+        "order": 1
+      }
+    ],
+    "formula": "C₂H₄O",
+    "clue": "อย่าตัดสินจากคำว่าปลายสายอย่างเดียว ต้องเห็นพันธะ C(=O)–H จริง",
+    "explanation": "คาร์บอนของ C=O ต่อกับ H อย่างน้อยหนึ่งตัว จึงเขียนหมู่ –CHO ได้ เมทานาล HCHO มี H ต่อคาร์บอนิลสองตัวและเป็นแอลดีไฮด์เช่นกัน",
+    "compact": true
+  },
+  "ketone": {
+    "atoms": [
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 476.15,
+        "y": 176.15,
+        "group": false
+      },
+      {
+        "id": "c2",
+        "element": "C",
+        "x": 370,
+        "y": 237.43,
+        "group": true
+      },
+      {
+        "id": "o1",
+        "element": "O",
+        "x": 370,
+        "y": 360,
+        "group": true
+      },
+      {
+        "id": "c3",
+        "element": "C",
+        "x": 263.85,
+        "y": 176.15,
+        "group": false
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 537.43,
+        "y": 282.29,
+        "group": false
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 414.86,
+        "y": 70,
+        "group": false
+      },
+      {
+        "id": "h3",
+        "element": "H",
+        "x": 582.29,
+        "y": 114.86,
+        "group": false
+      },
+      {
+        "id": "h4",
+        "element": "H",
+        "x": 202.57,
+        "y": 282.29,
+        "group": false
+      },
+      {
+        "id": "h5",
+        "element": "H",
+        "x": 325.14,
+        "y": 70,
+        "group": false
+      },
+      {
+        "id": "h6",
+        "element": "H",
+        "x": 157.71,
+        "y": 114.86,
+        "group": false
+      }
+    ],
+    "bonds": [
+      {
+        "from": "c1",
+        "to": "c2",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "o1",
+        "order": 2
+      },
+      {
+        "from": "c2",
+        "to": "c3",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h2",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h3",
+        "order": 1
+      },
+      {
+        "from": "c3",
+        "to": "h4",
+        "order": 1
+      },
+      {
+        "from": "c3",
+        "to": "h5",
+        "order": 1
+      },
+      {
+        "from": "c3",
+        "to": "h6",
+        "order": 1
+      }
+    ],
+    "formula": "C₃H₆O",
+    "clue": "C=O ในกรด เอสเทอร์ หรือเอไมด์ไม่ใช่หมู่คีโตน",
+    "explanation": "คาร์บอนของ C=O ต่อคาร์บอนทั้งสองด้าน ไม่ได้ต่อ H แบบแอลดีไฮด์ คาร์บอนิลเป็นชื่อหมู่ C=O ส่วนคีโตนเป็นกลุ่มสารที่มีบริบทการเชื่อมต่อนี้",
+    "compact": true
+  },
+  "amine": {
+    "atoms": [
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 370,
+        "y": 186,
+        "group": false
+      },
+      {
+        "id": "n1",
+        "element": "N",
+        "x": 370,
+        "y": 302,
+        "group": true
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 486,
+        "y": 186,
+        "group": false
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 254,
+        "y": 186,
+        "group": false
+      },
+      {
+        "id": "h3",
+        "element": "H",
+        "x": 370,
+        "y": 70,
+        "group": false
+      },
+      {
+        "id": "h4",
+        "element": "H",
+        "x": 269.54,
+        "y": 360,
+        "group": true
+      },
+      {
+        "id": "h5",
+        "element": "H",
+        "x": 470.46,
+        "y": 360,
+        "group": true
+      }
+    ],
+    "bonds": [
+      {
+        "from": "c1",
+        "to": "n1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h2",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h3",
+        "order": 1
+      },
+      {
+        "from": "n1",
+        "to": "h4",
+        "order": 1
+      },
+      {
+        "from": "n1",
+        "to": "h5",
+        "order": 1
+      }
+    ],
+    "formula": "CH₅N",
+    "clue": "N ที่ต่อคาร์บอนิลโดยตรงเป็นเอไมด์ ส่วน R₄N⁺ เป็นแอมโมเนียมจตุรภูมิ ไม่ใช่เอมีนตติยภูมิ",
+    "explanation": "เอมีนเกิดจากการแทน H ของ NH₃ ด้วยหมู่คาร์บอนหนึ่ง สอง หรือสามหมู่ แบ่งเป็นปฐมภูมิ ทุติยภูมิ และตติยภูมิตามจำนวนหมู่ที่ต่อ N เอมีนทั่วไปเป็นเบสจากคู่อิเล็กตรอนโดดเดี่ยว",
+    "compact": true
+  },
+  "haloalkane": {
+    "atoms": [
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 298.75,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "c2",
+        "element": "C",
+        "x": 441.25,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "cl1",
+        "element": "Cl",
+        "x": 583.75,
+        "y": 215,
+        "group": true
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 298.75,
+        "y": 72.5,
+        "group": false
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 298.75,
+        "y": 357.5,
+        "group": false
+      },
+      {
+        "id": "h3",
+        "element": "H",
+        "x": 156.25,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "h4",
+        "element": "H",
+        "x": 441.25,
+        "y": 72.5,
+        "group": false
+      },
+      {
+        "id": "h5",
+        "element": "H",
+        "x": 441.25,
+        "y": 357.5,
+        "group": false
+      }
+    ],
+    "bonds": [
+      {
+        "from": "c1",
+        "to": "c2",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "cl1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h2",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h3",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h4",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h5",
+        "order": 1
+      }
+    ],
+    "formula": "C₂H₅Cl",
+    "clue": "แฮโลเจนที่ต่อคาร์บอนวงอะโรมาติกโดยตรงเป็นแฮโลแอรีน มีบริบทต่างจากแฮโลแอลเคน",
+    "explanation": "อะตอมแฮโลเจนต่อกับคาร์บอนอิ่มตัวของหมู่แอลคิลโดยตรง ตัวอย่างนี้ใช้ Cl แต่หมวดนี้รวม F, Br และ I ด้วย",
+    "compact": true
+  },
+  "alkene": {
+    "atoms": [
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 370,
+        "y": 143.75,
+        "group": true
+      },
+      {
+        "id": "c2",
+        "element": "C",
+        "x": 370,
+        "y": 286.25,
+        "group": true
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 493.41,
+        "y": 72.5,
+        "group": false
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 246.59,
+        "y": 72.5,
+        "group": false
+      },
+      {
+        "id": "h3",
+        "element": "H",
+        "x": 246.59,
+        "y": 357.5,
+        "group": false
+      },
+      {
+        "id": "h4",
+        "element": "H",
+        "x": 493.41,
+        "y": 357.5,
+        "group": false
+      }
+    ],
+    "bonds": [
+      {
+        "from": "c1",
+        "to": "c2",
+        "order": 2
+      },
+      {
+        "from": "c1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h2",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h3",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h4",
+        "order": 1
+      }
+    ],
+    "formula": "C₂H₄",
+    "clue": "ไม่ใช่ C=O และไม่ใช้สูตร CₙH₂ₙ กับทุกสารที่มี C=C",
+    "explanation": "มีพันธะคู่คาร์บอน–คาร์บอน C=C ซึ่งเป็นตำแหน่งไม่อิ่มตัว สูตร CₙH₂ₙ ใช้กับแอลคีนสายเปิดที่มีพันธะคู่หนึ่งตำแหน่ง",
+    "compact": true
+  },
+  "alkyne": {
+    "atoms": [
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 441.25,
+        "y": 215,
+        "group": true
+      },
+      {
+        "id": "c2",
+        "element": "C",
+        "x": 298.75,
+        "y": 215,
+        "group": true
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 583.75,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 156.25,
+        "y": 215,
+        "group": false
+      }
+    ],
+    "bonds": [
+      {
+        "from": "c1",
+        "to": "c2",
+        "order": 3
+      },
+      {
+        "from": "c1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h2",
+        "order": 1
+      }
+    ],
+    "formula": "C₂H₂",
+    "clue": "C≡N เป็นไนไตรล์ ไม่ใช่แอลไคน์ เพราะอะตอมอีกด้านเป็น N",
+    "explanation": "มีพันธะสามคาร์บอน–คาร์บอน C≡C สูตร CₙH₂ₙ₋₂ ใช้กับแอลไคน์สายเปิดที่มีพันธะสามหนึ่งตำแหน่ง",
+    "compact": true
+  },
+  "arene": {
+    "atoms": [
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 453.72,
+        "y": 215,
+        "group": true
+      },
+      {
+        "id": "c2",
+        "element": "C",
+        "x": 411.86,
+        "y": 142.5,
+        "group": true
+      },
+      {
+        "id": "c3",
+        "element": "C",
+        "x": 328.14,
+        "y": 142.5,
+        "group": true
+      },
+      {
+        "id": "c4",
+        "element": "C",
+        "x": 286.28,
+        "y": 215,
+        "group": true
+      },
+      {
+        "id": "c5",
+        "element": "C",
+        "x": 328.14,
+        "y": 287.5,
+        "group": true
+      },
+      {
+        "id": "c6",
+        "element": "C",
+        "x": 411.86,
+        "y": 287.5,
+        "group": true
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 537.43,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 453.72,
+        "y": 70,
+        "group": false
+      },
+      {
+        "id": "h3",
+        "element": "H",
+        "x": 286.28,
+        "y": 70,
+        "group": false
+      },
+      {
+        "id": "h4",
+        "element": "H",
+        "x": 202.57,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "h5",
+        "element": "H",
+        "x": 286.28,
+        "y": 360,
+        "group": false
+      },
+      {
+        "id": "h6",
+        "element": "H",
+        "x": 453.72,
+        "y": 360,
+        "group": false
+      }
+    ],
+    "bonds": [
+      {
+        "from": "c1",
+        "to": "c2",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "c3",
+        "order": 2
+      },
+      {
+        "from": "c3",
+        "to": "c4",
+        "order": 1
+      },
+      {
+        "from": "c4",
+        "to": "c5",
+        "order": 2
+      },
+      {
+        "from": "c5",
+        "to": "c6",
+        "order": 1
+      },
+      {
+        "from": "c6",
+        "to": "c1",
+        "order": 2
+      },
+      {
+        "from": "c1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h2",
+        "order": 1
+      },
+      {
+        "from": "c3",
+        "to": "h3",
+        "order": 1
+      },
+      {
+        "from": "c4",
+        "to": "h4",
+        "order": 1
+      },
+      {
+        "from": "c5",
+        "to": "h5",
+        "order": 1
+      },
+      {
+        "from": "c6",
+        "to": "h6",
+        "order": 1
+      }
+    ],
+    "formula": "C₆H₆",
+    "clue": "อะรีนคือไฮโดรคาร์บอนอะโรมาติก ไม่ใช่สารที่มีกลิ่นหอมทุกชนิด และไม่ใช่ทุกวงคาร์บอนจะเป็นอะโรมาติก",
+    "explanation": "ตัวอย่างเบนซีนมีอิเล็กตรอน π กระจายบนวง การวาดพันธะเดี่ยวสลับคู่เป็นรูปเขียนแบบเคคูเล ไม่ได้แปลว่ามีพันธะคู่แยกอิสระสามชุดเหมือนแอลคีนทั่วไป",
+    "compact": true
+  },
+  "nitrile": {
+    "atoms": [
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 298.75,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "c2",
+        "element": "C",
+        "x": 441.25,
+        "y": 215,
+        "group": true
+      },
+      {
+        "id": "n1",
+        "element": "N",
+        "x": 583.75,
+        "y": 215,
+        "group": true
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 298.75,
+        "y": 72.5,
+        "group": false
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 298.75,
+        "y": 357.5,
+        "group": false
+      },
+      {
+        "id": "h3",
+        "element": "H",
+        "x": 156.25,
+        "y": 215,
+        "group": false
+      }
+    ],
+    "bonds": [
+      {
+        "from": "c1",
+        "to": "c2",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "n1",
+        "order": 3
+      },
+      {
+        "from": "c1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h2",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h3",
+        "order": 1
+      }
+    ],
+    "formula": "C₂H₃N",
+    "clue": "ไนไตรล์ R–C≡N ไม่เท่ากับไอออนไซยาไนด์ CN⁻ และไม่ใช่แอลไคน์ C≡C",
+    "explanation": "มีพันธะสาม C≡N โดย C ของหมู่นี้เชื่อมกับส่วนอินทรีย์ เป็นหมู่มีขั้วและมีสมบัติต่างจากเอมีน",
+    "compact": true
+  },
+  "thiol": {
+    "atoms": [
+      {
+        "id": "c1",
+        "element": "C",
+        "x": 263.13,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "c2",
+        "element": "C",
+        "x": 405.63,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "s1",
+        "element": "S",
+        "x": 548.13,
+        "y": 215,
+        "group": true
+      },
+      {
+        "id": "h1",
+        "element": "H",
+        "x": 263.13,
+        "y": 72.5,
+        "group": false
+      },
+      {
+        "id": "h2",
+        "element": "H",
+        "x": 263.13,
+        "y": 357.5,
+        "group": false
+      },
+      {
+        "id": "h3",
+        "element": "H",
+        "x": 120.63,
+        "y": 215,
+        "group": false
+      },
+      {
+        "id": "h4",
+        "element": "H",
+        "x": 405.63,
+        "y": 72.5,
+        "group": false
+      },
+      {
+        "id": "h5",
+        "element": "H",
+        "x": 405.63,
+        "y": 357.5,
+        "group": false
+      },
+      {
+        "id": "h6",
+        "element": "H",
+        "x": 619.38,
+        "y": 91.59,
+        "group": true
+      }
+    ],
+    "bonds": [
+      {
+        "from": "c1",
+        "to": "c2",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "s1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h1",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h2",
+        "order": 1
+      },
+      {
+        "from": "c1",
+        "to": "h3",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h4",
+        "order": 1
+      },
+      {
+        "from": "c2",
+        "to": "h5",
+        "order": 1
+      },
+      {
+        "from": "s1",
+        "to": "h6",
+        "order": 1
+      }
+    ],
+    "formula": "C₂H₆S",
+    "clue": "ไม่อนุมานกลิ่น ความปลอดภัย หรือสภาพละลายได้จาก –SH เพียงอย่างเดียว",
+    "explanation": "มีหมู่ซัลไฮดริล –SH ต่อกับคาร์บอน เป็นสารประกอบกำมะถัน ไม่ใช่แอลกอฮอล์เพราะอะตอมเป็น S ไม่ใช่ O",
+    "compact": true
+  }
+}

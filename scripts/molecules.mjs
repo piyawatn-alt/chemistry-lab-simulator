@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 const browser = await chromium.launch({
@@ -64,6 +65,77 @@ try {
       "true",
     );
   }
+  const catalog = JSON.parse(
+    readFileSync("src/data/molecules/functional-group-catalog.json", "utf8"),
+  );
+  const additional = JSON.parse(
+    readFileSync("src/data/molecules/generated-diagrams.json", "utf8"),
+  );
+  assert.equal(await page.locator(".tabs button").count(), 15);
+  for (const g of catalog.filter((g) => additional[g.id])) {
+    const diagram = additional[g.id];
+    await page
+      .locator(".tabs")
+      .getByRole("button", {
+        name: new RegExp(g.english.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+      })
+      .click();
+    const shown = diagram.atoms.filter(
+      (a) => a.element !== "H" || a.group,
+    ).length;
+    assert.equal(await page.locator(".diagram-atom").count(), shown, g.id);
+    await page
+      .getByRole("button", { name: "แสดง H ทุกอะตอม", exact: true })
+      .click();
+    assert.equal(
+      await page.locator(".diagram-atom").count(),
+      diagram.atoms.length,
+      g.id,
+    );
+    await page
+      .getByRole("button", { name: "ดูส่วนที่สำคัญ", exact: true })
+      .click();
+    assert.equal(
+      await page.locator(".atom-halo").count(),
+      diagram.atoms.filter((a) => a.group).length,
+      g.id,
+    );
+    assert.ok(
+      (await page.locator(".group-pitfall").innerText()).includes(g.pitfall),
+    );
+    if (["alkyne", "nitrile"].includes(g.id)) {
+      const bond = page.getByRole("button", { name: /พันธะสาม/ }).first();
+      assert.equal(await bond.locator("line:not(.bond-hit)").count(), 3);
+      await bond.click();
+      await page
+        .locator(".diagram-explanation")
+        .getByText(/อิเล็กตรอนร่วมพันธะ 3 คู่/)
+        .waitFor();
+    }
+    if (g.id === "arene") {
+      await page
+        .getByRole("button", { name: /พันธะคู่ C กับ C/ })
+        .first()
+        .click();
+      await page
+        .locator(".diagram-explanation")
+        .getByText(/รูปเขียนเคคูเล/)
+        .waitFor();
+    }
+    for (const width of [390, 1440]) {
+      await page.setViewportSize({ width, height: 1000 });
+      assert.ok(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+        g.id + " overflow",
+      );
+    }
+    if (g.id === "phenol")
+      await page
+        .locator(".explorer-body")
+        .screenshot({ path: "/tmp/chemlab-phenol.png" });
+  }
   await page
     .locator(".tabs")
     .getByRole("button", { name: /กรดคาร์บอกซิลิก/ })
@@ -121,7 +193,7 @@ try {
   );
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: all four molecule diagrams, hydrogen visibility, group highlighting, correct/incorrect challenge, keyboard interaction, double-bond explanation, restart, and responsive layouts.",
+    "PASS: all 15 molecule diagrams, hydrogen visibility, group highlighting, correct/incorrect challenge, keyboard interaction, double-bond explanation, restart, and responsive layouts.",
   );
 } finally {
   await browser.close();
