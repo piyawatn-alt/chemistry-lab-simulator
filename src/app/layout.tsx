@@ -10,6 +10,7 @@ import "@fontsource/noto-sans-thai/700.css";
 import "./globals.css";
 import "./knowledge.css";
 import "./experiments.css";
+import "./formulas.css";
 export const metadata: Metadata = {
   title: "ChemLab RX — Explore Chemistry, Understand Medicine",
   description:

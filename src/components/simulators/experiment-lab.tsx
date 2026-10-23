@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
+import { ScientificFormula } from "@/components/ui/scientific-formula";
 import {
   Play,
   Pause,
@@ -972,7 +973,9 @@ export function ExperimentLab({ id }: { id: ExperimentId }) {
           <p>
             <mark>{experiment.principle}</mark>
           </p>
-          <div className="experiment-equation">{experiment.equation}</div>
+          <div className="experiment-equation">
+            <ScientificFormula text={experiment.equation} />
+          </div>
           <div className="experiment-try">
             <Lightbulb size={20} />
             <div>

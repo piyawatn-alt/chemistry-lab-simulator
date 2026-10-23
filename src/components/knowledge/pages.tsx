@@ -30,6 +30,7 @@ import { ArticleCard } from "./article-card";
 import { LearningFigure } from "./learning-figure";
 import { contentFigures } from "@/data/knowledge/figures";
 import { HighlightedText } from "./highlighted-text";
+import { ScientificFormula } from "@/components/ui/scientific-formula";
 import { ArticleArt } from "./article-art";
 import { ExperimentGallery } from "@/components/simulators/experiment-gallery";
 export function JournalHeading({
@@ -357,7 +358,7 @@ export function ArticleReader({
               {s.formula && (
                 <div className="reader-formula">
                   <span>สูตร / ความสัมพันธ์สำคัญ</span>
-                  {s.formula}
+                  <ScientificFormula text={s.formula} />
                 </div>
               )}
               {s.bullets && (

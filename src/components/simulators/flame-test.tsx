@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
+import { ScientificFormula } from "@/components/ui/scientific-formula";
 import { Flame, Play, RotateCcw, ArrowRight } from "lucide-react";
 
 const samples = [
@@ -355,7 +356,7 @@ export function FlameTest() {
             <div>
               <strong>สังเกตสีของแสง</strong>
               <p>เช่น โซเดียมให้สีเหลืองเด่น</p>
-              <b>ΔE = hν = hc/λ</b>
+              <ScientificFormula text="ΔE = hν = hc/λ" />
             </div>
           </li>
         </ol>

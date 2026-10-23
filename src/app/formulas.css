@@ -1,0 +1,91 @@
+.scientific-formula {
+  text-align: left;
+  min-width: 0;
+}
+.formula-entry + .formula-entry {
+  margin-top: 23px;
+  padding-top: 20px;
+  border-top: 1px solid #dbe4d1;
+}
+.formula-typeset {
+  font-family:
+    "Cambria Math", Cambria, "Times New Roman", "Noto Sans Thai", serif;
+  font-size: 24px;
+  line-height: 2;
+  letter-spacing: normal;
+  overflow-wrap: normal;
+}
+.formula-typeset sub,
+.formula-typeset sup {
+  font-size: 0.7em;
+  line-height: 0;
+  position: static;
+}
+.formula-typeset sup {
+  vertical-align: super;
+}
+.formula-typeset sub {
+  vertical-align: sub;
+}
+.formula-fraction {
+  display: inline-flex;
+  vertical-align: middle;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+  margin: 0 0.22em;
+  font-size: 0.94em;
+  line-height: 1.35;
+}
+.formula-fraction > span {
+  display: block;
+  padding: 0 0.17em;
+}
+.formula-fraction > span:first-child {
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.12em;
+}
+.formula-fraction > span:last-child {
+  padding-top: 0.12em;
+}
+.formula-exponent .formula-fraction {
+  font-size: 0.95em;
+}
+.formula-typeset .formula-exponent {
+  display: inline-block;
+  font-size: 0.66em;
+  vertical-align: super;
+  line-height: 1.4;
+}
+.scientific-formula .formula-definition {
+  margin: 13px 0 0;
+  color: #63775c;
+  font-family: "Noto Sans Thai", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 2;
+  letter-spacing: normal;
+}
+.flame-energy .scientific-formula {
+  margin-top: 15px;
+}
+.flame-energy .formula-typeset {
+  font-size: 22px;
+}
+.reader-formula .formula-typeset {
+  text-align: center;
+}
+@media (max-width: 650px) {
+  .formula-typeset {
+    font-size: 21px;
+  }
+  .experiment-equation {
+    padding: 17px 13px;
+  }
+  .formula-typeset .formula-exponent {
+    font-size: 0.62em;
+  }
+  .reader-formula {
+    padding: 20px 13px;
+  }
+}
