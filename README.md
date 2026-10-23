@@ -1,81 +1,92 @@
 # ChemLab RX
 
-**Explore Chemistry, Understand Medicine.** A Thai-first interactive chemistry learning application for upper-secondary students (ม.4–ม.6).
+**Chemistry, made closer.** A Thai knowledge publication connecting chemistry with medicines and everyday life. Readers choose a question, open an illustrated article, and use visual tools when helpful. There are no course sequences, grades, quizzes, or completion requirements in the current interface.
 
-## Run locally
+## Development
 
-Requires **Node.js 22+** and npm. No API keys, database, or `.env` file are required for Phase 1.
+Requires Node.js 22+ and npm. No API keys, account, database, or environment variables are required.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-The development server uses port 3000. In the cloud workspace, run commands from `/workspace/chemistry-lab-simulator`. If the default npm cache is not writable, use `npm ci --cache /workspace/.npm-cache`.
+Run commands from the repository root (`/workspace/chemistry-lab-simulator` in the cloud). The server uses port 3000. For a restricted home directory, use `npm ci --cache /workspace/.npm-cache`.
 
 ```bash
-npm test           # Scientific model and basic bond-order sanity tests
+npm test           # Scientific graphs, curated molecular connectivity, reading-list parsing
 npm run typecheck  # TypeScript
-npm run build      # Production bundle and type checks
-npm start          # Serve the production build on port 3000
+npm run build      # Production build and type checks
+npm start          # Serve the production build
 ```
 
-## Browser smoke checks
+## Current experience
 
-With the app running in a separate terminal:
+- An editorial homepage, open-access topic collections, global search, and article search/filtering.
+- Eight complete illustrated articles across molecular structure, everyday chemistry, chemistry and pharmacy, and useful scientific ideas.
+- Article pages with key ideas, headings, optional formulas, reference links, related articles, article metadata, and contextual tool links.
+- A personal reading shelf with persistent add/remove controls. Bookmarks are stored locally, without sign-in; malformed or unavailable storage is handled.
+- Interactive 2D molecular examples: ethanol, ethanoic acid, ethyl ethanoate, and ethanamide. Readers can select atoms and bonds, highlight functional groups, show hydrogens, or try identifying the group themselves.
+- An interactive first-order concentration graph with adjustable inputs, units, assumptions, half-life, and reset.
+- Responsive navigation and layouts; keyboard-accessible controls, skip navigation, and self-hosted Inter/Noto Sans Thai fonts.
+
+Drug articles discuss the chemistry of aspirin and paracetamol and link to PubChem. Illustrations in those articles show simpler functional-group examples and explicitly state that they are **not the drug's molecular structure**. The text does not provide dosing or clinical advice. Sources are provided for further reading, and explanatory text is authored by the project.
+
+## Visual and scientific boundaries
+
+Molecular diagram coordinates are **2D layout positions**, not physical coordinates, bond angles, or verified 3D geometry. Explicit atom/bond data are tested for composition, ordinary neutral valence, connectivity, and highlighted groups. These checks are not a general chemical validity proof. Condensed formulas remain available as optional reference text.
+
+The concentration graph is an ideal irreversible, well-mixed, constant-temperature first-order model. It does not represent every reaction or a clinical dosing model. Scientific calculations stay separate from UI components.
+
+## Browser checks
+
+Start the app in a separate terminal, then run:
 
 ```bash
 npx playwright install chromium
 npm run test:smoke
-npm run test:molecules # Interactive molecular diagram checks
-# Or use an existing system browser:
-CHROMIUM_PATH=/usr/bin/chromium npm run test:smoke
+npm run test:molecules
 ```
 
-This exercises search, grade filtering, all learning stages, hints, quiz feedback and persistence, exploration tracking, live graph controls, mobile navigation, route layouts, and confirmed progress deletion. The smoke test uses an isolated browser context and saves screenshots in `/tmp`.
+To use a system browser instead:
 
-## Phase 1 features
+```bash
+CHROMIUM_PATH=/usr/bin/chromium npm run test:smoke
+CHROMIUM_PATH=/usr/bin/chromium npm run test:molecules
+```
 
-- Responsive dashboard, mobile navigation, live lesson search, grade filtering, and curriculum browsing.
-- Six project-authored sample lessons, one for each supplied course. Each follows **Learn → Guided Practice → Free Experiment → Quiz**, with objectives, hints, misconceptions, and pharmacy connections.
-- Functional Group Explorer: four curated structural examples (alcohol, carboxylic acid, ester, amide), interactive atom-and-bond diagrams, three guided visual stages, functional-group highlighting, clickable atom/bond explanations, optional explicit hydrogens, a find-the-group challenge, and exploration tracking.
-- Interactive first-order concentration graph in the lesson activities, with units, assumptions, reset controls, half-life, and reflection prompts.
-- Six working quizzes with hints, immediate feedback, retry, and latest scores. A correct answer marks the lesson complete.
-- Actual local progress, last lesson, explored groups, and scores persist across reloads. Progress can be explicitly reset. Storage failures are shown in the UI.
-
-Curriculum titles come from the project brief. Sample lessons and learning objectives are **not an official school chapter list or official learning outcomes**. The graph represents an ideal irreversible, well-mixed, constant-temperature first-order model; it is not a clinical model.
-
-## Scope and future work
-
-The molecular editor, full titration/esterification/multi-order kinetics simulators, electrochemical cell, drug library, saved experiments, and verified 3D viewer are explicitly labeled **Coming Soon**. No arbitrary molecular geometry or unsupported clinical claims are generated. 3Dmol.js is deferred until verified coordinates and supported structures are implemented in Phase 3.
-
-The molecular diagram on the homepage is decorative and explicitly labeled as an illustration, not a specific chemical structure. The explorer uses curated 2D connectivity graphs with all atoms and bonds specified. Layout positions do not represent physical coordinates, bond lengths, or bond angles. Condensed formulas are available in an optional disclosure. These examples are not a general molecular structure validator. `checkBasicValence` is a tested low-level helper for a future editor and **does not establish chemical validity**.
+Set `TEST_BASE_URL` for a different port. The checks cover the reading experience, search/filtering, empty states, bookmark persistence, storage failures, legacy redirects, responsive routes, and molecular interactions. They use isolated browser contexts and write screenshots to `/tmp`.
 
 ## Architecture
 
-- `src/app`: Next.js App Router routes and responsive Tailwind/CSS theme.
-- `src/components`: dashboard, lesson flow, explorers/graphs, shared components, and shadcn-style Button built with Radix Slot/CVA.
-- `src/data/curriculum`: configurable course titles, sample lessons, questions, and structural examples.
-- `src/data/molecules`: curated molecular graphs and 2D layout positions.
-- `src/lib/chemistry`: scientific calculations, molecular graph checks, and independent tests.
-- `src/lib/storage`: versioned local progress schema and defensive reader.
-- `src/hooks/use-progress.ts`: UI-facing persistence adapter. Replace this boundary with a Supabase-backed store and add authentication later; no auth or remote persistence is implied today.
+- `src/app`: App Router entry, article metadata, legacy redirects, base/tool CSS and the publication theme.
+- `src/components/knowledge`: homepage, cards, article illustrations, collections, reading shelf, and reader.
+- `src/components/workspace.tsx`: shared publication header, search, navigation, and route composition.
+- `src/components/simulators`: molecular diagrams and the concentration visualizer.
+- `src/data/knowledge`: topic definitions, article text, references, tool links, and search helpers.
+- `src/data/molecules`: curated structures, functional-group descriptions, and 2D layouts.
+- `src/lib/chemistry`: model calculations and scientific tests.
+- `src/lib/storage` and `src/hooks`: local reading-list persistence. The legacy progress parser remains for compatibility; old browser-local progress is neither erased nor displayed as scores.
+- `src/components/ui`: reusable Radix/CVA Button with shadcn configuration in `components.json`.
 
-Thai and English typography uses self-hosted Noto Sans Thai and Inter from Fontsource, with system fallbacks. Fonts are bundled with the app; no Google Fonts network access is needed. Science graphs use Recharts; transitions use Motion; icons use Lucide React. `components.json` provides shadcn/ui configuration.
+Persistence can be replaced behind the hook/storage boundary if remote bookmarks or authentication are introduced later. No remote authentication or database is implied today.
 
-## Deploy to Vercel
+## Existing links
 
-1. Push the source to your GitHub repository and import it into Vercel.
-2. Select the **Next.js** preset and repository root. Use Node.js 22+.
-3. Install command: `npm ci`. Build command: `npm run build`. Keep the default output directory.
-4. No environment variables are required. Deploy.
+Old course and lesson URLs redirect to relevant articles or the knowledge collection. `/labs` and `/builder` redirect to `/tools`, `/drugs` to the pharmacy collection, `/quizzes` to discovery, and `/progress` to the reading shelf. Old browser-local activity data is left untouched; it is not converted into bookmarks.
 
-Learning progress stays in each browser's local storage, including after deployment, and is not shared across devices or domains. This repository does not deploy automatically or configure a Vercel account.
+## Vercel deployment
 
-## Educational references
+1. Import this GitHub repository into Vercel.
+2. Use Node.js 22+ and the repository root.
+3. `vercel.json` explicitly selects **Next.js**, `npm ci`, `npm run build`, and output `.next`. Do not set the output directory to `public`.
+4. No environment variables are needed. Deploy the latest commit.
 
-- [OpenStax Chemistry 2e](https://openstax.org/details/books/chemistry-2e) — bonding, concentrations, reaction rates.
-- [IUPAC Gold Book](https://goldbook.iupac.org/) — chemical terminology.
-- [PubChem](https://pubchem.ncbi.nlm.nih.gov/) — reference information for future verified molecular structures.
+With an existing Git integration, a push to the configured production branch triggers a new deployment. The app itself does not manage a Vercel account or prove deployment success.
 
-For education only; not medical advice or dosing guidance.
+## References
+
+- [OpenStax Chemistry 2e](https://openstax.org/details/books/chemistry-2e)
+- [OpenStax Organic Chemistry](https://openstax.org/details/books/organic-chemistry)
+- [PubChem Aspirin](https://pubchem.ncbi.nlm.nih.gov/compound/2244)
+- [PubChem Acetaminophen](https://pubchem.ncbi.nlm.nih.gov/compound/1983)

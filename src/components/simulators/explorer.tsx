@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Sparkles, Check, RotateCcw, Lightbulb } from "lucide-react";
+import { Sparkles, RotateCcw, Lightbulb } from "lucide-react";
 import {
   AreaChart,
   Area,
@@ -12,19 +12,14 @@ import {
 } from "recharts";
 import { Button } from "@/components/ui/button";
 import { MoleculeDiagram } from "./molecule-diagram";
-import { groups } from "@/data/curriculum";
+import { groups } from "@/data/molecules/groups";
 import { firstOrder } from "@/lib/chemistry/models";
-import type { ProgressStore as Store } from "@/hooks/use-progress";
-export function Explorer({ store }: { store: Store }) {
+export function Explorer() {
   const [index, setIndex] = useState(0);
   const [reset, setReset] = useState(0);
   const g = groups[index];
   function select(i: number) {
     setIndex(i);
-    store.update((p) => ({
-      ...p,
-      explored: Array.from(new Set([...p.explored, groups[i].id])),
-    }));
   }
   return (
     <div className="explorer">
@@ -75,16 +70,6 @@ export function Explorer({ store }: { store: Store }) {
             </div>
           </div>
           <div className="actions">
-            <Button onClick={() => select(index)}>
-              {store.progress.explored.includes(g.id) ? (
-                <>
-                  <Check size={16} />
-                  สำรวจแล้ว
-                </>
-              ) : (
-                "บันทึกการสำรวจ"
-              )}
-            </Button>
             <Button
               variant="outline"
               onClick={() => {

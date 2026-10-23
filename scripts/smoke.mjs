@@ -1,171 +1,180 @@
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
-
-// Start npm run dev (or npm start after building) before running this script.
-// CHROMIUM_PATH can point to a system Chromium; otherwise install via npx playwright install chromium.
 const browser = await chromium.launch({
+  headless: true,
   ...(process.env.CHROMIUM_PATH
     ? { executablePath: process.env.CHROMIUM_PATH }
     : {}),
-  headless: true,
   args: ["--no-sandbox"],
 });
-const base = process.env.TEST_BASE_URL || "http://127.0.0.1:3000";
 const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
+const base = process.env.TEST_BASE_URL || "http://127.0.0.1:3000";
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
-const go = async (path) => {
+async function go(path) {
   const r = await page.goto(base + path);
-  assert.equal(r.status(), 200);
+  assert.equal(r.status(), 200, path);
   await page.locator("main[aria-busy=false]").waitFor();
   await page.locator("h1").waitFor();
-};
-const progress = () =>
-  page.evaluate(() =>
-    JSON.parse(localStorage.getItem("chemlab-rx:progress:v1")),
-  );
+}
 try {
   await go("/");
-  assert.equal(
-    await page.locator(".stat-card strong").first().innerText(),
-    "0 / 6 บทเรียน",
-  );
-  await page.waitForFunction(
-    () =>
-      getComputedStyle(document.querySelector("main > div")).opacity === "1",
-  );
-  await page.screenshot({ path: "/tmp/chemlab-desktop.png", fullPage: true });
-  await page.getByRole("link", { name: "เริ่มเรียนเลย", exact: true }).click();
-  await page.getByRole("button", { name: "ม.5", exact: true }).click();
-  await page.waitForFunction(
-    () => document.querySelectorAll(".course-card").length === 2,
-  );
-  assert.equal(await page.locator(".course-card").count(), 2);
+  assert.equal(await page.getByRole("heading", { level: 1 }).count(), 1);
+  assert.ok(!(await page.locator("nav").innerText()).includes("บทเรียน"));
+  await page.screenshot({
+    path: "/tmp/chemlab-knowledge-desktop.png",
+    fullPage: true,
+  });
   await page
-    .getByRole("textbox", { name: "ค้นหาบทเรียน" })
-    .fill("หมู่ฟังก์ชัน");
-  await page.locator(".search-results a").click();
+    .getByRole("textbox", { name: "ค้นหาเรื่องที่สงสัย" })
+    .fill("แอสไพริน");
   await page
-    .getByRole("heading", { name: "รู้จักหมู่ฟังก์ชัน", exact: true })
+    .locator(".journal-search-results")
+    .getByRole("link")
     .first()
-    .waitFor();
-  await page.getByRole("button", { name: "ไปฝึกด้วยกัน" }).click();
-  assert.equal(
-    await page.getByRole("button", { name: "ไปทดลองอิสระ" }).isDisabled(),
-    true,
-  );
-  await page.locator("details summary").click();
-  await page.getByRole("checkbox").check();
-  await page.getByRole("button", { name: "ไปทดลองอิสระ" }).click();
-  await page.getByRole("button", { name: /กรดคาร์บอกซิลิก/ }).click();
-  await page.getByRole("button", { name: "ตรวจสอบความเข้าใจ" }).click();
-  await page.getByRole("radio").nth(0).check();
-  await page.getByRole("button", { name: "ตรวจคำตอบ" }).click();
-  await page.getByText("ยังไม่ถูก ลองทบทวนอีกนิด", { exact: true }).waitFor();
-  assert.equal((await progress()).scores.organic, 0);
-  await page.getByRole("button", { name: "ลองอีกครั้ง" }).click();
-  await page.getByRole("radio").nth(2).check();
-  await page.getByRole("button", { name: "ตรวจคำตอบ" }).click();
+    .click();
   await page
-    .getByText("ถูกต้อง! เข้าใจเพิ่มขึ้นอีกขั้นแล้ว", { exact: true })
+    .getByRole("heading", {
+      name: "แอสไพรินหนึ่งโมเลกุล มีอะไรให้เคมีเล่าบ้าง?",
+      exact: true,
+    })
     .waitFor();
-  assert.equal((await progress()).scores.organic, 100);
-  assert.ok((await progress()).completed.includes("organic"));
+  await page.waitForFunction(() => document.title.includes("แอสไพริน"));
+  assert.ok((await page.title()).includes("แอสไพริน"));
+  await page
+    .locator(".reader-meta")
+    .getByRole("button", { name: "เก็บไว้อ่าน", exact: true })
+    .click();
   await page.reload();
   await page.locator("main[aria-busy=false]").waitFor();
-  await page.locator("h1").waitFor();
-  assert.equal((await progress()).scores.organic, 100);
-  await go("/progress");
-  await page.getByText("เรียนจบแล้ว", { exact: true }).last().waitFor();
-  await go("/explorer");
-  for (const label of ["แอลกอฮอล์", "กรดคาร์บอกซิลิก", "เอสเทอร์", "เอไมด์"])
-    await page.getByRole("button", { name: new RegExp(label) }).click();
-  assert.equal((await progress()).explored.length, 4);
-  await go("/lessons/kinetics");
-  await page.locator(".lesson-steps button").nth(2).click();
+  await page
+    .getByRole("button", { name: "บันทึกไว้อ่านแล้ว", exact: true })
+    .waitFor();
+  await go("/saved");
+  assert.equal(await page.locator(".story-card").count(), 1);
+  await page.getByRole("button", { name: /นำออกจากรายการอ่าน:/ }).click();
+  await page
+    .getByText("ชั้นหนังสือเล็ก ๆ ยังว่างอยู่", { exact: true })
+    .waitFor();
+  await go("/discover");
+  assert.equal(await page.locator(".story-card").count(), 8);
+  await page
+    .getByRole("button", { name: "เคมีกับเภสัชศาสตร์", exact: true })
+    .click();
+  await page.waitForFunction(
+    () => document.querySelectorAll(".story-card").length === 2,
+  );
+  await page
+    .getByRole("textbox", { name: "ค้นหาในคลังความรู้" })
+    .fill("ไม่มีเรื่องนี้แน่นอน");
+  await page
+    .getByRole("heading", { name: "ยังไม่พบเรื่องนี้ในคลัง" })
+    .waitFor();
+  await page.getByRole("button", { name: "กลับไปดูทุกเรื่อง" }).click();
+  await page.waitForFunction(
+    () => document.querySelectorAll(".story-card").length === 8,
+  );
+  await go("/read/why-reactions-slow-down");
+  await page.locator(".reader-tool-invite a").click();
+  await page
+    .getByRole("heading", { level: 1, name: "ค่อย ๆ เปลี่ยนไป มากแค่ไหน?" })
+    .waitFor();
   const before = await page.locator(".result-line").innerText();
   await page.getByRole("slider", { name: "ค่าคงที่อัตรา" }).focus();
   await page.keyboard.press("ArrowRight");
   assert.notEqual(await page.locator(".result-line").innerText(), before);
   await page.getByRole("button", { name: "คืนค่าเริ่มต้น" }).click();
   assert.equal(await page.locator(".result-line").innerText(), before);
-  for (const route of [
+  const routes = [
     "/",
-    "/lessons",
-    "/labs",
-    "/quizzes",
-    "/progress",
-    "/builder",
-    "/drugs",
-    "/about",
-    "/lessons/moles",
+    "/discover",
+    "/saved",
+    "/tools",
     "/explorer",
-  ]) {
-    await go(route);
-    assert.equal(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth > innerWidth,
-      ),
-      false,
-      `Desktop overflow: ${route}`,
-    );
+    "/tools/kinetics",
+    "/about",
+    "/topics/medicine",
+    "/topics/everyday",
+    "/read/small-groups-big-difference",
+    "/read/aspirin-two-groups",
+    "/read/paracetamol-chemistry",
+  ];
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const path of routes) {
+      await go(path);
+      assert.equal(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth > innerWidth,
+        ),
+        false,
+        `${width} overflow ${path}`,
+      );
+    }
   }
-  await page.setViewportSize({ width: 390, height: 844 });
   await go("/");
   await page.getByRole("button", { name: "เปิดเมนู" }).click();
   await page
     .locator("nav")
-    .getByRole("link", { name: "บทเรียน", exact: true })
+    .getByRole("link", { name: "สำรวจความรู้", exact: true })
     .click();
-  await page.getByRole("button", { name: "ม.6", exact: true }).click();
-  await page.waitForFunction(
-    () => document.querySelectorAll(".course-card").length === 2,
-  );
-  assert.equal(await page.locator(".course-card").count(), 2);
-  for (const route of [
-    "/",
-    "/lessons",
-    "/labs",
-    "/quizzes",
-    "/progress",
-    "/builder",
-    "/drugs",
-    "/about",
-    "/lessons/organic",
-    "/explorer",
-  ]) {
-    await go(route);
-    assert.equal(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth > innerWidth,
-      ),
-      false,
-      `Mobile overflow: ${route}`,
-    );
-  }
-  await go("/");
-  await page.waitForFunction(
-    () =>
-      getComputedStyle(document.querySelector("main > div")).opacity === "1",
-  );
-  await page.screenshot({ path: "/tmp/chemlab-mobile.png", fullPage: true });
-  await go("/progress");
-  await page.getByRole("button", { name: "ล้างความก้าวหน้า" }).click();
-  await page.getByRole("button", { name: "ยกเลิก", exact: true }).click();
-  assert.equal((await progress()).scores.organic, 100);
-  await page.getByRole("button", { name: "ล้างความก้าวหน้า" }).click();
-  await page.getByRole("button", { name: "ยืนยันลบความก้าวหน้า" }).click();
-  assert.deepEqual((await progress()).completed, []);
-  await page.reload();
   await page
-    .getByText(
-      "ยังไม่มีกิจกรรม เริ่มบทเรียนแรก แล้วกลับมาดูเส้นทางของคุณที่นี่",
-      { exact: true },
-    )
+    .getByRole("heading", { name: "ตามความสงสัยของคุณไป", exact: true })
+    .waitFor();
+  await go("/");
+  await page.screenshot({
+    path: "/tmp/chemlab-knowledge-mobile.png",
+    fullPage: true,
+  });
+  await go("/lessons/organic");
+  assert.ok(page.url().endsWith("/read/small-groups-big-difference"));
+  await go("/labs");
+  assert.ok(page.url().endsWith("/tools"));
+  await go("/quizzes");
+  assert.ok(page.url().endsWith("/discover"));
+  await go("/");
+  await page.evaluate(() =>
+    localStorage.setItem(
+      "chemlab-rx:progress:v1",
+      '{"completed":["organic"],"scores":{"organic":100}}',
+    ),
+  );
+  await page.reload();
+  await page.locator("main[aria-busy=false]").waitFor();
+  assert.equal(
+    await page.evaluate(
+      () =>
+        JSON.parse(localStorage.getItem("chemlab-rx:progress:v1")).scores
+          .organic,
+    ),
+    100,
+  );
+  await page.evaluate(() =>
+    localStorage.setItem("chemlab-rx:reading-list:v1", "broken json"),
+  );
+  await go("/saved");
+  await page
+    .getByText("ชั้นหนังสือเล็ก ๆ ยังว่างอยู่", { exact: true })
+    .waitFor();
+  await page.evaluate(() => {
+    Storage.prototype.setItem = () => {
+      throw new Error("Storage blocked");
+    };
+  });
+  await go("/read/small-groups-big-difference");
+  await page.evaluate(() => {
+    Storage.prototype.setItem = () => {
+      throw new Error("Storage blocked");
+    };
+  });
+  await page.getByRole("button", { name: "เก็บไว้อ่าน", exact: true }).click();
+  await page
+    .getByRole("alert")
+    .getByText(/บันทึกไว้ในเครื่องไม่ได้/)
     .waitFor();
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: search, grade filtering, guided flow, wrong/correct quiz, reload persistence, explorer tracking, live graph/reset, 20 route/viewport checks, mobile navigation, confirmed progress reset; no runtime errors.",
+    "PASS: knowledge navigation, search/filter/empty state, article metadata, saved reading persistence/removal, tools, mobile navigation, 24 responsive route checks, legacy redirects, preserved old data, corrupt/blocked storage; no runtime errors.",
   );
 } finally {
   await browser.close();

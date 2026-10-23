@@ -1,244 +1,221 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { motion } from "motion/react";
 import {
   Atom,
-  ArrowUpRight,
-  BookOpen,
-  FlaskConical,
-  Hexagon,
-  Library,
-  ClipboardCheck,
-  ChartNoAxesCombined,
-  Info,
   Search,
   Menu,
   X,
+  ArrowRight,
+  ArrowUpRight,
+  Bookmark,
   ChevronRight,
-  GraduationCap,
-  House,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { lessons } from "@/data/curriculum";
-import { useProgress } from "@/hooks/use-progress";
-import { PageHeading } from "@/components/shared/learning";
-import { Dashboard } from "@/components/dashboard/dashboard";
-import { LessonView } from "@/components/lessons/lesson-view";
-import { Explorer } from "@/components/simulators/explorer";
+import { useReadingList } from "@/hooks/use-reading-list";
+import { articles, searchArticles, topicName } from "@/data/knowledge";
+import { KnowledgeHome } from "@/components/knowledge/home";
 import {
-  Curriculum,
-  QuizList,
-  Labs,
-  ProgressView,
-  ComingSoon,
-  About,
-} from "@/components/pages/learning-pages";
+  ArticleReader,
+  Discover,
+  JournalHeading,
+  ReadingShelf,
+  Tools,
+  KnowledgeAbout,
+} from "@/components/knowledge/pages";
+import { Explorer, DecayExperiment } from "@/components/simulators/explorer";
 const navigation = [
-  { href: "", label: "หน้าหลัก", en: "Dashboard", icon: House },
-  { href: "lessons", label: "บทเรียน", en: "Lessons", icon: BookOpen },
-  { href: "labs", label: "ห้องทดลอง", en: "Simulators", icon: FlaskConical },
-  {
-    href: "builder",
-    label: "สร้างโมเลกุล",
-    en: "Molecule Builder",
-    icon: Hexagon,
-  },
-  { href: "drugs", label: "คลังโมเลกุลยา", en: "Drug Library", icon: Library },
-  { href: "quizzes", label: "แบบทดสอบ", en: "Quizzes", icon: ClipboardCheck },
-  {
-    href: "progress",
-    label: "ความก้าวหน้า",
-    en: "Progress",
-    icon: ChartNoAxesCombined,
-  },
-  { href: "about", label: "เกี่ยวกับโครงการ", en: "About", icon: Info },
+  { href: "/discover", label: "สำรวจความรู้" },
+  { href: "/topics/medicine", label: "เคมีกับยา" },
+  { href: "/tools", label: "เครื่องมือสำรวจ" },
+  { href: "/about", label: "รู้จักเรา" },
 ];
-const link = (path: string) => "/" + path;
 export default function Workspace({ path }: { path: string }) {
-  const store = useProgress();
+  const list = useReadingList();
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const active = path.split("/")[0];
-  const current = navigation.find((n) => n.href === active);
-  const lesson = lessons.find((l) => path === `lessons/${l.id}`);
-  const results = lessons.filter((l) =>
-    (l.title + l.topic + l.code + l.grade)
-      .toLowerCase()
-      .includes(search.toLowerCase()),
-  );
+  const [query, setQuery] = useState("");
+  const found = query.trim() ? searchArticles(query).slice(0, 5) : [];
+  const article = articles.find((a) => `read/${a.id}` === path);
+  const topic = path.startsWith("topics/") ? path.slice(7) : undefined;
   return (
-    <div className="app-shell">
-      <aside className={`sidebar ${open ? "is-open" : ""}`}>
-        <Link href="/" className="brand" onClick={() => setOpen(false)}>
-          <span className="brand-icon">
-            <Atom size={26} />
-          </span>
-          <span>
-            ChemLab <b>RX</b>
-            <small>CHEMISTRY MEETS POSSIBILITY</small>
-          </span>
-        </Link>
-        <div className="nav-label">LEARNING SPACE</div>
-        <nav aria-label="เมนูหลัก">
-          {navigation.map((n) => (
-            <Link
-              onClick={() => setOpen(false)}
-              className={`nav-item ${active === n.href ? "active" : ""}`}
-              href={link(n.href)}
-              key={n.href}
-            >
-              <n.icon size={19} />
-              <span>{n.label}</span>
-              {active === n.href && <span className="active-dot" />}
-            </Link>
-          ))}
-        </nav>
-        <div className="sidebar-note">
-          <span className="mini-icon">
-            <GraduationCap size={21} />
-          </span>
-          <strong>จากห้องเรียน สู่โลกของยา</strong>
-          <p>
-            เรียนรู้ทีละนิด
-            <br />
-            สร้างความเข้าใจที่ยั่งยืน
-          </p>
-          <Link href="/about">
-            รู้จัก ChemLab RX <ArrowUpRight size={14} />
-          </Link>
-        </div>
-        <div className="profile">
-          <span className="avatar">S</span>
-          <div>
-            <strong>พื้นที่การเรียนรู้ของคุณ</strong>
-            <small>นักสำรวจเคมี · Local profile</small>
-          </div>
-          <span className="online" />
-        </div>
-      </aside>
-      {open && (
-        <button
-          className="scrim"
-          aria-label="ปิดเมนู"
-          onClick={() => setOpen(false)}
-        />
-      )}
-      <div className="main-shell">
-        <header className="topbar">
-          <div className="breadcrumb">
-            <button
-              className="mobile-menu"
-              aria-label="เปิดเมนู"
-              onClick={() => setOpen(true)}
-            >
-              <Menu />
-            </button>
-            <span>พื้นที่การเรียนรู้</span>
-            <ChevronRight size={14} />
-            <strong>{current?.label || "สำรวจหมู่ฟังก์ชัน"}</strong>
-          </div>
-          <div className="search-wrap">
-            <Search size={17} />
-            <input
-              aria-label="ค้นหาบทเรียน"
-              placeholder="ค้นหาบทเรียน หัวข้อ หรือรหัสวิชา..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            {search && (
-              <>
-                <button aria-label="ล้างการค้นหา" onClick={() => setSearch("")}>
-                  <X size={15} />
-                </button>
-                <div className="search-results">
-                  {results.length ? (
-                    results.map((l) => (
-                      <Link
-                        href={`/lessons/${l.id}`}
-                        onClick={() => setSearch("")}
-                        key={l.id}
-                      >
-                        <BookOpen size={16} />
-                        <span>
-                          {l.topic}
-                          <small>
-                            {l.code} · {l.grade}
-                          </small>
-                        </span>
-                        <ArrowUpRight size={15} />
-                      </Link>
-                    ))
-                  ) : (
-                    <p>ไม่พบบทเรียน ลองค้นหา “อินทรีย์” หรือ “ม.5”</p>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-          <span className="top-status">
-            <span /> พร้อมเรียนรู้
-          </span>
-        </header>
-        <main key={path} aria-busy={!store.ready}>
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
+    <div className="knowledge-site">
+      <a href="#main-content" className="skip-link">
+        ข้ามไปยังเนื้อหา
+      </a>
+      <header className="journal-header">
+        <div className="journal-nav-wrap">
+          <Link
+            className="journal-brand"
+            href="/"
+            onClick={() => {
+              setOpen(false);
+              setQuery("");
+            }}
           >
-            {store.error && (
-              <p className="notice" role="alert">
-                {store.error}
-              </p>
-            )}
-            {!path ? (
-              <Dashboard store={store} />
-            ) : lesson ? (
-              <LessonView key={lesson.id} lesson={lesson} store={store} />
-            ) : path === "lessons" ? (
-              <Curriculum />
-            ) : path === "explorer" ? (
-              <>
-                <PageHeading
-                  eyebrow="INTERACTIVE LEARNING"
-                  title="สำรวจหมู่ฟังก์ชัน"
-                  subtitle="ลองเลือกหมู่ฟังก์ชัน แล้วสังเกตว่าอะตอมเชื่อมต่อกันอย่างไร"
-                />
-                <Explorer store={store} />
-              </>
-            ) : path === "labs" ? (
-              <Labs />
-            ) : path === "quizzes" ? (
-              <QuizList progress={store.progress} />
-            ) : path === "progress" ? (
-              <ProgressView store={store} />
-            ) : path === "about" ? (
-              <About />
-            ) : ["builder", "drugs"].includes(path) ? (
-              <ComingSoon kind={path} />
-            ) : (
-              <>
-                <PageHeading
-                  title="ไม่พบหน้านี้"
-                  subtitle="กลับไปสำรวจบทเรียนและกิจกรรมที่พร้อมใช้งาน"
-                />
-                <Button asChild>
-                  <Link href="/">กลับหน้าหลัก</Link>
-                </Button>
-              </>
-            )}
-          </motion.div>
-          <footer>
-            <span>© {new Date().getFullYear()} ChemLab RX</span>
             <span>
-              Explore Chemistry, Understand Medicine.
-              <span className="footer-dot"> · </span>สร้างความเข้าใจ
-              ผ่านการลงมือทำ
+              <Atom size={25} />
             </span>
-            <span className="version">PHASE 01</span>
-          </footer>
-        </main>
+            <strong>
+              ChemLab <b>RX</b>
+              <small>CHEMISTRY, MADE CLOSER.</small>
+            </strong>
+          </Link>
+          <nav
+            aria-label="เมนูหลัก"
+            className={open ? "journal-nav is-open" : "journal-nav"}
+          >
+            {navigation.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                onClick={() => {
+                  setOpen(false);
+                  setQuery("");
+                }}
+                aria-current={`/${path}` === n.href ? "page" : undefined}
+              >
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="journal-nav-actions">
+            <Link
+              href="/saved"
+              aria-label="เก็บไว้อ่าน"
+              className={path === "saved" ? "is-active" : ""}
+            >
+              <Bookmark size={19} />
+              {list.saved.length > 0 && <small>{list.saved.length}</small>}
+            </Link>
+            <button
+              aria-label="เปิดเมนู"
+              aria-expanded={open}
+              onClick={() => setOpen((v) => !v)}
+            >
+              {open ? <X size={22} /> : <Menu size={22} />}
+            </button>
+          </div>
+        </div>
+      </header>
+      <div className="journal-searchbar">
+        <div>
+          <span>EXPLORE CHEMISTRY, UNDERSTAND MEDICINE.</span>
+          <div className="journal-global-search">
+            <Search size={16} />
+            <input
+              aria-label="ค้นหาเรื่องที่สงสัย"
+              placeholder="วันนี้ คุณสงสัยเรื่องอะไร?"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") setQuery("");
+              }}
+            />
+            {query && (
+              <button aria-label="ล้างการค้นหา" onClick={() => setQuery("")}>
+                <X size={15} />
+              </button>
+            )}
+            {query.trim() && (
+              <div className="journal-search-results">
+                {found.length ? (
+                  found.map((a) => (
+                    <Link
+                      key={a.id}
+                      href={`/read/${a.id}`}
+                      onClick={() => setQuery("")}
+                    >
+                      <span>
+                        <small>{topicName(a.topic)}</small>
+                        {a.title}
+                      </span>
+                      <ArrowUpRight size={18} />
+                    </Link>
+                  ))
+                ) : (
+                  <p>ยังไม่พบเรื่องนี้ ลองค้นหา “น้ำ” หรือ “แอสไพริน”</p>
+                )}
+                <Link href="/discover" onClick={() => setQuery("")}>
+                  เปิดคลังความรู้ทั้งหมด <ArrowRight size={16} />
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
+      <main id="main-content" className="journal-main" aria-busy={!list.ready}>
+        {list.error && (
+          <p role="alert" className="knowledge-storage-error">
+            {list.error}
+          </p>
+        )}
+        {!path ? (
+          <KnowledgeHome list={list} />
+        ) : article ? (
+          <ArticleReader key={article.id} article={article} list={list} />
+        ) : path === "discover" || topic ? (
+          <Discover key={path} list={list} topic={topic} />
+        ) : path === "saved" ? (
+          <ReadingShelf list={list} />
+        ) : path === "tools" ? (
+          <Tools />
+        ) : path === "about" ? (
+          <KnowledgeAbout />
+        ) : path === "explorer" ? (
+          <>
+            <JournalHeading
+              eyebrow="MOLECULE EXPLORER"
+              title="มองโมเลกุล ให้เห็นความหมาย"
+              description="แตะอะตอม ดูพันธะ แล้วลองสังเกตหมู่ฟังก์ชันด้วยตัวเอง ไม่ต้องอ่านเรื่องอื่นมาก่อน"
+            />
+            <Explorer />
+            <div className="tool-related">
+              <span>อยากรู้ที่มา?</span>
+              <Link href="/read/small-groups-big-difference">
+                อ่านเรื่องหมู่เล็ก ๆ ที่เปลี่ยนสมบัติของทั้งโมเลกุล{" "}
+                <ArrowRight size={17} />
+              </Link>
+            </div>
+          </>
+        ) : path === "tools/kinetics" ? (
+          <>
+            <JournalHeading
+              eyebrow="REACTION VISUALIZER"
+              title="ค่อย ๆ เปลี่ยนไป มากแค่ไหน?"
+              description="ขยับตัวแปรเพื่อดูความเข้มข้นกับเวลาในแบบจำลองปฏิกิริยาอันดับหนึ่ง"
+            />
+            <DecayExperiment />
+            <div className="tool-related">
+              <span>อ่านเส้นกราฟให้ออก</span>
+              <Link href="/read/why-reactions-slow-down">
+                ทำไมปฏิกิริยาบางอย่างจึงค่อย ๆ ช้าลง? <ArrowRight size={17} />
+              </Link>
+            </div>
+          </>
+        ) : null}
+      </main>
+      <footer className="journal-footer">
+        <div>
+          <Link className="journal-brand" href="/">
+            <span>
+              <Atom size={23} />
+            </span>
+            <strong>
+              ChemLab <b>RX</b>
+            </strong>
+          </Link>
+          <p>พื้นที่สำหรับเรื่องเคมี ที่เริ่มต้นจากความสงสัยของคุณ</p>
+        </div>
+        <div>
+          <Link href="/discover">คลังความรู้</Link>
+          <Link href="/tools">เครื่องมือสำรวจ</Link>
+          <Link href="/about">แนวทางและแหล่งข้อมูล</Link>
+        </div>
+        <div className="journal-footer-bottom">
+          <span>© {new Date().getFullYear()} ChemLab RX</span>
+          <span>เพื่อความเข้าใจทางเคมี ไม่ใช่คำแนะนำทางการแพทย์</span>
+          <span>STAY CURIOUS.</span>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -8,10 +8,11 @@ import "@fontsource/noto-sans-thai/500.css";
 import "@fontsource/noto-sans-thai/600.css";
 import "@fontsource/noto-sans-thai/700.css";
 import "./globals.css";
+import "./knowledge.css";
 export const metadata: Metadata = {
   title: "ChemLab RX — Explore Chemistry, Understand Medicine",
   description:
-    "เรียนรู้ ทดลอง และค้นพบความสัมพันธ์ระหว่างเคมีกับเภสัชศาสตร์ สำหรับนักเรียน ม.4–ม.6",
+    "แหล่งความรู้เคมีที่เชื่อมโยงยาและชีวิตประจำวัน อ่านเรื่องที่สงสัยผ่านภาพและเครื่องมือสำรวจ",
 };
 export default function RootLayout({
   children,
