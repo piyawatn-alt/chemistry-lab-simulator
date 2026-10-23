@@ -31,6 +31,7 @@ import { LearningFigure } from "./learning-figure";
 import { contentFigures } from "@/data/knowledge/figures";
 import { HighlightedText } from "./highlighted-text";
 import { ArticleArt } from "./article-art";
+import { ExperimentGallery } from "@/components/simulators/experiment-gallery";
 export function JournalHeading({
   eyebrow,
   title,
@@ -217,11 +218,11 @@ export function Tools() {
         title="เครื่องมือประกอบเนื้อหาเคมี"
         description="การทดลองแบบแอนิเมชัน ภาพโมเลกุล และกราฟจำลอง สำหรับสำรวจแนวคิดเคมีด้วยตัวเอง"
       />
+      <ExperimentGallery />
+      <h2 className="experiment-tool-heading">
+        สำรวจโครงสร้างและกราฟเพิ่มเติม
+      </h2>
       <div className="knowledge-tools">
-        <Link href="/tools/flame-test">
-          <div className="flame-card-art" aria-hidden="true"><span>🔥</span><i /><i /><i /><b>Na · K · Li · Ca · Sr · Cu</b></div>
-          <div className="knowledge-tool-copy"><span className="journal-kicker">ANIMATED EXPERIMENT</span><h2>ทดลองสีเปลวไฟ</h2><p>เลือกเกลือโลหะ นำตัวอย่างเข้าสู่เปลวไฟ แล้วเทียบสีที่เกิดขึ้น พร้อมภาพอธิบายระดับพลังงานของอิเล็กตรอน</p><span>เริ่มทดลองจำลอง <ArrowUpRight size={19} /></span></div>
-        </Link>
         <Link href="/explorer">
           <ArticleArt visual="acid" />
           <div className="knowledge-tool-copy">

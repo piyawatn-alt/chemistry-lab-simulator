@@ -83,7 +83,7 @@ try {
     200,
   );
   await page.goto(base + "/tools");
-  await page.getByRole("link").filter({ hasText: "เริ่มทดลองจำลอง" }).click();
+  await page.getByRole("link").filter({ hasText: "ทดลองสีเปลวไฟ" }).click();
   await page.waitForURL("**/tools/flame-test");
   assert.deepEqual(errors, []);
   console.log(

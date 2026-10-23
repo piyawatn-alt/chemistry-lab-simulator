@@ -12,7 +12,8 @@
     "test:molecules": "node scripts/molecules.mjs",
     "test:content": "node scripts/content.mjs",
     "figures:generate": "node scripts/generate-molecular-figures.cjs",
-    "test:flame-test": "node scripts/flame-test.mjs"
+    "test:flame-test": "node scripts/flame-test.mjs",
+    "test:experiments": "node scripts/experiments.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

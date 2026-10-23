@@ -203,7 +203,16 @@ export function KnowledgeHome({ list }: { list: ReadingList }) {
           </Link>
         </div>
         <div className="invite-tools">
-          <Link href="/tools/flame-test"><span className="invite-symbol" aria-hidden="true">🔥</span><div><h3>ทดลองสีเปลวไฟ</h3><p>เลือกสาร ดูแอนิเมชัน และเปรียบเทียบสี</p></div><ArrowUpRight size={19}/></Link>
+          <Link href="/tools/experiments">
+            <span className="invite-symbol">
+              <Atom size={35} strokeWidth={1.2} />
+            </span>
+            <div>
+              <h3>7 การทดลองเคมีแบบแอนิเมชัน</h3>
+              <p>เปลวไฟ กรด–เบส ตะกอน แก๊ส และอีกหลายเรื่อง</p>
+            </div>
+            <ArrowUpRight size={19} />
+          </Link>
           <Link href="/explorer">
             <span className="invite-symbol">
               <Atom size={35} strokeWidth={1.2} />

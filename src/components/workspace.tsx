@@ -24,12 +24,15 @@ import {
 } from "@/components/knowledge/pages";
 import { Explorer, DecayExperiment } from "@/components/simulators/explorer";
 import { FlameTest } from "@/components/simulators/flame-test";
+import { ExperimentLab } from "@/components/simulators/experiment-lab";
+import { ExperimentGallery } from "@/components/simulators/experiment-gallery";
+import { experimentForPath } from "@/data/experiments";
 const navigation = [
   { href: "/discover", label: "เนื้อหาทั้งหมด" },
   { href: "/grades/4", label: "ม.4" },
   { href: "/grades/5", label: "ม.5" },
   { href: "/grades/6", label: "ม.6" },
-  { href: "/tools", label: "เครื่องมือ" },
+  { href: "/tools", label: "ทดลองและเครื่องมือ" },
 ];
 export default function Workspace({ path }: { path: string }) {
   const list = useReadingList();
@@ -185,9 +188,24 @@ export default function Workspace({ path }: { path: string }) {
               </Link>
             </div>
           </>
+        ) : path === "tools/experiments" ? (
+          <>
+            <JournalHeading
+              eyebrow="EXPLORE THE VIRTUAL LAB"
+              title="การทดลองเคมีแบบแอนิเมชัน"
+              description="เลือกการทดลองได้อิสระ ปรับตัวแปร ดูผล และเชื่อมโยงกับเนื้อหาเคมี ม.4–ม.6"
+            />
+            <ExperimentGallery />
+          </>
+        ) : experimentForPath(path) ? (
+          <ExperimentLab key={path} id={experimentForPath(path)!.id} />
         ) : path === "tools/flame-test" ? (
           <>
-            <JournalHeading eyebrow="FLAME TEST SIMULATOR" title="ทดลองสีเปลวไฟ" description="เลือกสาร ดูแอนิเมชัน และเชื่อมโยงสีของแสงกับระดับพลังงานของอิเล็กตรอน" />
+            <JournalHeading
+              eyebrow="FLAME TEST SIMULATOR"
+              title="ทดลองสีเปลวไฟ"
+              description="เลือกสาร ดูแอนิเมชัน และเชื่อมโยงสีของแสงกับระดับพลังงานของอิเล็กตรอน"
+            />
             <FlameTest />
           </>
         ) : path === "tools/kinetics" ? (

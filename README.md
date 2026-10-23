@@ -48,6 +48,7 @@ npm run test:smoke
 npm run test:molecules
 npm run test:content # All content pages and the highlight controls
 npm run test:flame-test # Animated flame colors, comparison, reset and mobile
+npm run test:experiments # Six additional interactive experiments and their numerical results
 ```
 
 To use a system browser instead:
@@ -115,3 +116,9 @@ npm test
 ```
 
 `scripts/generate-molecular-figures.cjs` validates the supplied SMILES, checks the expected formulas, matches groups, and generates 2D layouts. Metadata in `public/diagrams/molecules.json` records representations, group atom indices, source references, and the generator version. The script uses the official [RDKit.js distribution](https://www.rdkitjs.com/) (BSD-3-Clause); the files are not copied PubChem images and are not 3D geometries. No generation step is required at runtime because the generated SVGs are committed.
+
+## Animated experiment collection
+
+`/tools/experiments` offers seven experiments including the flame test. Six additional routes cover strong-acid/strong-base neutralization, qualitative diffusion, electrolyte conductivity, AgCl precipitation, Boyle’s law, and temperature-dependent first-order reaction rates. Each includes adjustable conditions, playback/pause/reset, up to four in-session comparison records, explanatory highlights, model assumptions, references, and a related content page. Changing a condition stops and resets playback; comparison records remain until reset or navigation. Reduced-motion mode displays the completed result immediately on start.
+
+The quantitative helpers in `src/lib/chemistry/experiments.ts` are verified against stoichiometry, water autoionization, weak-acid equilibrium, the ideal-gas law, and Arrhenius/first-order equations. Conductivity is a relative ion-count index, not a measured current; diffusion is qualitative, not a physical transport solver. Particle artwork is symbolic. The collection adds no dependencies, credentials, services, or environment variables.

@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { redirect, notFound } from "next/navigation";
 import Workspace from "@/components/workspace";
 import { articles, topics, courses } from "@/data/knowledge";
+import { experimentForPath } from "@/data/experiments";
 type Props = { params: Promise<{ slug?: string[] }> };
 const legacy: Record<string, string> = {
- "topics/medicine":"/courses/organic",
- "topics/molecules":"/courses/organic",
- "topics/everyday":"/discover",
- "topics/ideas":"/discover",
+  "topics/medicine": "/courses/organic",
+  "topics/molecules": "/courses/organic",
+  "topics/everyday": "/discover",
+  "topics/ideas": "/discover",
   lessons: "/discover",
   labs: "/tools",
   builder: "/tools",
@@ -23,7 +24,24 @@ const legacy: Record<string, string> = {
 };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
-  if (slug.join("/") === "tools/flame-test") return { title: "ทดลองสีเปลวไฟ — ChemLab RX", description: "การทดลองจำลองแบบแอนิเมชัน เลือกเกลือโลหะ 6 ชนิด สังเกตสีเปลวไฟ และเข้าใจระดับพลังงานของอิเล็กตรอน" };
+  if (slug.join("/") === "tools/flame-test")
+    return {
+      title: "ทดลองสีเปลวไฟ — ChemLab RX",
+      description:
+        "การทดลองจำลองแบบแอนิเมชัน เลือกเกลือโลหะ 6 ชนิด สังเกตสีเปลวไฟ และเข้าใจระดับพลังงานของอิเล็กตรอน",
+    };
+  const experiment = experimentForPath(slug.join("/"));
+  if (experiment)
+    return {
+      title: `${experiment.title} — ChemLab RX`,
+      description: experiment.short,
+    };
+  if (slug.join("/") === "tools/experiments")
+    return {
+      title: "การทดลองเคมีแบบแอนิเมชัน — ChemLab RX",
+      description:
+        "เลือก 7 การทดลองเสมือน ปรับตัวแปรและดูผลผ่านแอนิเมชัน พร้อมหลักการทางเคมี",
+    };
   const a = articles.find((a) => `read/${a.id}` === slug.join("/"));
   return a
     ? {
@@ -49,10 +67,12 @@ export default async function Page({ params }: Props) {
       "tools",
       "tools/kinetics",
       "tools/flame-test",
+      "tools/experiments",
       "saved",
       "about",
       "explorer",
     ].includes(path) ||
+    Boolean(experimentForPath(path)) ||
     articles.some((a) => path === `read/${a.id}`) ||
     topics.slice(1).some((t) => path === `topics/${t.id}`) ||
     ["4", "5", "6"].some((g) => path === `grades/${g}`) ||
