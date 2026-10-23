@@ -12,7 +12,7 @@ import "./knowledge.css";
 export const metadata: Metadata = {
   title: "ChemLab RX — Explore Chemistry, Understand Medicine",
   description:
-    "แหล่งความรู้เคมีที่เชื่อมโยงยาและชีวิตประจำวัน อ่านเรื่องที่สงสัยผ่านภาพและเครื่องมือสำรวจ",
+    "คลังเนื้อหาเคมี ม.4 ม.5 และ ม.6 แบ่งตามรายวิชาและหัวข้อ พร้อมภาพประกอบ สูตรสำคัญ และเครื่องมือจำลอง",
 };
 export default function RootLayout({
   children,

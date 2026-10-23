@@ -12,7 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useReadingList } from "@/hooks/use-reading-list";
-import { articles, searchArticles, topicName } from "@/data/knowledge";
+import { articles, searchArticles, courseForArticle } from "@/data/knowledge";
 import { KnowledgeHome } from "@/components/knowledge/home";
 import {
   ArticleReader,
@@ -24,10 +24,11 @@ import {
 } from "@/components/knowledge/pages";
 import { Explorer, DecayExperiment } from "@/components/simulators/explorer";
 const navigation = [
-  { href: "/discover", label: "สำรวจความรู้" },
-  { href: "/topics/medicine", label: "เคมีกับยา" },
-  { href: "/tools", label: "เครื่องมือสำรวจ" },
-  { href: "/about", label: "รู้จักเรา" },
+  { href: "/discover", label: "เนื้อหาทั้งหมด" },
+  { href: "/grades/4", label: "ม.4" },
+  { href: "/grades/5", label: "ม.5" },
+  { href: "/grades/6", label: "ม.6" },
+  { href: "/tools", label: "เครื่องมือ" },
 ];
 export default function Workspace({ path }: { path: string }) {
   const list = useReadingList();
@@ -36,6 +37,8 @@ export default function Workspace({ path }: { path: string }) {
   const found = query.trim() ? searchArticles(query).slice(0, 5) : [];
   const article = articles.find((a) => `read/${a.id}` === path);
   const topic = path.startsWith("topics/") ? path.slice(7) : undefined;
+  const grade = path.startsWith("grades/") ? path.slice(7) : undefined;
+  const course = path.startsWith("courses/") ? path.slice(8) : undefined;
   return (
     <div className="knowledge-site">
       <a href="#main-content" className="skip-link">
@@ -56,7 +59,7 @@ export default function Workspace({ path }: { path: string }) {
             </span>
             <strong>
               ChemLab <b>RX</b>
-              <small>CHEMISTRY, MADE CLOSER.</small>
+              <small>CHEMISTRY CONTENT LIBRARY</small>
             </strong>
           </Link>
           <nav
@@ -98,12 +101,12 @@ export default function Workspace({ path }: { path: string }) {
       </header>
       <div className="journal-searchbar">
         <div>
-          <span>EXPLORE CHEMISTRY, UNDERSTAND MEDICINE.</span>
+          <span>CHEMISTRY REFERENCE · ม.4 / ม.5 / ม.6</span>
           <div className="journal-global-search">
             <Search size={16} />
             <input
-              aria-label="ค้นหาเรื่องที่สงสัย"
-              placeholder="วันนี้ คุณสงสัยเรื่องอะไร?"
+              aria-label="ค้นหาเนื้อหา"
+              placeholder="ค้นหาหัวข้อเนื้อหา หรือรหัสวิชา"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
@@ -125,17 +128,17 @@ export default function Workspace({ path }: { path: string }) {
                       onClick={() => setQuery("")}
                     >
                       <span>
-                        <small>{topicName(a.topic)}</small>
+                        <small>{`ม.${courseForArticle(a).grade} · ${courseForArticle(a).code}`}</small>
                         {a.title}
                       </span>
                       <ArrowUpRight size={18} />
                     </Link>
                   ))
                 ) : (
-                  <p>ยังไม่พบเรื่องนี้ ลองค้นหา “น้ำ” หรือ “แอสไพริน”</p>
+                  <p>ไม่พบเนื้อหา ลองค้นหาชื่อหัวข้อหรือรหัสวิชา</p>
                 )}
                 <Link href="/discover" onClick={() => setQuery("")}>
-                  เปิดคลังความรู้ทั้งหมด <ArrowRight size={16} />
+                  เปิดคลังเนื้อหาทั้งหมด <ArrowRight size={16} />
                 </Link>
               </div>
             )}
@@ -152,8 +155,14 @@ export default function Workspace({ path }: { path: string }) {
           <KnowledgeHome list={list} />
         ) : article ? (
           <ArticleReader key={article.id} article={article} list={list} />
-        ) : path === "discover" || topic ? (
-          <Discover key={path} list={list} topic={topic} />
+        ) : path === "discover" || topic || grade || course ? (
+          <Discover
+            key={path}
+            list={list}
+            topic={topic}
+            grade={grade}
+            course={course}
+          />
         ) : path === "saved" ? (
           <ReadingShelf list={list} />
         ) : path === "tools" ? (
@@ -164,15 +173,14 @@ export default function Workspace({ path }: { path: string }) {
           <>
             <JournalHeading
               eyebrow="MOLECULE EXPLORER"
-              title="มองโมเลกุล ให้เห็นความหมาย"
+              title="โครงสร้างโมเลกุลและหมู่ฟังก์ชัน"
               description="แตะอะตอม ดูพันธะ แล้วลองสังเกตหมู่ฟังก์ชันด้วยตัวเอง ไม่ต้องอ่านเรื่องอื่นมาก่อน"
             />
             <Explorer />
             <div className="tool-related">
-              <span>อยากรู้ที่มา?</span>
+              <span>เนื้อหาที่เกี่ยวข้อง</span>
               <Link href="/read/small-groups-big-difference">
-                อ่านเรื่องหมู่เล็ก ๆ ที่เปลี่ยนสมบัติของทั้งโมเลกุล{" "}
-                <ArrowRight size={17} />
+                หมู่ฟังก์ชันของสารอินทรีย์ <ArrowRight size={17} />
               </Link>
             </div>
           </>
@@ -180,14 +188,14 @@ export default function Workspace({ path }: { path: string }) {
           <>
             <JournalHeading
               eyebrow="REACTION VISUALIZER"
-              title="ค่อย ๆ เปลี่ยนไป มากแค่ไหน?"
+              title="กราฟความเข้มข้นกับเวลา"
               description="ขยับตัวแปรเพื่อดูความเข้มข้นกับเวลาในแบบจำลองปฏิกิริยาอันดับหนึ่ง"
             />
             <DecayExperiment />
             <div className="tool-related">
               <span>อ่านเส้นกราฟให้ออก</span>
               <Link href="/read/why-reactions-slow-down">
-                ทำไมปฏิกิริยาบางอย่างจึงค่อย ๆ ช้าลง? <ArrowRight size={17} />
+                อัตราปฏิกิริยาและแบบจำลองอันดับหนึ่ง <ArrowRight size={17} />
               </Link>
             </div>
           </>
@@ -203,17 +211,17 @@ export default function Workspace({ path }: { path: string }) {
               ChemLab <b>RX</b>
             </strong>
           </Link>
-          <p>พื้นที่สำหรับเรื่องเคมี ที่เริ่มต้นจากความสงสัยของคุณ</p>
+          <p>แหล่งรวมเนื้อหาเคมีระดับมัธยมศึกษาปีที่ 4–6</p>
         </div>
         <div>
-          <Link href="/discover">คลังความรู้</Link>
+          <Link href="/discover">คลังเนื้อหา</Link>
           <Link href="/tools">เครื่องมือสำรวจ</Link>
           <Link href="/about">แนวทางและแหล่งข้อมูล</Link>
         </div>
         <div className="journal-footer-bottom">
           <span>© {new Date().getFullYear()} ChemLab RX</span>
           <span>เพื่อความเข้าใจทางเคมี ไม่ใช่คำแนะนำทางการแพทย์</span>
-          <span>STAY CURIOUS.</span>
+          <span>CHEMISTRY CONTENT LIBRARY</span>
         </div>
       </footer>
     </div>

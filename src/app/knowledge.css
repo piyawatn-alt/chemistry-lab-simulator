@@ -2025,3 +2025,435 @@
     font-size: 12px;
   }
 }
+/* Grade and subject directory: a content library rather than an editorial feed. */
+.library-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 65px;
+  align-items: center;
+  padding: 55px 0 42px;
+  border-bottom: 1px solid #e3e9da;
+}
+.library-hero h1 {
+  font-size: 52px;
+  font-weight: 500;
+  letter-spacing: -1.8px;
+  line-height: 1.65;
+  margin: 16px 0;
+}
+.library-hero h1 > span {
+  color: #4d876a;
+}
+.library-hero > div > p {
+  font-size: 14px;
+  line-height: 2.1;
+  color: #74886b;
+}
+.library-hero-index {
+  background: #f1f5eb;
+  border: 1px solid #dfe8d4;
+  border-radius: 12px;
+  padding: 25px;
+}
+.library-hero-index h2 {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 10px 0 20px;
+}
+.library-hero-index > a {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 17px 0;
+  border-top: 1px solid #e0e8d7;
+}
+.library-hero-index > a > span {
+  height: 43px;
+  width: 43px;
+  background: #e1ebd8;
+  color: #61844d;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 500;
+}
+.library-hero-index > a:nth-of-type(2) > span {
+  background: #dfeaf0;
+  color: #61849c;
+}
+.library-hero-index > a:nth-of-type(3) > span {
+  background: #ebe2f0;
+  color: #92809f;
+}
+.library-hero-index strong {
+  font-size: 13px;
+  font-weight: 500;
+}
+.library-hero-index small {
+  display: block;
+  font-size: 10px;
+  color: #829575;
+  margin-top: 6px;
+}
+.library-hero-index > a > svg {
+  margin-left: auto;
+  color: #819773;
+}
+.grade-shelf {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.grade-card {
+  background: #fff;
+  border: 1px solid #e1e7d9;
+  border-radius: 11px;
+  overflow: hidden;
+}
+.grade-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 20px;
+  background: #f0f5e8;
+  border-bottom: 1px solid #e1e7d9;
+}
+.grade-card-heading > span {
+  font-size: 16px;
+  color: #6b885c;
+  white-space: nowrap;
+}
+.grade-card-heading b {
+  font-size: 34px;
+  font-weight: 500;
+  margin-left: 2px;
+}
+.grade-card-heading small {
+  font-size: 9px;
+  color: #809471;
+}
+.grade-card-heading h3 {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.8;
+  margin-top: 4px;
+}
+.grade-card-heading > svg {
+  margin-left: auto;
+  color: #8da17f;
+}
+.grade-5 .grade-card-heading {
+  background: #edf3f5;
+}
+.grade-5 .grade-card-heading > span {
+  color: #6f8e9e;
+}
+.grade-6 .grade-card-heading {
+  background: #f2eef5;
+}
+.grade-6 .grade-card-heading > span {
+  color: #9a87a8;
+}
+.grade-card > div {
+  padding: 0 20px;
+}
+.grade-card > div > a {
+  display: block;
+  padding: 20px 0;
+  border-bottom: 1px solid #edf0e7;
+}
+.grade-card > div > a:last-child {
+  border: 0;
+}
+.grade-card > div > a > span {
+  font-size: 9px;
+  color: #7e9372;
+}
+.grade-card h4 {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.9;
+  margin-top: 8px;
+  min-height: 49px;
+}
+.grade-card > div > a > small {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #849775;
+  font-size: 9px;
+  margin-top: 16px;
+}
+.library-count {
+  font-size: 11px;
+  color: #80936f;
+}
+.course-directory {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+.course-directory > section {
+  border: 1px solid #e0e7d7;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+.course-directory header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 20px;
+  background: #f7f9f1;
+  border-bottom: 1px solid #e8eddf;
+}
+.course-grade-tag {
+  border: 1px solid #dce7cd;
+  background: #ecf4e2;
+  border-radius: 8px;
+  color: #68884f;
+  padding: 11px 8px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.course-grade-tag.grade-5 {
+  background: #eaf1f5;
+  border-color: #dbe7ed;
+  color: #6c8b9c;
+}
+.course-grade-tag.grade-6 {
+  background: #f0ebf5;
+  border-color: #e4dbea;
+  color: #9b87aa;
+}
+.course-directory header > div {
+  min-width: 0;
+}
+.course-directory header > div > span {
+  font-size: 9px;
+  color: #869a76;
+}
+.course-directory h3 {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.9;
+  margin-top: 5px;
+}
+.course-directory header > a {
+  margin-left: auto;
+  color: #819b70;
+}
+.course-directory > section > div {
+  padding: 5px 20px;
+}
+.course-directory > section > div > a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 17px 0;
+  border-bottom: 1px solid #eef1e7;
+}
+.course-directory > section > div > a:last-child {
+  border: 0;
+}
+.course-directory > section > div > a > span {
+  color: #9bad8b;
+  font-size: 9px;
+}
+.course-directory strong {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.8;
+}
+.course-directory small {
+  margin-left: auto;
+  color: #93a682;
+  font-size: 8px;
+  white-space: nowrap;
+}
+.course-directory > section > div > a > svg {
+  color: #8da47c;
+}
+.curriculum-note {
+  font-size: 10px;
+  line-height: 2;
+  color: #889a7b;
+  margin-top: 22px;
+}
+.course-filter {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #f2f6eb;
+  border: 1px solid #e3eadb;
+  padding: 14px 17px;
+  border-radius: 8px;
+}
+.course-filter label {
+  font-size: 11px;
+  color: #7e9470;
+  white-space: nowrap;
+}
+.course-filter select {
+  width: 100%;
+  min-width: 0;
+  font: inherit;
+  font-size: 12px;
+  color: #506e45;
+  background: white;
+  border: 1px solid #dce5d3;
+  border-radius: 5px;
+  padding: 11px;
+  cursor: pointer;
+}
+.reader-heading .journal-kicker {
+  font-size: 9px;
+  letter-spacing: 0.5px;
+}
+@media (max-width: 1000px) {
+  .library-hero {
+    gap: 35px;
+  }
+  .library-hero h1 {
+    font-size: 43px;
+  }
+  .grade-shelf {
+    gap: 14px;
+  }
+  .grade-card-heading {
+    padding: 18px 15px;
+    gap: 10px;
+  }
+  .grade-card-heading h3 {
+    font-size: 11px;
+  }
+  .grade-card-heading b {
+    font-size: 30px;
+  }
+  .grade-card > div {
+    padding: 0 15px;
+  }
+  .grade-card h4 {
+    font-size: 12px;
+  }
+  .course-directory {
+    gap: 16px;
+  }
+  .course-directory small {
+    display: none;
+  }
+}
+@media (max-width: 620px) {
+  .library-hero {
+    grid-template-columns: 1fr;
+    gap: 27px;
+    padding: 33px 0 30px;
+  }
+  .library-hero h1 {
+    font-size: 38px;
+    letter-spacing: -1px;
+    margin: 13px 0;
+  }
+  .library-hero > div > p {
+    font-size: 12px;
+    line-height: 2.1;
+  }
+  .library-hero-index {
+    padding: 21px;
+  }
+  .library-hero-index h2 {
+    font-size: 19px;
+    margin-bottom: 17px;
+  }
+  .library-hero-index strong {
+    font-size: 12px;
+  }
+  .library-hero-index small {
+    font-size: 9px;
+  }
+  .library-hero-index > a {
+    gap: 13px;
+    padding: 16px 0;
+  }
+  .grade-shelf {
+    grid-template-columns: 1fr;
+    gap: 19px;
+  }
+  .grade-card-heading {
+    padding: 20px;
+    gap: 17px;
+  }
+  .grade-card-heading h3 {
+    font-size: 15px;
+  }
+  .grade-card-heading small {
+    font-size: 10px;
+  }
+  .grade-card-heading b {
+    font-size: 38px;
+  }
+  .grade-card > div {
+    padding: 0 20px;
+  }
+  .grade-card h4 {
+    font-size: 14px;
+    min-height: 0;
+  }
+  .grade-card > div > a {
+    padding: 20px 0;
+  }
+  .grade-card > div > a > small {
+    font-size: 10px;
+    margin-top: 14px;
+  }
+  .grade-card > div > a > span {
+    font-size: 10px;
+  }
+  .course-directory {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .course-directory header {
+    padding: 18px 16px;
+  }
+  .course-directory h3 {
+    font-size: 13px;
+  }
+  .course-directory strong {
+    font-size: 12px;
+    line-height: 1.9;
+  }
+  .course-directory > section > div {
+    padding: 4px 16px;
+  }
+  .course-directory > section > div > a {
+    gap: 9px;
+  }
+  .course-directory > section > div > a > svg {
+    width: 13px;
+  }
+  .library-count {
+    font-size: 9px;
+    white-space: nowrap;
+    margin-bottom: 5px;
+  }
+  .course-filter {
+    padding: 12px;
+    gap: 10px;
+    align-items: start;
+    flex-direction: column;
+  }
+  .course-filter select {
+    min-height: 44px;
+    font-size: 11px;
+  }
+  .reader-heading .journal-kicker {
+    font-size: 9px;
+    line-height: 2;
+    letter-spacing: 0;
+  }
+}
+.course-directory {
+  align-items: start;
+}

@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { ArrowUpRight, Bookmark, Check } from "lucide-react";
-import { type Article, readingMinutes, topicName } from "@/data/knowledge";
+import {
+  type Article,
+  readingMinutes,
+  courseForArticle,
+} from "@/data/knowledge";
 import type { ReadingList } from "@/hooks/use-reading-list";
 import { ArticleArt } from "./article-art";
 export function ArticleCard({
@@ -10,6 +14,7 @@ export function ArticleCard({
   article: Article;
   list: ReadingList;
 }) {
+  const course = courseForArticle(a);
   const saved = list.saved.includes(a.id);
   return (
     <article className="story-card">
@@ -22,7 +27,7 @@ export function ArticleCard({
       </Link>
       <div className="story-card-content">
         <div className="story-card-meta">
-          <span>{topicName(a.topic)}</span>
+          <span>{`ม.${course.grade} · ${course.code}`}</span>
           <button
             disabled={!list.ready}
             aria-label={`${saved ? "นำออกจาก" : "เพิ่มใน"}รายการอ่าน: ${a.title}`}

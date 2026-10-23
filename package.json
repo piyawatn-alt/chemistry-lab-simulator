@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test src/lib/chemistry/*.test.ts src/lib/storage/*.test.ts",
+    "test": "tsx --test src/lib/chemistry/*.test.ts src/lib/storage/*.test.ts src/lib/content/*.test.ts",
     "test:smoke": "node scripts/smoke.mjs",
     "test:molecules": "node scripts/molecules.mjs"
   },

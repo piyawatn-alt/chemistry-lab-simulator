@@ -2,180 +2,227 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
-  Sparkles,
-  Search,
-  MoveUpRight,
+  BookOpen,
+  Layers,
+  Atom,
   ChartNoAxesCombined,
 } from "lucide-react";
-import { articles, topics } from "@/data/knowledge";
+import { articles, courses, articlesForCourse } from "@/data/knowledge";
 import type { ReadingList } from "@/hooks/use-reading-list";
 import { ArticleArt } from "./article-art";
 import { ArticleCard } from "./article-card";
 export function KnowledgeHome({ list }: { list: ReadingList }) {
   return (
     <>
-      <section className="journal-hero">
-        <div className="journal-hero-copy">
-          <span className="journal-kicker">
-            <span />A LITTLE CURIOSITY. A WHOLE NEW WORLD.
-          </span>
+      <section className="library-hero">
+        <div>
+          <span className="journal-kicker">CHEMISTRY CONTENT LIBRARY</span>
           <h1>
-            เรื่องใกล้ตัว
+            คลังเนื้อหาเคมี
             <br />
-            มี<span>เคมี</span>ซ่อนอยู่<span className="journal-period">.</span>
+            <span>ม.4 · ม.5 · ม.6</span>
           </h1>
           <p>
-            จากน้ำหนึ่งแก้ว ถึงโมเลกุลในยา
+            รวมเนื้อหาแยกตามระดับชั้นและรายวิชา
             <br />
-            ชวนมองสิ่งคุ้นเคย ผ่านเรื่องราวที่เข้าใจได้
+            พร้อมคำอธิบาย ภาพประกอบ สูตรสำคัญ และเครื่องมือจำลอง
           </p>
           <div className="journal-hero-actions">
             <Link className="journal-button" href="/discover">
-              ตามความสงสัยไปกัน <ArrowRight size={17} />
+              ดูเนื้อหาทั้งหมด <ArrowRight size={17} />
             </Link>
             <Link className="journal-text-link" href="/tools">
-              ลองสำรวจด้วยตัวเอง <ArrowUpRight size={16} />
+              เครื่องมือประกอบเนื้อหา <ArrowUpRight size={16} />
             </Link>
           </div>
-          <div className="journal-hero-note">
-            <span />
-            อ่านได้ทุกเรื่อง · เลือกเริ่มตรงไหนก็ได้
-          </div>
         </div>
-        <Link className="hero-feature" href={`/read/${articles[0].id}`}>
-          <div className="hero-feature-label">
-            <span>THE SMALL DETAILS</span>
-            <ArrowUpRight size={20} />
-          </div>
-          <ArticleArt visual="alcohol" large />
-          <div className="hero-feature-copy">
-            <span className="journal-kicker">เริ่มจากความสงสัยเล็ก ๆ</span>
-            <h2>
-              หมู่เล็ก ๆ ที่เปลี่ยนสมบัติ
-              <br />
-              ของทั้งโมเลกุล
-            </h2>
-            <span className="hero-feature-action">
-              ไปทำความรู้จักหมู่ฟังก์ชัน <ArrowRight size={17} />
-            </span>
-          </div>
-        </Link>
+        <div className="library-hero-index">
+          <span className="journal-kicker">CONTENT DIRECTORY</span>
+          <h2>เลือกเนื้อหาตามระดับชั้น</h2>
+          {["4", "5", "6"].map((grade, i) => (
+            <Link key={grade} href={`/grades/${grade}`}>
+              <span>ม.{grade}</span>
+              <div>
+                <strong>
+                  {
+                    [
+                      "พื้นฐานและปริมาณสาร",
+                      "ปฏิกิริยาและเคมีอินทรีย์",
+                      "วัสดุและการประยุกต์",
+                    ][i]
+                  }
+                </strong>
+                <small>
+                  {courses
+                    .filter((c) => c.grade === grade)
+                    .map((c) => c.code)
+                    .join(" · ")}
+                </small>
+              </div>
+              <ArrowUpRight size={18} />
+            </Link>
+          ))}
+        </div>
       </section>
-      <div className="journal-intro-line">
-        <span>เคมีที่เชื่อมโยงกับชีวิตจริง</span>
-        <span>
-          อ่านเรื่องที่สนใจ <i /> มองผ่านภาพ <i /> ลองด้วยเครื่องมือ
-        </span>
-        <span>CHEMISTRY, MADE CLOSER.</span>
-      </div>
-      <section className="journal-section">
+      <section className="journal-section library-level-section">
         <div className="journal-section-heading">
           <div>
-            <span className="journal-kicker">FOLLOW YOUR CURIOSITY</span>
-            <h2>เริ่มจากเรื่องที่คุณสงสัย</h2>
+            <span className="journal-kicker">BROWSE BY GRADE</span>
+            <h2>เนื้อหาตามระดับชั้น</h2>
           </div>
           <Link href="/discover">
-            สำรวจทุกเรื่อง <ArrowRight size={17} />
+            สารบัญเนื้อหาทั้งหมด <ArrowRight size={17} />
           </Link>
         </div>
-        <div className="topic-shelf">
-          {topics.slice(1).map((t, i) => (
-            <Link
-              href={`/topics/${t.id}`}
-              className={`topic-tile topic-color-${i}`}
-              key={t.id}
-            >
-              <span className="topic-number">
-                0{i + 1} <ArrowUpRight size={18} />
-              </span>
-              <div className="topic-symbol">
-                {["C–O–H", "H₂O", "RX", "[A]₀"][i]}
+        <div className="grade-shelf">
+          {["4", "5", "6"].map((grade, i) => (
+            <section className={`grade-card grade-${grade}`} key={grade}>
+              <Link href={`/grades/${grade}`} className="grade-card-heading">
+                <span>
+                  ม.<b>{grade}</b>
+                </span>
+                <div>
+                  <small>มัธยมศึกษาปีที่ {grade}</small>
+                  <h3>
+                    {
+                      [
+                        "พื้นฐานเคมี",
+                        "ปฏิกิริยาและสารอินทรีย์",
+                        "พอลิเมอร์และการบูรณาการ",
+                      ][i]
+                    }
+                  </h3>
+                </div>
+                <ArrowUpRight size={19} />
+              </Link>
+              <div>
+                {courses
+                  .filter((c) => c.grade === grade)
+                  .map((c) => (
+                    <Link href={`/courses/${c.id}`} key={c.id}>
+                      <span>
+                        {c.code}
+                        {c.semester ? ` · เทอม ${c.semester}` : ""}
+                      </span>
+                      <h4>{c.title}</h4>
+                      <small>
+                        {articlesForCourse(c.id).length} หัวข้อที่เปิดอ่านได้{" "}
+                        <ArrowRight size={14} />
+                      </small>
+                    </Link>
+                  ))}
               </div>
-              <h3>{t.name}</h3>
-              <p>{t.description}</p>
-            </Link>
+            </section>
           ))}
         </div>
       </section>
       <section className="journal-section">
         <div className="journal-section-heading">
           <div>
-            <span className="journal-kicker">WORTH A CLOSER LOOK</span>
-            <h2>เรื่องใกล้ตัว ที่น่ารู้ให้ลึกขึ้น</h2>
+            <span className="journal-kicker">CONTENT INDEX</span>
+            <h2>สารบัญแยกตามรายวิชา</h2>
+          </div>
+          <span className="library-count">{articles.length} หัวข้อเนื้อหา</span>
+        </div>
+        <div className="course-directory">
+          {courses.map((c) => (
+            <section key={c.id}>
+              <header>
+                <span className={`course-grade-tag grade-${c.grade}`}>
+                  ม.{c.grade}
+                </span>
+                <div>
+                  <span>
+                    {c.code}
+                    {c.semester ? ` · ภาคเรียนที่ ${c.semester}` : ""}
+                  </span>
+                  <Link href={`/courses/${c.id}`}>
+                    <h3>{c.title}</h3>
+                  </Link>
+                </div>
+                <Link
+                  href={`/courses/${c.id}`}
+                  aria-label={`ดูเนื้อหา ${c.code}`}
+                >
+                  <ArrowUpRight size={19} />
+                </Link>
+              </header>
+              <div>
+                {articlesForCourse(c.id).map((a, i) => (
+                  <Link key={a.id} href={`/read/${a.id}`}>
+                    <span>{String(i + 1).padStart(2, "0")}</span>
+                    <strong>{a.title}</strong>
+                    <small>
+                      {a.tool ? "มีเครื่องมือประกอบ" : "เนื้อหาและภาพประกอบ"}
+                    </small>
+                    <ArrowRight size={15} />
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+        <p className="curriculum-note">
+          รายวิชาจัดตามขอบเขตโครงการ แสดงเฉพาะหัวข้อที่มีเนื้อหาแล้ว
+          ไม่ใช่สารบัญหรือหลักสูตรฉบับสมบูรณ์อย่างเป็นทางการ
+        </p>
+      </section>
+      <section className="journal-section">
+        <div className="journal-section-heading">
+          <div>
+            <span className="journal-kicker">
+              CONTENT WITH VISUAL EXPLANATIONS
+            </span>
+            <h2>เนื้อหาพร้อมภาพประกอบ</h2>
           </div>
           <Link href="/discover">
-            ดูเรื่องทั้งหมด <ArrowRight size={17} />
+            ดูเนื้อหาทั้งหมด <ArrowRight size={17} />
           </Link>
         </div>
         <div className="story-grid">
-          {[articles[1], articles[2], articles[5]].map((a) => (
+          {[articles[1], articles[0], articles[6]].map((a) => (
             <ArticleCard key={a.id} article={a} list={list} />
           ))}
         </div>
       </section>
       <section className="interactive-invite">
         <div>
-          <span className="journal-kicker">
-            <Sparkles size={14} /> NOT JUST SOMETHING TO READ
-          </span>
+          <span className="journal-kicker">REFERENCE TOOLS</span>
           <h2>
-            บางเรื่อง เข้าใจง่ายขึ้น
+            เครื่องมือประกอบ
             <br />
-            เมื่อได้ลองมองเอง
+            การอ่านเนื้อหา
           </h2>
           <p>
-            แตะอะตอมเพื่อดูว่าเชื่อมกันอย่างไร
+            ภาพการเชื่อมต่อของอะตอมและกราฟทางเคมี
             <br />
-            หรือขยับตัวแปร แล้วสังเกตเส้นกราฟที่เปลี่ยนไป
+            สำหรับดูตัวอย่างควบคู่กับคำอธิบาย
           </p>
-          <Link href="/tools" className="journal-button">
-            เปิดเครื่องมือสำรวจ <ArrowRight size={17} />
+          <Link className="journal-button" href="/tools">
+            ดูเครื่องมือทั้งหมด <ArrowRight size={17} />
           </Link>
         </div>
         <div className="invite-tools">
           <Link href="/explorer">
             <span className="invite-symbol">
-              C — <b>O</b> — H
+              <Atom size={35} strokeWidth={1.2} />
             </span>
             <div>
-              <h3>มองโมเลกุลให้เห็นภาพ</h3>
-              <p>แตะ ดูพันธะ และลองหาหมู่ฟังก์ชัน</p>
+              <h3>โครงสร้างและหมู่ฟังก์ชัน</h3>
+              <p>ภาพอะตอม พันธะ และการระบุหมู่ฟังก์ชัน</p>
             </div>
-            <ArrowUpRight size={20} />
+            <ArrowUpRight size={19} />
           </Link>
           <Link href="/tools/kinetics">
-            <span className="invite-symbol invite-curve">
-              <ChartNoAxesCombined size={40} strokeWidth={1.2} />
+            <span className="invite-symbol">
+              <ChartNoAxesCombined size={35} strokeWidth={1.2} />
             </span>
             <div>
-              <h3>อ่านความเปลี่ยนแปลงของสาร</h3>
-              <p>ปรับความเข้มข้น แล้วเปรียบเทียบกราฟ</p>
+              <h3>กราฟความเข้มข้นกับเวลา</h3>
+              <p>แบบจำลองอันดับหนึ่งและครึ่งชีวิต</p>
             </div>
-            <ArrowUpRight size={20} />
+            <ArrowUpRight size={19} />
           </Link>
-        </div>
-      </section>
-      <section className="journal-section">
-        <div className="journal-section-heading">
-          <div>
-            <span className="journal-kicker">IDEAS TO KEEP EXPLORING</span>
-            <h2>ต่อยอดความสงสัย</h2>
-          </div>
-          <Link href="/discover">
-            ค้นหาเรื่องที่สนใจ <Search size={17} />
-          </Link>
-        </div>
-        <div className="reading-links">
-          {[articles[3], articles[4], articles[6], articles[7]].map((a, i) => (
-            <Link href={`/read/${a.id}`} key={a.id}>
-              <span>0{i + 1}</span>
-              <div>
-                <small>{topics.find((t) => t.id === a.topic)?.name}</small>
-                <h3>{a.title}</h3>
-              </div>
-              <MoveUpRight size={18} />
-            </Link>
-          ))}
         </div>
       </section>
     </>

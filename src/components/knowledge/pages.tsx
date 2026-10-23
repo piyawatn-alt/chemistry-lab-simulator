@@ -18,6 +18,9 @@ import {
   topicName,
   type Article,
   readingMinutes,
+  courses,
+  courseForArticle,
+  articlesForCourse,
 } from "@/data/knowledge";
 import type { ReadingList } from "@/hooks/use-reading-list";
 import { ArticleCard } from "./article-card";
@@ -42,73 +45,120 @@ export function JournalHeading({
 export function Discover({
   list,
   topic = "all",
+  grade = "all",
+  course = "all",
 }: {
   list: ReadingList;
   topic?: string;
+  grade?: string;
+  course?: string;
 }) {
+  const initialCourse = courses.find((c) => c.id === course);
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState(topic);
-  const found = searchArticles(query).filter(
-    (a) => filter === "all" || a.topic === filter,
-  );
+  const [level, setLevel] = useState(initialCourse?.grade || grade);
+  const [selectedCourse, setCourse] = useState(course);
+  const matching = searchArticles(query).filter((a) => {
+    const c = courseForArticle(a);
+    return (
+      (level === "all" || c.grade === level) &&
+      (selectedCourse === "all" || c.id === selectedCourse) &&
+      (topic === "all" || a.topic === topic)
+    );
+  });
+  const currentCourse = courses.find((c) => c.id === selectedCourse);
   return (
     <>
       <JournalHeading
-        eyebrow="THE KNOWLEDGE COLLECTION"
-        title={topic === "all" ? "ตามความสงสัยของคุณไป" : topicName(topic)}
-        description="เลือกเรื่องที่สนใจ ค้นหาคำที่สงสัย หรือเปิดอ่านโดยไม่ต้องเรียงลำดับ"
+        eyebrow="CHEMISTRY CONTENT LIBRARY"
+        title={
+          currentCourse
+            ? currentCourse.title
+            : level === "all"
+              ? "คลังเนื้อหาเคมี ม.4–ม.6"
+              : `เนื้อหาเคมี ม.${level}`
+        }
+        description={
+          currentCourse
+            ? `${currentCourse.code} · ม.${currentCourse.grade}${currentCourse.semester ? ` · ภาคเรียนที่ ${currentCourse.semester}` : ""}`
+            : "เลือกระดับชั้น รายวิชา และหัวข้อเนื้อหาที่ต้องการอ่าน"
+        }
       />
       <div className="discovery-search">
         <Search size={21} />
         <input
-          aria-label="ค้นหาในคลังความรู้"
+          aria-label="ค้นหาในคลังเนื้อหา"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="ลองค้นหา การละลาย แอสไพริน หรือหมู่ฟังก์ชัน"
+          placeholder="ค้นหาชื่อหัวข้อ เช่น พันธะเคมี ความเข้มข้น หรือหมู่ฟังก์ชัน"
         />
         {query && (
-          <button onClick={() => setQuery("")} aria-label="ล้างคำค้น">
+          <button aria-label="ล้างคำค้น" onClick={() => setQuery("")}>
             ล้าง
           </button>
         )}
       </div>
-      <div className="journal-filters" aria-label="หมวดหมู่ความรู้">
-        {topics.map((t) => (
+      <div className="journal-filters" aria-label="ระดับชั้น">
+        {["all", "4", "5", "6"].map((g) => (
           <button
-            key={t.id}
-            aria-pressed={filter === t.id}
-            onClick={() => setFilter(t.id)}
+            key={g}
+            aria-pressed={level === g}
+            onClick={() => {
+              setLevel(g);
+              setCourse("all");
+            }}
           >
-            {t.name}
+            {g === "all" ? "ทุกระดับชั้น" : `ม.${g}`}
           </button>
         ))}
       </div>
-      <div className="collection-count">
-        <span>{found.length} เรื่องที่เลือกอ่านได้</span>
-        <span>ภาพประกอบ · คำอธิบาย · แหล่งอ้างอิง</span>
+      <div className="course-filter">
+        <label htmlFor="course-select">รายวิชา</label>
+        <select
+          id="course-select"
+          value={selectedCourse}
+          onChange={(e) => setCourse(e.target.value)}
+        >
+          <option value="all">ทุกรายวิชาในระดับชั้นที่เลือก</option>
+          {courses
+            .filter((c) => level === "all" || c.grade === level)
+            .map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.code} {c.title}
+              </option>
+            ))}
+        </select>
       </div>
-      {found.length ? (
+      <div className="collection-count">
+        <span>{matching.length} หัวข้อเนื้อหา</span>
+        <span>คำอธิบาย · ภาพประกอบ · สูตรสำคัญ</span>
+      </div>
+      {matching.length ? (
         <div className="story-grid collection-grid">
-          {found.map((a) => (
+          {matching.map((a) => (
             <ArticleCard key={a.id} article={a} list={list} />
           ))}
         </div>
       ) : (
         <div className="journal-empty">
           <Search size={30} />
-          <h2>ยังไม่พบเรื่องนี้ในคลัง</h2>
-          <p>ลองใช้คำสั้นลง เช่น “น้ำ” “เอไมด์” หรือเลือกหมวดอื่น</p>
+          <h2>ไม่พบเนื้อหาที่ตรงกับตัวกรอง</h2>
+          <p>เปลี่ยนคำค้น ระดับชั้น หรือรายวิชาเพื่อดูเนื้อหาอื่น</p>
           <button
             className="journal-button"
             onClick={() => {
               setQuery("");
-              setFilter("all");
+              setLevel("all");
+              setCourse("all");
             }}
           >
-            กลับไปดูทุกเรื่อง
+            ดูเนื้อหาทั้งหมด
           </button>
         </div>
       )}
+      <p className="curriculum-note">
+        รวบรวมหัวข้อที่มีเนื้อหาแล้วตามรายวิชา
+        ไม่ใช่สารบัญครบหลักสูตรอย่างเป็นทางการ
+      </p>
     </>
   );
 }
@@ -118,8 +168,8 @@ export function ReadingShelf({ list }: { list: ReadingList }) {
     <>
       <JournalHeading
         eyebrow="YOUR READING SHELF"
-        title="เก็บความสงสัย ไว้อ่านต่อ"
-        description="เรื่องที่คุณบันทึกไว้บนเบราว์เซอร์นี้ เลือกอ่านตอนไหนก็ได้"
+        title="เนื้อหาที่บันทึกไว้"
+        description="รายการเนื้อหาที่บันทึกไว้สำหรับเปิดอ่านซ้ำบนเบราว์เซอร์นี้"
       />
       {saved.length ? (
         <>
@@ -142,7 +192,7 @@ export function ReadingShelf({ list }: { list: ReadingList }) {
             แล้วกลับมาอ่านต่อที่นี่ได้
           </p>
           <Link className="journal-button" href="/discover">
-            หาเรื่องน่าอ่าน <ArrowRight size={17} />
+            เลือกเนื้อหาที่ต้องการอ่าน <ArrowRight size={17} />
           </Link>
         </div>
       )}
@@ -158,15 +208,15 @@ export function Tools() {
     <>
       <JournalHeading
         eyebrow="A DIFFERENT WAY TO UNDERSTAND"
-        title="ลองมอง ลองเปลี่ยน แล้วเข้าใจ"
-        description="เครื่องมือเล็ก ๆ ที่ช่วยให้เรื่องในบทความมองเห็นได้ชัดขึ้น เปิดใช้ได้ทันที"
+        title="เครื่องมือประกอบเนื้อหาเคมี"
+        description="ภาพโมเลกุลและกราฟจำลอง สำหรับใช้ประกอบการอ่านเนื้อหาแต่ละหัวข้อ"
       />
       <div className="knowledge-tools">
         <Link href="/explorer">
           <ArticleArt visual="acid" />
           <div className="knowledge-tool-copy">
             <span className="journal-kicker">MOLECULE EXPLORER</span>
-            <h2>จากตัวอักษร สู่ภาพของโมเลกุล</h2>
+            <h2>โครงสร้างโมเลกุลและหมู่ฟังก์ชัน</h2>
             <p>
               แตะอะตอม ดูความหมายของพันธะ และสังเกตว่าแอลกอฮอล์ กรดคาร์บอกซิลิก
               เอสเทอร์ และเอไมด์ต่างกันตรงไหน
@@ -180,7 +230,7 @@ export function Tools() {
           <ArticleArt visual="kinetics" />
           <div className="knowledge-tool-copy">
             <span className="journal-kicker">REACTION VISUALIZER</span>
-            <h2>เมื่อความเข้มข้นค่อย ๆ เปลี่ยนไป</h2>
+            <h2>ความเข้มข้นกับเวลาในปฏิกิริยาอันดับหนึ่ง</h2>
             <p>
               ปรับความเข้มข้นเริ่มต้นและค่าคงที่อัตรา
               แล้วดูว่าเส้นกราฟอันดับหนึ่งกับครึ่งชีวิตเปลี่ยนอย่างไร
@@ -210,19 +260,22 @@ export function ArticleReader({
   list: ReadingList;
 }) {
   const saved = list.saved.includes(a.id);
+  const course = courseForArticle(a);
   const related = articles
     .filter((b) => b.id !== a.id && (b.topic === a.topic || b.tool === a.tool))
     .slice(0, 3);
   return (
     <>
       <div className="article-breadcrumb">
-        <Link href="/discover">คลังความรู้</Link>
+        <Link href="/discover">คลังเนื้อหา</Link>
         <span>/</span>
-        <Link href={`/topics/${a.topic}`}>{topicName(a.topic)}</Link>
+        <Link href={`/grades/${course.grade}`}>ม.{course.grade}</Link>
+        <span>/</span>
+        <Link href={`/courses/${course.id}`}>{course.code}</Link>
       </div>
       <header className="reader-heading">
         <span className="journal-kicker">
-          {topics.find((t) => t.id === a.topic)?.label}
+          {`ม.${course.grade} / ${course.code} / ${course.title}`}
         </span>
         <h1>{a.title}</h1>
         <p>{a.intro}</p>
@@ -258,7 +311,7 @@ export function ArticleReader({
       <div className="reader-layout">
         <article className="reader-body">
           <div className="reader-takeaway">
-            <span className="journal-kicker">ประเด็นที่อยากชวนจำ</span>
+            <span className="journal-kicker">สรุปสาระสำคัญ</span>
             <p>{a.takeaway}</p>
           </div>
           {a.sections.map((s, i) => (
@@ -278,7 +331,7 @@ export function ArticleReader({
                 )}
               </span>
               <div>
-                <h3>ลองมองเรื่องนี้ด้วยตัวเอง</h3>
+                <h3>เครื่องมือประกอบหัวข้อนี้</h3>
                 <p>
                   {a.tool === "explorer"
                     ? "เปิดภาพโมเลกุล แล้วแตะดูส่วนที่เพิ่งอ่าน"
@@ -294,7 +347,7 @@ export function ArticleReader({
           )}
           <section className="reader-sources" id="sources">
             <span className="journal-kicker">KEEP EXPLORING</span>
-            <h2>แหล่งข้อมูลสำหรับอ่านต่อ</h2>
+            <h2>เอกสารอ้างอิงและแหล่งข้อมูล</h2>
             {a.sources.map((s) => (
               <a key={s.url} href={s.url} target="_blank" rel="noreferrer">
                 {s.name}
@@ -319,11 +372,11 @@ export function ArticleReader({
               {s.title}
             </a>
           ))}
-          <a href="#sources">แหล่งข้อมูลสำหรับอ่านต่อ</a>
+          <a href="#sources">เอกสารอ้างอิงและแหล่งข้อมูล</a>
           <div>
             <Bookmark size={20} />
-            <h3>เก็บเรื่องนี้ไว้ก่อนก็ได้</h3>
-            <p>ความสงสัยไม่จำเป็นต้องจบในครั้งเดียว</p>
+            <h3>บันทึกเนื้อหานี้</h3>
+            <p>เปิดอ่านซ้ำได้จากรายการเนื้อหาที่บันทึกไว้</p>
             <button onClick={() => list.toggle(a.id)} disabled={!list.ready}>
               {saved ? "นำออกจากรายการอ่าน" : "บันทึกเรื่องนี้"}{" "}
               <ArrowUpRight size={15} />
@@ -335,10 +388,8 @@ export function ArticleReader({
         <section className="journal-section">
           <div className="journal-section-heading">
             <div>
-              <span className="journal-kicker">
-                ONE QUESTION LEADS TO ANOTHER
-              </span>
-              <h2>ถ้ายังสงสัย ลองอ่านเรื่องนี้ต่อ</h2>
+              <span className="journal-kicker">RELATED CONTENT</span>
+              <h2>เนื้อหาที่เกี่ยวข้อง</h2>
             </div>
           </div>
           <div className="story-grid">
@@ -355,52 +406,53 @@ export function KnowledgeAbout() {
   return (
     <>
       <JournalHeading
-        eyebrow="ABOUT CHEMLAB RX"
-        title="ให้เคมี อยู่ใกล้ความเข้าใจมากขึ้น"
-        description="Explore Chemistry, Understand Medicine."
+        eyebrow="ABOUT THE CONTENT LIBRARY"
+        title="คลังเนื้อหาเคมีระดับมัธยมศึกษาตอนปลาย"
+        description="แหล่งรวมเนื้อหา ม.4 ม.5 และ ม.6 พร้อมภาพประกอบและเครื่องมือทางเคมี"
       />
       <div className="knowledge-about">
         <p className="about-lead">
-          เราอยากให้การอ่านเรื่องเคมี เริ่มต้นจากคำถามที่คุ้นเคย
+          รวบรวมเนื้อหาโดยจัดตามระดับชั้น รายวิชา และหัวข้อ
           <br />
-          แล้วค่อย ๆ พาไปเห็นสิ่งที่ซ่อนอยู่ในระดับโมเลกุล
+          สำหรับค้นคว้า อ่านทบทวน และใช้อ้างอิงประกอบการศึกษา
         </p>
         <div className="about-values">
           <section>
-            <span>01 / เรื่องราว</span>
-            <h2>เริ่มจากโลกจริง</h2>
+            <span>01 / โครงสร้างเนื้อหา</span>
+            <h2>ระดับชั้นและรายวิชา</h2>
             <p>
-              น้ำ สารละลาย วัสดุ และโมเลกุลในยา ล้วนมีแนวคิดทางเคมีที่น่าสงสัย
-              เลือกอ่านเฉพาะเรื่องที่อยากรู้ได้เลย
+              เนื้อหาแบ่งเป็น ม.4 ม.5 และ ม.6 ภายใต้รายวิชาตามขอบเขตโครงการ
+              แสดงเฉพาะหัวข้อที่เปิดอ่านได้แล้ว
+              ไม่ได้อ้างว่าเป็นสารบัญครบหลักสูตรของโรงเรียน
             </p>
           </section>
           <section>
-            <span>02 / ภาพและเครื่องมือ</span>
-            <h2>เปลี่ยนคำอธิบายให้มองเห็น</h2>
+            <span>02 / สื่อประกอบ</span>
+            <h2>ภาพ สูตร และเครื่องมือ</h2>
             <p>
-              แผนภาพอะตอมที่กดได้ และกราฟที่ปรับค่าได้
-              เป็นอีกวิธีช่วยทำความเข้าใจ โดยระบุสมมติฐานและข้อจำกัดอย่างชัดเจน
+              หัวข้อเนื้อหามีคำอธิบาย ภาพโครงสร้าง สูตรที่เกี่ยวข้อง
+              และเครื่องมือจำลองในหัวข้อที่รองรับ โดยระบุสมมติฐานและข้อจำกัด
             </p>
           </section>
           <section>
-            <span>03 / แหล่งข้อมูล</span>
-            <h2>รู้ว่าข้อมูลมาจากไหน</h2>
+            <span>03 / เอกสารอ้างอิง</span>
+            <h2>แหล่งข้อมูลตรวจสอบได้</h2>
             <p>
-              ทุกบทความมีแหล่งอ้างอิงสำหรับอ่านต่อ เช่น OpenStax และ PubChem
-              เนื้อหาเรียบเรียงโดยโครงการ ไม่ใช่บทความวิจัยต้นฉบับ
+              ใช้แหล่งข้อมูลอย่าง OpenStax และ PubChem
+              พร้อมลิงก์อ้างอิงในหน้าเนื้อหา ข้อความเป็นการเรียบเรียงของโครงการ
             </p>
           </section>
         </div>
-        <h2>อ่านได้อิสระ เก็บไว้ได้ตามใจ</h2>
+        <h2>การเข้าถึงเนื้อหา</h2>
         <p>
-          ไม่มีลำดับบังคับ ไม่มีคะแนน และไม่ต้องเข้าสู่ระบบ
-          รายการที่เก็บไว้อ่านอยู่ในเบราว์เซอร์ของคุณ
+          เปิดอ่านหัวข้อใดก็ได้โดยไม่ต้องเข้าสู่ระบบ
+          ไม่มีคะแนนหรือการบังคับลำดับการอ่าน
+          รายการบันทึกเก็บอยู่ในเบราว์เซอร์ของแต่ละอุปกรณ์
         </p>
-        <h2>เคมีกับยา ต้องแยกขอบเขตให้ชัด</h2>
+        <h2>ขอบเขตข้อมูลทางเภสัชศาสตร์</h2>
         <p>
-          บทความเกี่ยวกับสารยาอธิบายโครงสร้างและสมบัติทางเคมี
-          ไม่ใช่คำแนะนำให้เลือกใช้ยา เปลี่ยนขนาดยา หรือวินิจฉัยโรค
-          ข้อมูลทางสุขภาพควรปรึกษาเภสัชกรหรือแพทย์
+          ตัวอย่างสารยาใช้ประกอบเนื้อหาทางเคมี ไม่ใช้แทนคำแนะนำในการเลือกใช้ยา
+          การปรับขนาดยา หรือการวินิจฉัยโรค
         </p>
       </div>
     </>

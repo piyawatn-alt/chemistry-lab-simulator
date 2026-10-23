@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import { redirect, notFound } from "next/navigation";
 import Workspace from "@/components/workspace";
-import { articles, topics } from "@/data/knowledge";
+import { articles, topics, courses } from "@/data/knowledge";
 type Props = { params: Promise<{ slug?: string[] }> };
 const legacy: Record<string, string> = {
+ "topics/medicine":"/courses/organic",
+ "topics/molecules":"/courses/organic",
+ "topics/everyday":"/discover",
+ "topics/ideas":"/discover",
   lessons: "/discover",
   labs: "/tools",
   builder: "/tools",
-  drugs: "/topics/medicine",
+  drugs: "/courses/organic",
   quizzes: "/discover",
   progress: "/saved",
   "lessons/bonds": "/read/small-groups-big-difference",
@@ -15,7 +19,7 @@ const legacy: Record<string, string> = {
   "lessons/moles": "/read/concentration-is-a-ratio",
   "lessons/kinetics": "/read/why-reactions-slow-down",
   "lessons/polymers": "/read/polymers-around-us",
-  "lessons/integration": "/read/why-reactions-slow-down",
+  "lessons/integration": "/read/chemical-models",
 };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
@@ -31,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           locale: "th_TH",
         },
       }
-    : { title: "ChemLab RX — เคมีที่เชื่อมโยงยาและชีวิตประจำวัน" };
+    : { title: "ChemLab RX — คลังเนื้อหาเคมี ม.4–ม.6" };
 }
 export default async function Page({ params }: Props) {
   const { slug = [] } = await params;
@@ -48,7 +52,9 @@ export default async function Page({ params }: Props) {
       "explorer",
     ].includes(path) ||
     articles.some((a) => path === `read/${a.id}`) ||
-    topics.slice(1).some((t) => path === `topics/${t.id}`);
+    topics.slice(1).some((t) => path === `topics/${t.id}`) ||
+    ["4", "5", "6"].some((g) => path === `grades/${g}`) ||
+    courses.some((c) => path === `courses/${c.id}`);
   if (!known) notFound();
   return <Workspace path={path} />;
 }

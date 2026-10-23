@@ -1,6 +1,6 @@
 # ChemLab RX
 
-**Chemistry, made closer.** A Thai knowledge publication connecting chemistry with medicines and everyday life. Readers choose a question, open an illustrated article, and use visual tools when helpful. There are no course sequences, grades, quizzes, or completion requirements in the current interface.
+**Chemistry Content Library.** A Thai chemistry reference organized by ม.4, ม.5, ม.6, subject, and content heading. Readers browse the directory, open explanatory material, and use visual tools alongside it. Headings are declarative subject names rather than FAQ questions. There are no quizzes, scores, or completion requirements.
 
 ## Development
 
@@ -22,8 +22,8 @@ npm start          # Serve the production build
 
 ## Current experience
 
-- An editorial homepage, open-access topic collections, global search, and article search/filtering.
-- Eight complete illustrated articles across molecular structure, everyday chemistry, chemistry and pharmacy, and useful scientific ideas.
+- A content directory with three grade collections, six subject collections, global search, and grade/subject/search filters.
+- Nine illustrated content entries across bonding and solution properties, concentrations, kinetics, organic chemistry, polymers, and integrated chemical models. Course names come from the project brief; entries are selected available topics, not a claim of complete official syllabus coverage.
 - Article pages with key ideas, headings, optional formulas, reference links, related articles, article metadata, and contextual tool links.
 - A personal reading shelf with persistent add/remove controls. Bookmarks are stored locally, without sign-in; malformed or unavailable storage is handled.
 - Interactive 2D molecular examples: ethanol, ethanoic acid, ethyl ethanoate, and ethanamide. Readers can select atoms and bonds, highlight functional groups, show hydrogens, or try identifying the group themselves.
@@ -63,7 +63,7 @@ Set `TEST_BASE_URL` for a different port. The checks cover the reading experienc
 - `src/components/knowledge`: homepage, cards, article illustrations, collections, reading shelf, and reader.
 - `src/components/workspace.tsx`: shared publication header, search, navigation, and route composition.
 - `src/components/simulators`: molecular diagrams and the concentration visualizer.
-- `src/data/knowledge`: topic definitions, article text, references, tool links, and search helpers.
+- `src/data/knowledge`: grade/subject definitions, content-to-subject mappings, explanatory text, references, tool links, and search helpers.
 - `src/data/molecules`: curated structures, functional-group descriptions, and 2D layouts.
 - `src/lib/chemistry`: model calculations and scientific tests.
 - `src/lib/storage` and `src/hooks`: local reading-list persistence. The legacy progress parser remains for compatibility; old browser-local progress is neither erased nor displayed as scores.
@@ -71,9 +71,11 @@ Set `TEST_BASE_URL` for a different port. The checks cover the reading experienc
 
 Persistence can be replaced behind the hook/storage boundary if remote bookmarks or authentication are introduced later. No remote authentication or database is implied today.
 
+Use `/grades/4`, `/grades/5`, `/grades/6` for grade collections and `/courses/<subject-id>` for subject collections.
+
 ## Existing links
 
-Old course and lesson URLs redirect to relevant articles or the knowledge collection. `/labs` and `/builder` redirect to `/tools`, `/drugs` to the pharmacy collection, `/quizzes` to discovery, and `/progress` to the reading shelf. Old browser-local activity data is left untouched; it is not converted into bookmarks.
+Old course and lesson URLs redirect to relevant articles or the knowledge collection. `/labs` and `/builder` redirect to `/tools`, `/drugs` to the organic chemistry collection, `/quizzes` to discovery, and `/progress` to the reading shelf. Old browser-local activity data is left untouched; it is not converted into bookmarks.
 
 ## Vercel deployment
 

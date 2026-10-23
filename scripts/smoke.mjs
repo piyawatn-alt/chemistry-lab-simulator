@@ -25,9 +25,7 @@ try {
     path: "/tmp/chemlab-knowledge-desktop.png",
     fullPage: true,
   });
-  await page
-    .getByRole("textbox", { name: "ค้นหาเรื่องที่สงสัย" })
-    .fill("แอสไพริน");
+  await page.getByRole("textbox", { name: "ค้นหาเนื้อหา" }).fill("แอสไพริน");
   await page
     .locator(".journal-search-results")
     .getByRole("link")
@@ -35,7 +33,7 @@ try {
     .click();
   await page
     .getByRole("heading", {
-      name: "แอสไพรินหนึ่งโมเลกุล มีอะไรให้เคมีเล่าบ้าง?",
+      name: "โครงสร้างและหมู่ฟังก์ชันของแอสไพริน",
       exact: true,
     })
     .waitFor();
@@ -57,27 +55,38 @@ try {
     .getByText("ชั้นหนังสือเล็ก ๆ ยังว่างอยู่", { exact: true })
     .waitFor();
   await go("/discover");
-  assert.equal(await page.locator(".story-card").count(), 8);
-  await page
-    .getByRole("button", { name: "เคมีกับเภสัชศาสตร์", exact: true })
-    .click();
+  assert.equal(await page.locator(".story-card").count(), 9);
+  await page.getByRole("button", { name: "ม.5", exact: true }).click();
   await page.waitForFunction(
-    () => document.querySelectorAll(".story-card").length === 2,
+    () => document.querySelectorAll(".story-card").length === 5,
   );
   await page
-    .getByRole("textbox", { name: "ค้นหาในคลังความรู้" })
+    .getByRole("textbox", { name: "ค้นหาในคลังเนื้อหา" })
     .fill("ไม่มีเรื่องนี้แน่นอน");
   await page
-    .getByRole("heading", { name: "ยังไม่พบเรื่องนี้ในคลัง" })
+    .getByRole("heading", { name: "ไม่พบเนื้อหาที่ตรงกับตัวกรอง" })
     .waitFor();
-  await page.getByRole("button", { name: "กลับไปดูทุกเรื่อง" }).click();
+  await page.getByRole("button", { name: "ดูเนื้อหาทั้งหมด" }).click();
   await page.waitForFunction(
-    () => document.querySelectorAll(".story-card").length === 8,
+    () => document.querySelectorAll(".story-card").length === 9,
   );
+  await go("/grades/5");
+  await page.getByLabel("รายวิชา", { exact: true }).selectOption("organic");
+  await page.waitForFunction(
+    () => document.querySelectorAll(".story-card").length === 4,
+  );
+  await page
+    .getByRole("heading", { level: 1, name: "อินทรีย์เคมี", exact: true })
+    .waitFor();
+  await go("/courses/integration");
+  assert.equal(await page.locator(".story-card").count(), 1);
+  await page
+    .getByRole("heading", { level: 1, name: "การบูรณาการทางเคมี", exact: true })
+    .waitFor();
   await go("/read/why-reactions-slow-down");
   await page.locator(".reader-tool-invite a").click();
   await page
-    .getByRole("heading", { level: 1, name: "ค่อย ๆ เปลี่ยนไป มากแค่ไหน?" })
+    .getByRole("heading", { level: 1, name: "กราฟความเข้มข้นกับเวลา" })
     .waitFor();
   const before = await page.locator(".result-line").innerText();
   await page.getByRole("slider", { name: "ค่าคงที่อัตรา" }).focus();
@@ -93,8 +102,15 @@ try {
     "/explorer",
     "/tools/kinetics",
     "/about",
-    "/topics/medicine",
-    "/topics/everyday",
+    "/grades/4",
+    "/grades/5",
+    "/grades/6",
+    "/courses/atomic",
+    "/courses/stoichiometry",
+    "/courses/reaction",
+    "/courses/organic",
+    "/courses/materials",
+    "/courses/integration",
     "/read/small-groups-big-difference",
     "/read/aspirin-two-groups",
     "/read/paracetamol-chemistry",
@@ -116,10 +132,10 @@ try {
   await page.getByRole("button", { name: "เปิดเมนู" }).click();
   await page
     .locator("nav")
-    .getByRole("link", { name: "สำรวจความรู้", exact: true })
+    .getByRole("link", { name: "เนื้อหาทั้งหมด", exact: true })
     .click();
   await page
-    .getByRole("heading", { name: "ตามความสงสัยของคุณไป", exact: true })
+    .getByRole("heading", { name: "คลังเนื้อหาเคมี ม.4–ม.6", exact: true })
     .waitFor();
   await go("/");
   await page.screenshot({
@@ -174,7 +190,7 @@ try {
     .waitFor();
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: knowledge navigation, search/filter/empty state, article metadata, saved reading persistence/removal, tools, mobile navigation, 24 responsive route checks, legacy redirects, preserved old data, corrupt/blocked storage; no runtime errors.",
+    "PASS: knowledge navigation, search/filter/empty state, article metadata, saved reading persistence/removal, tools, mobile navigation, grade/subject responsive route checks, legacy redirects, preserved old data, corrupt/blocked storage; no runtime errors.",
   );
 } finally {
   await browser.close();
