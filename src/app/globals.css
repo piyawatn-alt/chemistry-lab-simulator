@@ -2103,3 +2103,466 @@ footer {
     display: none;
   }
 }
+/* The molecule explorer teaches connectivity through interactive 2D diagrams. */
+.explorer-body {
+  grid-template-columns: minmax(0, 1.7fr) minmax(230px, 1fr);
+  align-items: start;
+}
+.molecule-lab {
+  border: 1px solid #dce9e3;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  min-width: 0;
+}
+.molecule-stage-header {
+  padding: 22px 22px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.molecule-stage-header h3 {
+  font-size: 15px;
+  line-height: 1.7;
+}
+.molecule-stage-header .eyebrow {
+  font-size: 8px;
+  margin-bottom: 6px;
+  color: #5c8474;
+}
+.molecule-formula {
+  font-size: 13px;
+  border: 1px solid #e0ebe4;
+  background: #f4f8f5;
+  border-radius: 8px;
+  padding: 8px 10px;
+  white-space: nowrap;
+  color: #527665;
+}
+.visual-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  padding: 0 16px 16px;
+}
+.visual-steps button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 5px;
+  border-radius: 8px;
+  color: #71877c;
+  background: #f5f7f5;
+  font-size: 10px;
+  min-height: 44px;
+}
+.visual-steps button span {
+  display: grid;
+  place-items: center;
+  border: 1px solid #dce6de;
+  border-radius: 50%;
+  width: 19px;
+  height: 19px;
+  font-size: 9px;
+}
+.visual-steps button[aria-pressed="true"] {
+  color: #0f766e;
+  background: #e6f4ee;
+  font-weight: 600;
+}
+.visual-steps button[aria-pressed="true"] span {
+  background: #0f766e;
+  color: white;
+  border-color: #0f766e;
+}
+.molecule-toolbar {
+  padding: 12px 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid #edf2ee;
+  background: #fbfdfb;
+  font-size: 9px;
+  color: #6a8175;
+}
+.molecule-toolbar span,
+.molecule-toolbar button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.molecule-toolbar button {
+  background: white;
+  border: 1px solid #dde8e1;
+  border-radius: 6px;
+  padding: 8px;
+  min-height: 36px;
+  color: #3d7161;
+  white-space: nowrap;
+}
+.molecule-toolbar button[aria-pressed="true"] {
+  background: #e8f5ef;
+  border-color: #9ac8b4;
+}
+.molecule-canvas {
+  position: relative;
+  background: #f5faf7;
+  overflow: hidden;
+}
+.molecule-canvas > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 240px;
+}
+.diagram-badge {
+  position: absolute;
+  top: 13px;
+  left: 16px;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: #829b8a;
+  background: #f5faf7dd;
+  padding: 5px 7px;
+  border-radius: 5px;
+  pointer-events: none;
+}
+.diagram-bond {
+  cursor: pointer;
+  outline: none;
+}
+.diagram-bond line:not(.bond-hit) {
+  stroke: #9ab1a7;
+  stroke-width: 5;
+  stroke-linecap: round;
+  pointer-events: none;
+  transition: stroke 0.25s;
+}
+.diagram-bond:hover line:not(.bond-hit),
+.diagram-bond:focus-visible line:not(.bond-hit) {
+  stroke: #0f766e;
+  stroke-width: 7;
+}
+.diagram-bond.highlighted line:not(.bond-hit) {
+  stroke: #0f766e;
+}
+.diagram-atom {
+  cursor: pointer;
+  outline: none;
+}
+.atom-hit-area {
+  fill: transparent;
+  pointer-events: all;
+}
+.atom-body {
+  fill: #526b66;
+  stroke: white;
+  stroke-width: 4;
+  filter: drop-shadow(0 5px 5px #163d2818);
+  transition:
+    stroke 0.2s,
+    fill 0.2s;
+}
+.element-O .atom-body {
+  fill: #df755f;
+}
+.element-N .atom-body {
+  fill: #628bc1;
+}
+.element-H .atom-body {
+  fill: #fff;
+  stroke: #bacbc3;
+  stroke-width: 2;
+}
+.diagram-atom text {
+  fill: #fff;
+  font:
+    600 24px "Inter",
+    sans-serif;
+  pointer-events: none;
+  user-select: none;
+}
+.diagram-atom.element-H text {
+  fill: #667d71;
+  font-size: 19px;
+}
+.diagram-atom .hydrogen-count {
+  fill: #728778;
+  font-size: 13px;
+  font-weight: 500;
+}
+.atom-halo {
+  fill: #bfead5;
+  stroke: #60ae8d;
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  pointer-events: none;
+}
+.diagram-atom.selected .atom-body,
+.diagram-atom:focus-visible .atom-body {
+  stroke: #0f766e;
+  stroke-width: 6;
+}
+.diagram-atom:hover .atom-body {
+  stroke: #84b79e;
+  stroke-width: 5;
+}
+.element-legend {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: #ffffffb3;
+  border-top: 1px solid #e7eee9;
+  padding: 13px 10px;
+  color: #5e7667;
+  font-size: 11px;
+}
+.element-legend > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.element-legend small {
+  font-size: 9px;
+  color: #7a9080;
+}
+.element-legend i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.legend-C {
+  background: #526b66;
+}
+.legend-O {
+  background: #df755f;
+}
+.legend-N {
+  background: #628bc1;
+}
+.legend-H {
+  background: white;
+  border: 1px solid #9eb3a5;
+}
+.diagram-explanation {
+  display: flex;
+  gap: 12px;
+  padding: 19px 20px;
+  min-height: 125px;
+  color: #3b8c70;
+  border-top: 1px solid #e5eee7;
+}
+.diagram-explanation > svg {
+  margin-top: 3px;
+}
+.diagram-explanation strong {
+  color: #426a57;
+  font-size: 12px;
+  font-weight: 600;
+}
+.diagram-explanation p {
+  font-size: 11px;
+  line-height: 1.95;
+  color: #718575;
+  margin-top: 5px;
+}
+.selected-element {
+  height: 33px;
+  width: 33px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  color: white;
+  background: #526b66;
+  font-family: Inter, sans-serif;
+}
+.selected-element.element-O {
+  background: #df755f;
+}
+.selected-element.element-N {
+  background: #628bc1;
+}
+.selected-element.element-H {
+  color: #647d70;
+  background: #eff4ed;
+}
+.diagram-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fafcf9;
+  border-top: 1px solid #e7eee8;
+  padding: 13px 17px;
+}
+.diagram-bottom > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  line-height: 1.8;
+  color: #6f8875;
+}
+.diagram-bottom .button {
+  white-space: nowrap;
+  font-size: 10px;
+}
+.formula-disclosure code {
+  display: block;
+  font-size: 14px;
+  margin: 14px 0 8px;
+  overflow-wrap: anywhere;
+}
+.formula-disclosure p {
+  font-size: 10px;
+}
+.explorer-details .pill {
+  margin-top: 4px;
+}
+@media (max-width: 1180px) {
+  .explorer-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .explorer-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 25px;
+  }
+  .explorer-details > h3,
+  .explorer-details > .pill,
+  .explorer-details > p,
+  .explorer-details > .formula-disclosure {
+    grid-column: 1;
+  }
+  .explorer-details > .callout {
+    grid-column: 2;
+    grid-row: 1/6;
+    align-self: start;
+    margin-top: 4px;
+  }
+  .explorer-details > .actions {
+    grid-column: 1/-1;
+    margin-top: 10px;
+  }
+  .molecule-canvas > svg {
+    max-height: 420px;
+  }
+}
+@media (max-width: 720px) {
+  .explorer {
+    padding: 12px;
+  }
+  .explorer-intro {
+    padding: 8px 5px;
+    gap: 9px;
+  }
+  .explorer-intro h3 {
+    font-size: 14px;
+  }
+  .explorer-intro p {
+    font-size: 11px;
+  }
+  .molecule-stage-header {
+    padding: 17px 14px;
+  }
+  .molecule-stage-header h3 {
+    font-size: 13px;
+  }
+  .molecule-formula {
+    font-size: 11px;
+    padding: 7px;
+  }
+  .visual-steps {
+    padding: 0 9px 12px;
+    gap: 4px;
+  }
+  .visual-steps button {
+    font-size: 9px;
+    gap: 4px;
+    padding: 8px 3px;
+    flex-direction: column;
+  }
+  .visual-steps button span {
+    height: 19px;
+    width: 19px;
+  }
+  .molecule-toolbar {
+    padding: 9px;
+    flex-wrap: wrap;
+    gap: 7px;
+    font-size: 9px;
+  }
+  .molecule-toolbar button {
+    min-height: 42px;
+  }
+  .molecule-canvas > svg {
+    min-height: 210px;
+    transform: scale(1.02);
+  }
+  .diagram-badge {
+    top: 8px;
+    left: 8px;
+    font-size: 8px;
+  }
+  .element-legend {
+    gap: 13px;
+    padding: 10px 5px;
+    font-size: 10px;
+  }
+  .element-legend small {
+    display: none;
+  }
+  .diagram-explanation {
+    padding: 15px 13px;
+    min-height: 135px;
+    gap: 9px;
+  }
+  .diagram-explanation strong {
+    font-size: 12px;
+  }
+  .diagram-explanation p {
+    font-size: 11px;
+  }
+  .diagram-bottom {
+    padding: 12px 10px;
+    align-items: start;
+  }
+  .diagram-bottom > span {
+    font-size: 9px;
+    max-width: 155px;
+  }
+  .diagram-bottom .button {
+    padding: 9px;
+    font-size: 9px;
+  }
+  .explorer-details {
+    display: block;
+    padding: 5px;
+  }
+  .explorer-details > .callout {
+    margin-top: 20px;
+  }
+  .explorer-details > .actions {
+    margin-top: 20px;
+  }
+}
+.explorer {
+  container-type: inline-size;
+}
+@container (max-width:800px) {
+  .explorer-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .explorer-details {
+    display: block;
+  }
+  .molecule-canvas > svg {
+    max-height: 420px;
+  }
+}

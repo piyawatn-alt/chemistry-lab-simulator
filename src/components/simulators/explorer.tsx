@@ -11,16 +11,14 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Button } from "@/components/ui/button";
+import { MoleculeDiagram } from "./molecule-diagram";
 import { groups } from "@/data/curriculum";
 import { firstOrder } from "@/lib/chemistry/models";
 import type { ProgressStore as Store } from "@/hooks/use-progress";
 export function Explorer({ store }: { store: Store }) {
   const [index, setIndex] = useState(0);
+  const [reset, setReset] = useState(0);
   const g = groups[index];
-  const before = g.structure.slice(0, g.structure.indexOf(g.highlight));
-  const after = g.structure.slice(
-    g.structure.indexOf(g.highlight) + g.highlight.length,
-  );
   function select(i: number) {
     setIndex(i);
     store.update((p) => ({
@@ -33,10 +31,10 @@ export function Explorer({ store }: { store: Store }) {
       <div className="explorer-intro">
         <span className="step-number">01</span>
         <div>
-          <h3>เลือกหมู่ฟังก์ชัน แล้วกด “บันทึกการสำรวจ”</h3>
+          <h3>เห็นอะตอม เข้าใจพันธะ แล้วลองหาหมู่ฟังก์ชัน</h3>
           <p>
-            สีเขียวเน้นกลุ่มอะตอมที่กำลังศึกษา สูตรแสดงการเชื่อมต่อแบบย่อ
-            ไม่ใช่รูปร่างสามมิติ
+            เลือกตัวอย่างด้านล่าง แล้วสำรวจภาพทีละขั้น
+            แตะอะตอมหรือพันธะเพื่อดูคำอธิบาย
           </p>
         </div>
       </div>
@@ -54,22 +52,20 @@ export function Explorer({ store }: { store: Store }) {
         ))}
       </div>
       <div className="explorer-body">
-        <div className="structure-panel">
-          <span className="tiny-label">CONDENSED STRUCTURAL FORMULA</span>
-          <div className="structure-formula">
-            {before}
-            <mark>{g.highlight}</mark>
-            {after}
-          </div>
-          <strong>{g.example}</strong>
-          <span className="structure-caption">
-            R และ R′ แทนหมู่ไฮโดรคาร์บอนในสูตรทั่วไป
-          </span>
-        </div>
+        <MoleculeDiagram
+          key={`${g.id}-${reset}`}
+          groupId={g.id}
+          name={g.name}
+          example={g.example}
+        />
         <div className="explorer-details">
           <span className="pill">{g.english}</span>
           <h3>{g.name}</h3>
-          <code>{g.formula}</code>
+          <details className="formula-disclosure">
+            <summary>เทียบกับสูตรโครงสร้างแบบย่อ</summary>
+            <code>{g.structure}</code>
+            <p>สูตรทั่วไป: {g.formula} โดย R และ R′ แทนหมู่ไฮโดรคาร์บอน</p>
+          </details>
           <p>{g.description}</p>
           <div className="callout">
             <Sparkles size={18} />
@@ -89,7 +85,13 @@ export function Explorer({ store }: { store: Store }) {
                 "บันทึกการสำรวจ"
               )}
             </Button>
-            <Button variant="outline" onClick={() => setIndex(0)}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIndex(0);
+                setReset((n) => n + 1);
+              }}
+            >
               <RotateCcw size={15} />
               เริ่มใหม่
             </Button>
