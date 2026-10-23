@@ -1,3 +1,5 @@
+import { expandedArticles } from "./expanded-content";
+import { enrichExistingArticles } from "./study-guides";
 export const topics = [
   {
     id: "all",
@@ -30,8 +32,19 @@ export const topics = [
     description: "อธิบายเรื่องซับซ้อนด้วยภาพที่เข้าใจง่าย",
   },
 ];
+export type ContentSection = {
+  title: string;
+  text: string;
+  formula?: string;
+  highlights?: string[];
+  note?: string;
+  bullets?: string[];
+  example?: { title: string; steps: string[]; result: string };
+  table?: { headers: string[]; rows: string[][] };
+};
 export type Article = {
   id: string;
+  courseId?: string;
   topic: string;
   title: string;
   intro: string;
@@ -44,10 +57,18 @@ export type Article = {
     | "kinetics"
     | "water"
     | "polymer"
-    | "concentration";
+    | "concentration"
+    | "atomic"
+    | "gas"
+    | "equilibrium"
+    | "electrochem"
+    | "safety"
+    | "hydrocarbon";
   tags: string[];
   takeaway: string;
-  sections: { title: string; text: string; formula?: string }[];
+  keyPoints?: string[];
+  terms?: { term: string; meaning: string }[];
+  sections: ContentSection[];
   sources: { name: string; url: string }[];
   tool?: "explorer" | "kinetics";
 };
@@ -371,19 +392,34 @@ articles.push({
   tool: "kinetics",
 });
 
+articles.push(...expandedArticles);
+enrichExistingArticles(articles);
+
 export function topicName(id: string) {
   return topics.find((t) => t.id === id)?.name || "ความรู้เคมี";
 }
 export function readingMinutes(a: Article) {
   return Math.max(
     2,
-    Math.ceil(a.sections.reduce((n, s) => n + s.text.length, 0) / 700),
+    Math.ceil(
+      a.sections.reduce(
+        (n, s) =>
+          n +
+          s.text.length +
+          (s.example?.steps.join("").length || 0) +
+          (s.example?.result.length || 0) +
+          (s.note?.length || 0) +
+          (s.bullets?.join("").length || 0) +
+          (s.table?.rows.flat().join("").length || 0),
+        0,
+      ) / 700,
+    ),
   );
 }
 export function searchArticles(query: string) {
   const q = query.trim().toLocaleLowerCase();
   return articles.filter((a) =>
-    `${a.title} ${a.intro} ${a.tags.join(" ")} ${topicName(a.topic)} ${courseForArticle(a)?.title} ${courseForArticle(a)?.code} ม.${courseForArticle(a)?.grade}`
+    `${a.title} ${a.intro} ${a.tags.join(" ")} ${a.sections.map((s) => s.title).join(" ")} ${a.terms?.map((t) => t.term).join(" ") || ""} ${topicName(a.topic)} ${courseForArticle(a)?.title} ${courseForArticle(a)?.code} ม.${courseForArticle(a)?.grade}`
       .toLocaleLowerCase()
       .includes(q),
   );
@@ -445,7 +481,7 @@ const articleCourses: Record<string, string> = {
   "chemical-models": "integration",
 };
 export function courseForArticle(a: Article) {
-  return courses.find((c) => c.id === articleCourses[a.id])!;
+  return courses.find((c) => c.id === (a.courseId || articleCourses[a.id]))!;
 }
 export function articlesForCourse(id: string) {
   return articles.filter((a) => courseForArticle(a)?.id === id);

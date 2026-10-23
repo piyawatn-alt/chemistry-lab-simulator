@@ -10,6 +10,9 @@ import {
   Atom,
   ChartNoAxesCombined,
   ShieldCheck,
+  Highlighter,
+  Lightbulb,
+  AlertCircle,
 } from "lucide-react";
 import {
   articles,
@@ -24,6 +27,7 @@ import {
 } from "@/data/knowledge";
 import type { ReadingList } from "@/hooks/use-reading-list";
 import { ArticleCard } from "./article-card";
+import { HighlightedText } from "./highlighted-text";
 import { ArticleArt } from "./article-art";
 export function JournalHeading({
   eyebrow,
@@ -259,10 +263,16 @@ export function ArticleReader({
   article: Article;
   list: ReadingList;
 }) {
+  const [highlightsOn, setHighlightsOn] = useState(true);
   const saved = list.saved.includes(a.id);
   const course = courseForArticle(a);
   const related = articles
-    .filter((b) => b.id !== a.id && (b.topic === a.topic || b.tool === a.tool))
+    .filter(
+      (b) =>
+        b.id !== a.id &&
+        (courseForArticle(b).id === course.id ||
+          Boolean(a.tool && b.tool === a.tool)),
+    )
     .slice(0, 3);
   return (
     <>
@@ -308,17 +318,117 @@ export function ArticleReader({
             : ""}
         </span>
       </div>
+      <div className="reader-reading-tools">
+        <div>
+          <Highlighter size={17} />
+          <span>
+            สีเหลือง: สาระสำคัญ · กรอบเขียว: ตัวอย่าง · กรอบส้ม: ข้อควรระวัง
+          </span>
+        </div>
+        <button
+          aria-pressed={highlightsOn}
+          onClick={() => setHighlightsOn((v) => !v)}
+        >
+          <Highlighter size={16} />
+          {highlightsOn ? "ปิดไฮไลต์" : "เปิดไฮไลต์"}
+        </button>
+      </div>
       <div className="reader-layout">
         <article className="reader-body">
           <div className="reader-takeaway">
             <span className="journal-kicker">สรุปสาระสำคัญ</span>
-            <p>{a.takeaway}</p>
+            {a.keyPoints?.length ? (
+              <ul className="key-point-list">
+                {a.keyPoints.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>{a.takeaway}</p>
+            )}
           </div>
           {a.sections.map((s, i) => (
             <section id={`section-${i}`} key={s.title}>
               <h2>{s.title}</h2>
-              <p>{s.text}</p>
-              {s.formula && <div className="reader-formula">{s.formula}</div>}
+              <p>
+                <HighlightedText
+                  text={s.text}
+                  phrases={s.highlights}
+                  enabled={highlightsOn}
+                />
+              </p>
+              {s.formula && (
+                <div className="reader-formula">
+                  <span>สูตร / ความสัมพันธ์สำคัญ</span>
+                  {s.formula}
+                </div>
+              )}
+              {s.bullets && (
+                <ul className="section-point-list">
+                  {s.bullets.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              )}
+              {s.table && (
+                <div
+                  className="content-table-scroll"
+                  role="region"
+                  aria-label={`ตาราง ${s.title}`}
+                  tabIndex={0}
+                >
+                  <table className="content-table">
+                    <thead>
+                      <tr>
+                        {s.table.headers.map((h) => (
+                          <th scope="col" key={h}>
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {s.table.rows.map((row, j) => (
+                        <tr key={j}>
+                          {row.map((cell, k) => (
+                            <td key={k}>{cell}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              {s.example && (
+                <aside
+                  className="worked-example"
+                  aria-label={`ตัวอย่าง ${s.example.title}`}
+                >
+                  <div className="content-block-label">
+                    <Lightbulb size={18} />
+                    ตัวอย่างประกอบ
+                  </div>
+                  <h3>{s.example.title}</h3>
+                  <ol>
+                    {s.example.steps.map((step) => (
+                      <li key={step}>{step}</li>
+                    ))}
+                  </ol>
+                  <div className="example-result">
+                    <strong>สรุปผล</strong>
+                    <p>{s.example.result}</p>
+                  </div>
+                </aside>
+              )}
+              {s.note && (
+                <aside className="content-caution">
+                  <AlertCircle size={19} />
+                  <div>
+                    <strong>ข้อควรระวัง / จุดที่มักสับสน</strong>
+                    <p>{s.note}</p>
+                  </div>
+                </aside>
+              )}
             </section>
           ))}
           {a.tool && (
@@ -344,6 +454,20 @@ export function ArticleReader({
                 </Link>
               </div>
             </div>
+          )}
+          {a.terms?.length && (
+            <section className="content-glossary" id="glossary">
+              <span className="journal-kicker">KEY TERMS</span>
+              <h2>คำศัพท์สำคัญ</h2>
+              <dl>
+                {a.terms.map((t) => (
+                  <div key={t.term}>
+                    <dt>{t.term}</dt>
+                    <dd>{t.meaning}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
           )}
           <section className="reader-sources" id="sources">
             <span className="journal-kicker">KEEP EXPLORING</span>
@@ -372,6 +496,7 @@ export function ArticleReader({
               {s.title}
             </a>
           ))}
+          {a.terms?.length && <a href="#glossary">คำศัพท์สำคัญ</a>}
           <a href="#sources">เอกสารอ้างอิงและแหล่งข้อมูล</a>
           <div>
             <Bookmark size={20} />

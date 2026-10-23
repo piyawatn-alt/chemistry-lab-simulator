@@ -1,3 +1,4 @@
+import { ConceptArt } from "./concept-art";
 import { diagrams } from "@/data/molecules/functional-groups";
 import type { Article } from "@/data/knowledge";
 export function ArticleArt({
@@ -108,6 +109,15 @@ export function ArticleArt({
               </g>
             ))}
         </svg>
+      ) : [
+          "atomic",
+          "gas",
+          "equilibrium",
+          "electrochem",
+          "safety",
+          "hydrocarbon",
+        ].includes(visual) ? (
+        <ConceptArt kind={visual} />
       ) : visual === "water" ? (
         <svg viewBox="0 0 600 360">
           <g stroke="#abc7cd" strokeWidth="15" strokeLinecap="round">
@@ -248,7 +258,19 @@ export function ArticleArt({
               ? "FIRST-ORDER REACTION"
               : visual === "concentration"
                 ? "AN ILLUSTRATION OF CONCENTRATION"
-                : "REPEATING UNITS"}
+                : visual === "atomic"
+                  ? "ผังอนุภาคเชิงสัญลักษณ์ ไม่ใช่วงโคจรจริง"
+                  : visual === "gas"
+                    ? "แบบจำลองอนุภาคแก๊ส"
+                    : visual === "equilibrium"
+                      ? "แผนภาพทิศทางปฏิกิริยาย้อนกลับ"
+                      : visual === "electrochem"
+                        ? "ผังแนวคิดเซลล์ Zn–Cu ไม่ใช่อุปกรณ์ครบชุด"
+                        : visual === "safety"
+                          ? "ข้อมูลความปลอดภัยของสารเคมี"
+                          : visual === "hydrocarbon"
+                            ? "C₂H₄ · เอทีน ภาพเชื่อมต่อ 2 มิติ"
+                            : "REPEATING UNITS"}
       </span>
     </div>
   );

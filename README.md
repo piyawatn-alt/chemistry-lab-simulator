@@ -23,8 +23,8 @@ npm start          # Serve the production build
 ## Current experience
 
 - A content directory with three grade collections, six subject collections, global search, and grade/subject/search filters.
-- Nine illustrated content entries across bonding and solution properties, concentrations, kinetics, organic chemistry, polymers, and integrated chemical models. Course names come from the project brief; entries are selected available topics, not a claim of complete official syllabus coverage.
-- Article pages with key ideas, headings, optional formulas, reference links, related articles, article metadata, and contextual tool links.
+- Twenty-four illustrated content entries across atomic structure, periodic trends, bonding, stoichiometry, gas laws, concentrations, kinetics, equilibria, acids/bases, titration, organic chemistry, polymers, electrochemistry, and experimental methods. Course names come from the project brief; entries are selected available topics, not a claim of complete official syllabus coverage.
+- Article pages with explicit yellow highlights (toggleable without removing text), key-point summaries, formulas, worked examples, comparison tables, caution notes, glossaries, sources, and relevant subject/tool links.
 - A personal reading shelf with persistent add/remove controls. Bookmarks are stored locally, without sign-in; malformed or unavailable storage is handled.
 - Interactive 2D molecular examples: ethanol, ethanoic acid, ethyl ethanoate, and ethanamide. Readers can select atoms and bonds, highlight functional groups, show hydrogens, or try identifying the group themselves.
 - An interactive first-order concentration graph with adjustable inputs, units, assumptions, half-life, and reset.
@@ -46,6 +46,7 @@ Start the app in a separate terminal, then run:
 npx playwright install chromium
 npm run test:smoke
 npm run test:molecules
+npm run test:content # All content pages and the highlight controls
 ```
 
 To use a system browser instead:
@@ -53,9 +54,10 @@ To use a system browser instead:
 ```bash
 CHROMIUM_PATH=/usr/bin/chromium npm run test:smoke
 CHROMIUM_PATH=/usr/bin/chromium npm run test:molecules
+CHROMIUM_PATH=/usr/bin/chromium npm run test:content
 ```
 
-Set `TEST_BASE_URL` for a different port. The checks cover the reading experience, search/filtering, empty states, bookmark persistence, storage failures, legacy redirects, responsive routes, and molecular interactions. They use isolated browser contexts and write screenshots to `/tmp`.
+Set `TEST_BASE_URL` for a different port. The checks cover the reading experience, search/filtering, empty states, bookmark persistence, storage failures, legacy redirects, responsive routes, molecular interactions, literal highlight rendering/toggling, all 24 content pages, and mobile table scrolling. Unit checks also verify highlighted excerpts exist, table rows match headers, and worked numerical answers agree with their stated simplified models. They use isolated browser contexts and write screenshots to `/tmp`.
 
 ## Architecture
 
@@ -63,9 +65,10 @@ Set `TEST_BASE_URL` for a different port. The checks cover the reading experienc
 - `src/components/knowledge`: homepage, cards, article illustrations, collections, reading shelf, and reader.
 - `src/components/workspace.tsx`: shared publication header, search, navigation, and route composition.
 - `src/components/simulators`: molecular diagrams and the concentration visualizer.
-- `src/data/knowledge`: grade/subject definitions, content-to-subject mappings, explanatory text, references, tool links, and search helpers.
+- `src/data/knowledge`: grade/subject definitions, content-to-subject mappings, explanatory text, references, tool links, and search helpers. `expanded-content.ts` holds the additional core topics; `study-guides.ts` enriches the initial entries with summaries and worked examples.
 - `src/data/molecules`: curated structures, functional-group descriptions, and 2D layouts.
 - `src/lib/chemistry`: model calculations and scientific tests.
+- `src/lib/content`: literal-text highlight segmentation, content consistency checks, and worked-answer checks.
 - `src/lib/storage` and `src/hooks`: local reading-list persistence. The legacy progress parser remains for compatibility; old browser-local progress is neither erased nor displayed as scores.
 - `src/components/ui`: reusable Radix/CVA Button with shadcn configuration in `components.json`.
 
@@ -92,3 +95,9 @@ With an existing Git integration, a push to the configured production branch tri
 - [OpenStax Organic Chemistry](https://openstax.org/details/books/organic-chemistry)
 - [PubChem Aspirin](https://pubchem.ncbi.nlm.nih.gov/compound/2244)
 - [PubChem Acetaminophen](https://pubchem.ncbi.nlm.nih.gov/compound/1983)
+
+## Editing content and emphasis
+
+Use `ContentSection.highlights` for exact phrases from that section's `text`. Rendering splits plain text into ordinary spans and `<mark>` elements; it never interprets source text as HTML. Keep emphasis selective. Add `example` for a named worked problem with ordered steps and a result, `note` for assumptions/misconceptions, `table` for comparisons, and article-level `keyPoints`/`terms` for summaries and definitions. Checks reject highlights that do not occur in their source paragraph.
+
+Core coverage is expanded across all six configured subjects, but the site does not claim to be a complete official syllabus or a substitute for an approved textbook. Numerical examples state their approximations and conditions. The esterification equilibrium value used in the example is specified for illustration, not asserted as a measured constant at every temperature. Safety content links to [OSHA Hazard Communication](https://www.osha.gov/hazcom) alongside the chemistry references.

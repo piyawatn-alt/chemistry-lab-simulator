@@ -2457,3 +2457,340 @@
 .course-directory {
   align-items: start;
 }
+/* Editorial emphasis is explicit, selectable text, with a readable highlighter toggle. */
+.reader-reading-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border: 1px solid #e3e8d9;
+  background: #f8faf2;
+  border-radius: 8px;
+  padding: 13px 17px;
+  margin-top: 25px;
+  color: #6f8461;
+  font-size: 10px;
+}
+.reader-reading-tools > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  line-height: 1.9;
+}
+.reader-reading-tools button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  min-height: 40px;
+  padding: 7px 11px;
+  background: #fff;
+  border: 1px solid #dce6d3;
+  border-radius: 6px;
+  color: #6b845b;
+  font-size: 10px;
+}
+.reader-reading-tools button[aria-pressed="true"] {
+  background: #fff4b9;
+  border-color: #eadb8c;
+  color: #6c5f24;
+}
+.content-highlight {
+  color: inherit;
+  background: #fff0a6;
+  padding: 1px 3px;
+  border-radius: 3px;
+  font-weight: 500;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.key-point-list {
+  list-style: disc;
+  padding-left: 21px;
+  margin: 13px 0 0;
+  color: #42653e;
+  font-size: 14px;
+  line-height: 2.1;
+}
+.key-point-list li + li {
+  margin-top: 9px;
+}
+.reader-formula > span {
+  display: block;
+  font-family: "Noto Sans Thai", sans-serif;
+  color: #869974;
+  font-size: 10px;
+  margin-bottom: 10px;
+  letter-spacing: 0.3px;
+}
+.section-point-list {
+  list-style: disc;
+  padding-left: 22px;
+  margin: 20px 0;
+  font-size: 14px;
+  color: #61775a;
+  line-height: 2.1;
+}
+.section-point-list li + li {
+  margin-top: 9px;
+}
+.worked-example {
+  padding: 23px 25px;
+  border: 1px solid #d9e7cf;
+  background: #f2f7ec;
+  border-radius: 10px;
+  margin-top: 24px;
+}
+.content-block-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: #769966;
+  letter-spacing: 0.3px;
+  margin-bottom: 13px;
+}
+.worked-example h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #466e3b;
+  line-height: 2;
+}
+.worked-example ol {
+  list-style: none;
+  counter-reset: worked-step;
+  margin: 19px 0;
+  padding: 0;
+}
+.worked-example li {
+  counter-increment: worked-step;
+  position: relative;
+  padding-left: 35px;
+  font-size: 13px;
+  line-height: 2.05;
+  color: #627f54;
+  margin-top: 13px;
+}
+.worked-example li:before {
+  content: counter(worked-step);
+  position: absolute;
+  left: 0;
+  top: 2px;
+  background: #e1edda;
+  border: 1px solid #d2e3c6;
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font:
+    500 10px Inter,
+    sans-serif;
+  color: #71945d;
+}
+.example-result {
+  border-top: 1px solid #dce9d2;
+  padding-top: 16px;
+  margin-top: 18px;
+}
+.example-result strong {
+  font-size: 10px;
+  color: #769b62;
+}
+.example-result p {
+  font-size: 14px;
+  color: #436e37;
+  font-weight: 500;
+  line-height: 2;
+  margin-top: 6px;
+}
+.content-caution {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  padding: 20px 22px;
+  border: 1px solid #eadfc0;
+  background: #fdf8e9;
+  border-radius: 9px;
+  margin-top: 23px;
+  color: #9b843f;
+}
+.content-caution > svg {
+  margin-top: 2px;
+}
+.content-caution strong {
+  font-size: 11px;
+  font-weight: 500;
+}
+.content-caution p {
+  font-size: 12px;
+  line-height: 2.1;
+  color: #8b784b;
+  margin-top: 8px;
+}
+.content-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #dfe7d4;
+  border-radius: 8px;
+  margin-top: 23px;
+}
+.content-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 450px;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.95;
+  background: #fff;
+}
+.content-table th {
+  background: #f1f5e9;
+  color: #5b7b4a;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 13px 15px;
+  border-bottom: 1px solid #e0e7d5;
+}
+.content-table td {
+  padding: 14px 15px;
+  border-bottom: 1px solid #edf1e6;
+  color: #6b815e;
+  vertical-align: top;
+}
+.content-table tr:last-child td {
+  border-bottom: 0;
+}
+.content-table tbody tr:nth-child(even) {
+  background: #fafcf6;
+}
+.content-glossary {
+  border-top: 1px solid #e2e8d6;
+  padding-top: 28px;
+}
+.content-glossary dl {
+  margin-top: 18px;
+}
+.content-glossary dl > div {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e8eddf;
+}
+.content-glossary dt {
+  font-size: 13px;
+  font-weight: 500;
+  color: #55794b;
+  line-height: 1.9;
+}
+.content-glossary dd {
+  font-size: 13px;
+  color: #778c68;
+  line-height: 2;
+  margin: 0;
+}
+.art-atomic {
+  background: #f0f1f7;
+}
+.art-gas {
+  background: #eef4f7;
+}
+.art-equilibrium {
+  background: #f1f4e9;
+}
+.art-electrochem {
+  background: #edf3ef;
+}
+.art-safety {
+  background: #f8f2e9;
+}
+@media (max-width: 620px) {
+  .reader-reading-tools {
+    padding: 13px;
+    align-items: start;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 10px;
+  }
+  .reader-reading-tools button {
+    min-height: 44px;
+  }
+  .key-point-list {
+    font-size: 13px;
+    line-height: 2.1;
+    padding-left: 18px;
+  }
+  .key-point-list li + li {
+    margin-top: 12px;
+  }
+  .worked-example {
+    padding: 20px 17px;
+  }
+  .worked-example h3 {
+    font-size: 15px;
+    line-height: 2;
+  }
+  .worked-example li {
+    font-size: 13px;
+    line-height: 2.15;
+    padding-left: 32px;
+  }
+  .example-result p {
+    font-size: 13px;
+    line-height: 2.1;
+  }
+  .content-caution {
+    padding: 17px 15px;
+    gap: 10px;
+  }
+  .content-caution p {
+    font-size: 12px;
+  }
+  .section-point-list {
+    font-size: 13px;
+    line-height: 2.1;
+  }
+  .content-table {
+    font-size: 11px;
+    min-width: 410px;
+  }
+  .content-table th {
+    font-size: 10px;
+    padding: 12px;
+  }
+  .content-table td {
+    padding: 13px 12px;
+  }
+  .content-glossary dl > div {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    padding: 17px 0;
+  }
+  .content-glossary dt {
+    font-size: 13px;
+  }
+  .content-glossary dd {
+    font-size: 12px;
+    line-height: 2.1;
+  }
+  .reader-formula {
+    font-size: 14px;
+    line-height: 2.1;
+  }
+}
+.content-highlight {
+  color: #36482f;
+}
+.content-caution strong {
+  color: #725b2e;
+}
+.content-caution p {
+  color: #776337;
+}
+.worked-example li {
+  color: #4c6940;
+}
+.content-glossary dd {
+  color: #5d744e;
+}

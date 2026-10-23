@@ -55,10 +55,10 @@ try {
     .getByText("ชั้นหนังสือเล็ก ๆ ยังว่างอยู่", { exact: true })
     .waitFor();
   await go("/discover");
-  assert.equal(await page.locator(".story-card").count(), 9);
+  assert.equal(await page.locator(".story-card").count(), 24);
   await page.getByRole("button", { name: "ม.5", exact: true }).click();
   await page.waitForFunction(
-    () => document.querySelectorAll(".story-card").length === 5,
+    () => document.querySelectorAll(".story-card").length === 11,
   );
   await page
     .getByRole("textbox", { name: "ค้นหาในคลังเนื้อหา" })
@@ -68,18 +68,18 @@ try {
     .waitFor();
   await page.getByRole("button", { name: "ดูเนื้อหาทั้งหมด" }).click();
   await page.waitForFunction(
-    () => document.querySelectorAll(".story-card").length === 9,
+    () => document.querySelectorAll(".story-card").length === 24,
   );
   await go("/grades/5");
   await page.getByLabel("รายวิชา", { exact: true }).selectOption("organic");
   await page.waitForFunction(
-    () => document.querySelectorAll(".story-card").length === 4,
+    () => document.querySelectorAll(".story-card").length === 6,
   );
   await page
     .getByRole("heading", { level: 1, name: "อินทรีย์เคมี", exact: true })
     .waitFor();
   await go("/courses/integration");
-  assert.equal(await page.locator(".story-card").count(), 1);
+  assert.equal(await page.locator(".story-card").count(), 3);
   await page
     .getByRole("heading", { level: 1, name: "การบูรณาการทางเคมี", exact: true })
     .waitFor();
