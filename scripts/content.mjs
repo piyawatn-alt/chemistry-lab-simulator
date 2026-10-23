@@ -25,6 +25,16 @@ try {
   for (const path of links) {
     await go(path);
     assert.equal(await page.locator("h1").count(), 1, path);
+    const figure = page.locator(".learning-figure");
+    assert.equal(await figure.count(), 1, path);
+    assert.ok((await figure.locator("svg,img,[role=img]").count()) > 0, path);
+    await figure.scrollIntoViewIfNeeded();
+    await page.waitForFunction(() =>
+      Array.from(document.querySelectorAll(".learning-figure img")).every(
+        (img) => img.complete && img.naturalWidth > 0,
+      ),
+    );
+
     assert.ok((await page.locator(".content-highlight").count()) > 0, path);
     assert.ok((await page.locator(".key-point-list li").count()) >= 3, path);
     assert.ok((await page.locator(".content-glossary dt").count()) >= 3, path);
@@ -43,7 +53,43 @@ try {
       path,
     );
   }
+  await go("/read/atomic-structure");
+  const electronCounts = await page
+    .locator(".learning-figure .learning-panel")
+    .evaluateAll((panels) =>
+      panels.map(
+        (p) => p.querySelectorAll('[data-particle="electron"]').length,
+      ),
+    );
+  assert.deepEqual(electronCounts, [11, 10]);
+  await go("/read/why-reactions-slow-down");
+  const remaining = await page
+    .locator(".learning-figure .learning-panel")
+    .evaluateAll((panels) =>
+      panels.map(
+        (p) => p.querySelectorAll('[data-particle="remaining"]').length,
+      ),
+    );
+  assert.deepEqual(remaining, [8, 4, 2]);
+  await go("/read/chemical-equilibrium");
+  assert.equal(
+    await page.locator(".equilibrium-mixture .learning-panel").count(),
+    1,
+  );
+  await go("/read/aspirin-two-groups");
+  await page
+    .locator(".learning-figure")
+    .screenshot({ path: "/tmp/chemlab-aspirin-figure.png" });
   await go("/read/concentration-is-a-ratio");
+  const soluteCounts = await page
+    .locator(".learning-figure .learning-panel")
+    .evaluateAll((panels) =>
+      panels.map((p) => p.querySelectorAll('[data-species="solute"]').length),
+    );
+  assert.deepEqual(soluteCounts, [6, 6]);
+  await page
+    .locator(".learning-figure")
+    .screenshot({ path: "/tmp/chemlab-dilution-figure.png" });
   const original = await page
     .locator(".reader-body > section")
     .first()
@@ -71,6 +117,9 @@ try {
   await page.screenshot({ path: "/tmp/chemlab-worked-example.png" });
   for (const path of [
     "/read/atomic-structure",
+    "/read/aspirin-two-groups",
+    "/read/chemical-equilibrium",
+    "/read/states-ideal-gas",
     "/read/acids-bases-ph",
     "/read/strong-acid-base-titration",
     "/read/redox-galvanic-cells",
@@ -86,17 +135,27 @@ try {
       false,
       `mobile ${path}`,
     );
+    const drugRegion = page.getByRole("region", {
+      name: /โครงสร้าง .*เลื่อนภาพ/,
+    });
+    if (await drugRegion.count()) {
+      await drugRegion.focus();
+      await page.keyboard.press("ArrowRight");
+      await page.waitForFunction(
+        () => document.querySelector(".drug-figure-scroll").scrollLeft > 0,
+      );
+    }
     const regions = page.getByRole("region", { name: /ตาราง/ });
     if (await regions.count()) {
       await regions.first().focus();
       await page.keyboard.press("ArrowRight");
     }
   }
-  await page.locator(".worked-example").first().scrollIntoViewIfNeeded();
+  await page.locator(".learning-figure").scrollIntoViewIfNeeded();
   await page.screenshot({ path: "/tmp/chemlab-content-mobile.png" });
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: all 24 content pages, literal highlights, toggle without text loss, key points, worked examples/tables, caution notes, glossary, desktop and mobile layouts, keyboard-accessible table scrolling; no runtime errors.",
+    "PASS: all 24 illustrated content pages, loaded molecular images, conserved particles, ion electron counts, half-life figures, literal highlights, toggle without text loss, key points, worked examples/tables, caution notes, glossary, desktop and mobile layouts, keyboard-accessible table scrolling; no runtime errors.",
   );
 } finally {
   await browser.close();

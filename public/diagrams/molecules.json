@@ -1,0 +1,77 @@
+[
+  {
+    "id": "aspirin",
+    "smiles": "CC(=O)Oc1ccccc1C(=O)O",
+    "formula": {
+      "C": 9,
+      "H": 8,
+      "O": 4
+    },
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/2244",
+    "rdkit": "2026.09.1",
+    "groups": [
+      {
+        "name": "เอสเทอร์",
+        "atoms": [
+          1,
+          2,
+          3
+        ],
+        "bonds": [
+          1,
+          2
+        ]
+      },
+      {
+        "name": "คาร์บอกซิล",
+        "atoms": [
+          10,
+          11,
+          12
+        ],
+        "bonds": [
+          10,
+          11
+        ]
+      }
+    ],
+    "layout": "2D explanatory coordinates"
+  },
+  {
+    "id": "paracetamol",
+    "smiles": "CC(=O)Nc1ccc(O)cc1",
+    "formula": {
+      "C": 8,
+      "H": 9,
+      "O": 2,
+      "N": 1
+    },
+    "source": "https://pubchem.ncbi.nlm.nih.gov/compound/1983",
+    "rdkit": "2026.09.1",
+    "groups": [
+      {
+        "name": "เอไมด์",
+        "atoms": [
+          1,
+          2,
+          3
+        ],
+        "bonds": [
+          1,
+          2
+        ]
+      },
+      {
+        "name": "ฟีนอล",
+        "atoms": [
+          7,
+          8
+        ],
+        "bonds": [
+          7
+        ]
+      }
+    ],
+    "layout": "2D explanatory coordinates"
+  }
+]

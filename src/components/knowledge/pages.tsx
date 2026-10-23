@@ -27,6 +27,8 @@ import {
 } from "@/data/knowledge";
 import type { ReadingList } from "@/hooks/use-reading-list";
 import { ArticleCard } from "./article-card";
+import { LearningFigure } from "./learning-figure";
+import { contentFigures } from "@/data/knowledge/figures";
 import { HighlightedText } from "./highlighted-text";
 import { ArticleArt } from "./article-art";
 export function JournalHeading({
@@ -305,19 +307,6 @@ export function ArticleReader({
           </button>
         </div>
       </header>
-      <div className="reader-cover">
-        <ArticleArt
-          visual={a.visual}
-          large
-          conceptOnly={a.topic === "medicine"}
-        />
-        <span>
-          ภาพประกอบแนวคิด
-          {a.topic === "medicine"
-            ? " · เป็นตัวอย่างหมู่ฟังก์ชัน ไม่ใช่โครงสร้างสารยาที่กล่าวถึง"
-            : ""}
-        </span>
-      </div>
       <div className="reader-reading-tools">
         <div>
           <Highlighter size={17} />
@@ -357,6 +346,9 @@ export function ArticleReader({
                   enabled={highlightsOn}
                 />
               </p>
+              {contentFigures[a.id]?.section === s.title && (
+                <LearningFigure spec={contentFigures[a.id]} />
+              )}
               {s.formula && (
                 <div className="reader-formula">
                   <span>สูตร / ความสัมพันธ์สำคัญ</span>
