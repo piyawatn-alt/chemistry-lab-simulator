@@ -215,9 +215,13 @@ export function Tools() {
       <JournalHeading
         eyebrow="A DIFFERENT WAY TO UNDERSTAND"
         title="เครื่องมือประกอบเนื้อหาเคมี"
-        description="ภาพโมเลกุลและกราฟจำลอง สำหรับใช้ประกอบการอ่านเนื้อหาแต่ละหัวข้อ"
+        description="การทดลองแบบแอนิเมชัน ภาพโมเลกุล และกราฟจำลอง สำหรับสำรวจแนวคิดเคมีด้วยตัวเอง"
       />
       <div className="knowledge-tools">
+        <Link href="/tools/flame-test">
+          <div className="flame-card-art" aria-hidden="true"><span>🔥</span><i /><i /><i /><b>Na · K · Li · Ca · Sr · Cu</b></div>
+          <div className="knowledge-tool-copy"><span className="journal-kicker">ANIMATED EXPERIMENT</span><h2>ทดลองสีเปลวไฟ</h2><p>เลือกเกลือโลหะ นำตัวอย่างเข้าสู่เปลวไฟ แล้วเทียบสีที่เกิดขึ้น พร้อมภาพอธิบายระดับพลังงานของอิเล็กตรอน</p><span>เริ่มทดลองจำลอง <ArrowUpRight size={19} /></span></div>
+        </Link>
         <Link href="/explorer">
           <ArticleArt visual="acid" />
           <div className="knowledge-tool-copy">

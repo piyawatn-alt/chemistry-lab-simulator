@@ -23,6 +23,7 @@ import {
   KnowledgeAbout,
 } from "@/components/knowledge/pages";
 import { Explorer, DecayExperiment } from "@/components/simulators/explorer";
+import { FlameTest } from "@/components/simulators/flame-test";
 const navigation = [
   { href: "/discover", label: "เนื้อหาทั้งหมด" },
   { href: "/grades/4", label: "ม.4" },
@@ -183,6 +184,11 @@ export default function Workspace({ path }: { path: string }) {
                 หมู่ฟังก์ชันของสารอินทรีย์ <ArrowRight size={17} />
               </Link>
             </div>
+          </>
+        ) : path === "tools/flame-test" ? (
+          <>
+            <JournalHeading eyebrow="FLAME TEST SIMULATOR" title="ทดลองสีเปลวไฟ" description="เลือกสาร ดูแอนิเมชัน และเชื่อมโยงสีของแสงกับระดับพลังงานของอิเล็กตรอน" />
+            <FlameTest />
           </>
         ) : path === "tools/kinetics" ? (
           <>

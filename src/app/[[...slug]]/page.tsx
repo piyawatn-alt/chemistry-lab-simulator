@@ -23,6 +23,7 @@ const legacy: Record<string, string> = {
 };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
+  if (slug.join("/") === "tools/flame-test") return { title: "ทดลองสีเปลวไฟ — ChemLab RX", description: "การทดลองจำลองแบบแอนิเมชัน เลือกเกลือโลหะ 6 ชนิด สังเกตสีเปลวไฟ และเข้าใจระดับพลังงานของอิเล็กตรอน" };
   const a = articles.find((a) => `read/${a.id}` === slug.join("/"));
   return a
     ? {
@@ -47,6 +48,7 @@ export default async function Page({ params }: Props) {
       "discover",
       "tools",
       "tools/kinetics",
+      "tools/flame-test",
       "saved",
       "about",
       "explorer",

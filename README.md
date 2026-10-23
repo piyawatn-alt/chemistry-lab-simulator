@@ -47,6 +47,7 @@ npx playwright install chromium
 npm run test:smoke
 npm run test:molecules
 npm run test:content # All content pages and the highlight controls
+npm run test:flame-test # Animated flame colors, comparison, reset and mobile
 ```
 
 To use a system browser instead:
