@@ -43,7 +43,7 @@ async function save() {
 }
 try {
   await go("/tools/experiments");
-  assert.equal(await page.locator(".experiment-card").count(), 8);
+  assert.equal(await page.locator(".experiment-card").count(), 7);
   await page.screenshot({
     path: "/tmp/chemlab-experiments-gallery.png",
     fullPage: true,
@@ -178,7 +178,7 @@ try {
     fullPage: true,
   });
   await go("/tools");
-  assert.equal(await page.locator(".experiment-card").count(), 8);
+  assert.equal(await page.locator(".experiment-card").count(), 7);
   assert.equal(
     (await page.request.get(base + "/tools/not-an-experiment")).status(),
     404,

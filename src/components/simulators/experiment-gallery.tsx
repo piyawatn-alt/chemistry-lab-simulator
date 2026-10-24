@@ -12,31 +12,10 @@ export function ExperimentGallery() {
           <p>ปรับตัวแปร ดูการเปลี่ยนแปลง แล้วอ่านเหตุผลทางเคมีได้ในหน้าเดียว</p>
         </div>
         <span className="experiment-count">
-          <FlaskConical size={18} /> {experiments.length + 2} การทดลอง
+          <FlaskConical size={18} /> 7 การทดลอง
         </span>
       </div>
       <div className="experiment-cards">
-        <Link
-          href="/tools/ionization"
-          className="experiment-card"
-          style={{ "--experiment-accent": "#95c6a6" } as React.CSSProperties}
-        >
-          <div className="experiment-card-picture">
-            <span className="experiment-card-symbol">pH / pKa</span>
-            <b>PHARMACEUTICAL CHEMISTRY</b>
-          </div>
-          <div className="experiment-card-copy">
-            <span>เคมีเชื่อมเภสัช</span>
-            <h3>pH การแตกตัว และการละลาย</h3>
-            <p>
-              เทียบกรดอ่อนกับเบสอ่อน เก็บผลจริง ส่งออก CSV
-              และเขียนบันทึกสิ่งที่เรียนรู้
-            </p>
-            <strong>
-              เปิดการทดลอง <ArrowUpRight size={17} />
-            </strong>
-          </div>
-        </Link>
         <Link
           href="/tools/flame-test"
           className="experiment-card"

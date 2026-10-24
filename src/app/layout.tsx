@@ -11,9 +11,8 @@ import "./globals.css";
 import "./knowledge.css";
 import "./experiments.css";
 import "./formulas.css";
-import "./pharmacy.css";
 export const metadata: Metadata = {
-  title: "ChemLab RX — เรียนรู้เคมี เชื่อมโยงเภสัชศาสตร์",
+  title: "ChemLab RX — คลังเนื้อหาเคมี ม.4–ม.6",
   description:
     "คลังเนื้อหาเคมี ม.4 ม.5 และ ม.6 แบ่งตามรายวิชาและหัวข้อ พร้อมภาพประกอบ สูตรสำคัญ และเครื่องมือจำลอง",
 };

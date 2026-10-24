@@ -5,6 +5,9 @@ import { articles, topics, courses } from "@/data/knowledge";
 import { experimentForPath } from "@/data/experiments";
 type Props = { params: Promise<{ slug?: string[] }> };
 const legacy: Record<string, string> = {
+  pharmacy: "/discover",
+  journal: "/discover",
+  "tools/ionization": "/read/acids-bases-ph",
   "topics/medicine": "/courses/organic",
   "topics/molecules": "/courses/organic",
   "topics/everyday": "/discover",
@@ -24,24 +27,6 @@ const legacy: Record<string, string> = {
 };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
-  const special: Record<string, { title: string; description: string }> = {
-    pharmacy: {
-      title: "เคมีสู่เภสัชศาสตร์ — ChemLab RX",
-      description:
-        "อ่านโครงสร้างสารยา ทดลอง pH กับรูปประจุ และเก็บหลักฐานการเรียนรู้ด้วยตนเอง",
-    },
-    journal: {
-      title: "สมุดการเรียนรู้ — ChemLab RX",
-      description:
-        "บันทึกผลจำลอง เหตุผล และข้อจำกัด พร้อมส่งออกหลักฐานการเรียนรู้",
-    },
-    "tools/ionization": {
-      title: "pH การแตกตัว และการละลาย — ChemLab RX",
-      description:
-        "สำรวจกรดอ่อนและเบสอ่อนด้วยแบบจำลอง Henderson–Hasselbalch และกราฟเปรียบเทียบ",
-    },
-  };
-  if (special[slug.join("/")]) return special[slug.join("/")];
   if (slug.join("/") === "tools/flame-test")
     return {
       title: "ทดลองสีเปลวไฟ — ChemLab RX",
@@ -58,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: "การทดลองเคมีแบบแอนิเมชัน — ChemLab RX",
       description:
-        "เลือก 8 การทดลองเสมือน ปรับตัวแปรและดูผลผ่านแอนิเมชัน พร้อมหลักการทางเคมี",
+        "เลือก 7 การทดลองเสมือน ปรับตัวแปรและดูผลผ่านแอนิเมชัน พร้อมหลักการทางเคมี",
     };
   const a = articles.find((a) => `read/${a.id}` === slug.join("/"));
   return a
@@ -72,7 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           locale: "th_TH",
         },
       }
-    : { title: "ChemLab RX — เรียนรู้เคมี เชื่อมโยงเภสัชศาสตร์" };
+    : { title: "ChemLab RX — คลังเนื้อหาเคมี ม.4–ม.6" };
 }
 export default async function Page({ params }: Props) {
   const { slug = [] } = await params;
@@ -89,9 +74,6 @@ export default async function Page({ params }: Props) {
       "saved",
       "about",
       "explorer",
-      "pharmacy",
-      "journal",
-      "tools/ionization",
     ].includes(path) ||
     Boolean(experimentForPath(path)) ||
     articles.some((a) => path === `read/${a.id}`) ||

@@ -27,17 +27,12 @@ import { FlameTest } from "@/components/simulators/flame-test";
 import { ExperimentLab } from "@/components/simulators/experiment-lab";
 import { ExperimentGallery } from "@/components/simulators/experiment-gallery";
 import { experimentForPath } from "@/data/experiments";
-import { PharmacyHub } from "@/components/pharmacy/hub";
-import { IonizationLab } from "@/components/pharmacy/ionization-lab";
-import { LearningJournal } from "@/components/pharmacy/journal";
 const navigation = [
   { href: "/discover", label: "เนื้อหาทั้งหมด" },
   { href: "/grades/4", label: "ม.4" },
   { href: "/grades/5", label: "ม.5" },
   { href: "/grades/6", label: "ม.6" },
   { href: "/tools", label: "ทดลองและเครื่องมือ" },
-  { href: "/pharmacy", label: "เคมีสู่เภสัช" },
-  { href: "/journal", label: "สมุดการเรียนรู้" },
 ];
 export default function Workspace({ path }: { path: string }) {
   const list = useReadingList();
@@ -172,12 +167,6 @@ export default function Workspace({ path }: { path: string }) {
             grade={grade}
             course={course}
           />
-        ) : path === "pharmacy" ? (
-          <PharmacyHub />
-        ) : path === "journal" ? (
-          <LearningJournal />
-        ) : path === "tools/ionization" ? (
-          <IonizationLab />
         ) : path === "saved" ? (
           <ReadingShelf list={list} />
         ) : path === "tools" ? (

@@ -14,8 +14,7 @@
     "figures:generate": "node scripts/generate-molecular-figures.cjs",
     "test:flame-test": "node scripts/flame-test.mjs",
     "test:experiments": "node scripts/experiments.mjs",
-    "groups:generate": "node scripts/generate-functional-groups.cjs",
-    "test:pharmacy": "node scripts/pharmacy.mjs"
+    "groups:generate": "node scripts/generate-functional-groups.cjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

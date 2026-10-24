@@ -82,7 +82,7 @@ export function Explorer() {
           <div className="callout">
             <Sparkles size={18} />
             <div>
-              <strong>Chemistry to Pharmacy</strong>
+              <strong>สมบัติและตัวอย่างของสาร</strong>
               <p>{g.connection}</p>
             </div>
           </div>
