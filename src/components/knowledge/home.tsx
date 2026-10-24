@@ -14,14 +14,40 @@ import { ArticleCard } from "./article-card";
 export function KnowledgeHome({ list }: { list: ReadingList }) {
   return (
     <>
+      <section className="pharmacy-home-feature">
+        <div>
+          <span className="journal-kicker">NEW · CHEMISTRY TO PHARMACY</span>
+          <h1>
+            จากเคมีที่เรียน
+            <br />
+            สู่คำอธิบายทางเภสัชศาสตร์
+          </h1>
+          <p>
+            สำรวจโครงสร้างสารยา ทดลอง pH กับรูปประจุ
+            และเก็บหลักฐานสิ่งที่คุณเรียนรู้ด้วยตัวเอง
+          </p>
+          <Link className="journal-button" href="/pharmacy">
+            สำรวจเคมีสู่เภสัช <ArrowUpRight size={17} />
+          </Link>
+        </div>
+        <div aria-hidden="true">
+          <span>HA ⇌ H⁺ + A⁻</span>
+          <strong>
+            เปลี่ยนตัวแปร
+            <br />
+            <em>เข้าใจเหตุผล</em>
+          </strong>
+          <small>STRUCTURE · EXPERIMENT · REFLECTION</small>
+        </div>
+      </section>
       <section className="library-hero">
         <div>
           <span className="journal-kicker">CHEMISTRY CONTENT LIBRARY</span>
-          <h1>
+          <h2>
             คลังเนื้อหาเคมี
             <br />
             <span>ม.4 · ม.5 · ม.6</span>
-          </h1>
+          </h2>
           <p>
             รวมเนื้อหาแยกตามระดับชั้นและรายวิชา
             <br />
@@ -208,7 +234,7 @@ export function KnowledgeHome({ list }: { list: ReadingList }) {
               <Atom size={35} strokeWidth={1.2} />
             </span>
             <div>
-              <h3>7 การทดลองเคมีแบบแอนิเมชัน</h3>
+              <h3>8 การทดลองเคมีแบบแอนิเมชัน</h3>
               <p>เปลวไฟ กรด–เบส ตะกอน แก๊ส และอีกหลายเรื่อง</p>
             </div>
             <ArrowUpRight size={19} />
