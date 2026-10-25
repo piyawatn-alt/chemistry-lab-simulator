@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { articles } from "../../data/knowledge";
-import { contentFigures, figureKinds } from "../../data/knowledge/figures";
+import { contentFigures, figureKinds, supplementaryFigures } from "../../data/knowledge/figures";
 test("every content entry has an explanatory figure attached to a real section", () => {
   for (const a of articles) {
     const f = contentFigures[a.id];
@@ -37,4 +37,20 @@ test("generated drug figures match formulas and functional groups in the source 
     meta.find((m: { id: string }) => m.id === "aspirin").groups[0].atoms.length,
     3,
   );
+});
+
+test("supplementary diagrams link to existing sections without displacing primary explanations", () => {
+  const kinds = new Set<string>();
+  for (const [id, specs] of Object.entries(supplementaryFigures)) {
+    const article = articles.find(a => a.id === id);
+    assert.ok(article, id);
+    for (const spec of specs) {
+      assert.ok(figureKinds.includes(spec.kind));
+      assert.ok(article.sections.some(s => s.title === spec.section), `${id}: ${spec.section}`);
+      assert.ok(spec.caption.length > 60, `${id} needs a useful reading guide`);
+      assert.notEqual(spec.kind, contentFigures[id].kind, `${id} needs a distinct explanation`);
+      kinds.add(spec.kind);
+    }
+  }
+  assert.ok(kinds.size >= 5);
 });

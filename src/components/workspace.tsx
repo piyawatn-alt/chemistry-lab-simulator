@@ -9,10 +9,12 @@ import {
   ArrowRight,
   ArrowUpRight,
   Bookmark,
+  BookOpen,
   ChevronRight,
 } from "lucide-react";
 import { useReadingList } from "@/hooks/use-reading-list";
-import { articles, searchArticles, courseForArticle } from "@/data/knowledge";
+import { articles, courseForArticle } from "@/data/knowledge";
+import { searchContent } from "@/lib/content/search";
 import { KnowledgeHome } from "@/components/knowledge/home";
 import {
   ArticleReader,
@@ -38,13 +40,13 @@ export default function Workspace({ path }: { path: string }) {
   const list = useReadingList();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const found = query.trim() ? searchArticles(query).slice(0, 5) : [];
+  const found = query.trim() ? searchContent(query).slice(0, 5) : [];
   const article = articles.find((a) => `read/${a.id}` === path);
   const topic = path.startsWith("topics/") ? path.slice(7) : undefined;
   const grade = path.startsWith("grades/") ? path.slice(7) : undefined;
   const course = path.startsWith("courses/") ? path.slice(8) : undefined;
   return (
-    <div className="knowledge-site">
+    <div className="knowledge-site" data-home={!path}>
       <a href="#main-content" className="skip-link">
         ข้ามไปยังเนื้อหา
       </a>
@@ -63,11 +65,12 @@ export default function Workspace({ path }: { path: string }) {
             </span>
             <strong>
               ChemLab <b>RX</b>
-              <small>CHEMISTRY CONTENT LIBRARY</small>
+              <small>คลังเนื้อหาเคมี ม.4–ม.6</small>
             </strong>
           </Link>
           <nav
             aria-label="เมนูหลัก"
+            id="primary-navigation"
             className={open ? "journal-nav is-open" : "journal-nav"}
           >
             {navigation.map((n) => (
@@ -96,6 +99,7 @@ export default function Workspace({ path }: { path: string }) {
             <button
               aria-label="เปิดเมนู"
               aria-expanded={open}
+              aria-controls="primary-navigation"
               onClick={() => setOpen((v) => !v)}
             >
               {open ? <X size={22} /> : <Menu size={22} />}
@@ -105,12 +109,14 @@ export default function Workspace({ path }: { path: string }) {
       </header>
       <div className="journal-searchbar">
         <div>
-          <span>CHEMISTRY REFERENCE · ม.4 / ม.5 / ม.6</span>
-          <div className="journal-global-search">
+          <span><BookOpen size={14} /> อ่านหลักการ · ดูภาพ · ทดลอง</span>
+          <form action="/discover" className="journal-global-search" role="search">
             <Search size={16} />
             <input
+              name="q"
+              autoComplete="off"
               aria-label="ค้นหาเนื้อหา"
-              placeholder="ค้นหาหัวข้อเนื้อหา หรือรหัสวิชา"
+              placeholder="ค้นหาหัวข้อ สูตร หรือคำศัพท์เคมี"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
@@ -118,22 +124,24 @@ export default function Workspace({ path }: { path: string }) {
               }}
             />
             {query && (
-              <button aria-label="ล้างการค้นหา" onClick={() => setQuery("")}>
+              <button type="button" aria-label="ล้างการค้นหา" onClick={() => setQuery("")}>
                 <X size={15} />
               </button>
             )}
             {query.trim() && (
               <div className="journal-search-results">
                 {found.length ? (
-                  found.map((a) => (
+                  found.map(({ article: a, sectionTitle, sectionIndex, snippet }) => (
                     <Link
                       key={a.id}
-                      href={`/read/${a.id}`}
+                      href={`/read/${a.id}${sectionIndex !== undefined ? `#section-${sectionIndex}` : ""}`}
                       onClick={() => setQuery("")}
                     >
                       <span>
                         <small>{`ม.${courseForArticle(a).grade} · ${courseForArticle(a).code}`}</small>
-                        {a.title}
+                        <strong>{a.title}</strong>
+                        {sectionTitle && <small className="global-result-section">หัวข้อ: {sectionTitle}</small>}
+                        <span className="global-result-snippet">{snippet}</span>
                       </span>
                       <ArrowUpRight size={18} />
                     </Link>
@@ -141,12 +149,12 @@ export default function Workspace({ path }: { path: string }) {
                 ) : (
                   <p>ไม่พบเนื้อหา ลองค้นหาชื่อหัวข้อหรือรหัสวิชา</p>
                 )}
-                <Link href="/discover" onClick={() => setQuery("")}>
-                  เปิดคลังเนื้อหาทั้งหมด <ArrowRight size={16} />
+                <Link href={`/discover?q=${encodeURIComponent(query.trim())}`} onClick={() => setQuery("")}>
+                  ดูผลการค้นหาทั้งหมด <ArrowRight size={16} />
                 </Link>
               </div>
             )}
-          </div>
+          </form>
         </div>
       </div>
       <main id="main-content" className="journal-main" aria-busy={!list.ready}>
@@ -244,7 +252,7 @@ export default function Workspace({ path }: { path: string }) {
         </div>
         <div className="journal-footer-bottom">
           <span>© {new Date().getFullYear()} ChemLab RX</span>
-          <span>เพื่อความเข้าใจทางเคมี ไม่ใช่คำแนะนำทางการแพทย์</span>
+          <span>ภาพและการทดลองจำลองเพื่ออธิบายหลักเคมี</span>
           <span>CHEMISTRY CONTENT LIBRARY</span>
         </div>
       </footer>

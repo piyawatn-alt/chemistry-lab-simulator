@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Search,
   ArrowRight,
@@ -13,26 +14,28 @@ import {
   Highlighter,
   Lightbulb,
   AlertCircle,
+  ChevronDown,
+  FlaskConical,
+  List,
 } from "lucide-react";
 import {
   articles,
-  topics,
-  searchArticles,
-  topicName,
   type Article,
   readingMinutes,
   courses,
   courseForArticle,
-  articlesForCourse,
 } from "@/data/knowledge";
 import type { ReadingList } from "@/hooks/use-reading-list";
 import { ArticleCard } from "./article-card";
 import { LearningFigure } from "./learning-figure";
-import { contentFigures } from "@/data/knowledge/figures";
+import { contentFigures, supplementaryFigures } from "@/data/knowledge/figures";
 import { HighlightedText } from "./highlighted-text";
 import { ScientificFormula } from "@/components/ui/scientific-formula";
 import { ArticleArt } from "./article-art";
 import { ExperimentGallery } from "@/components/simulators/experiment-gallery";
+import { foundationsFor, toolsForArticle } from "@/data/knowledge/connections";
+import "@/app/reader-refresh.css";
+import { chemistrySubjects, searchContent } from "@/lib/content/search";
 export function JournalHeading({
   eyebrow,
   title,
@@ -50,27 +53,37 @@ export function JournalHeading({
     </div>
   );
 }
-export function Discover({
+type DiscoverProps = { list: ReadingList; topic?: string; grade?: string; course?: string };
+export function Discover(props: DiscoverProps) {
+  return <Suspense fallback={<div className="discovery-match-status" role="status">กำลังเปิดคลังเนื้อหา…</div>}><DiscoverContent {...props} /></Suspense>;
+}
+function DiscoverContent({
   list,
   topic = "all",
   grade = "all",
   course = "all",
-}: {
-  list: ReadingList;
-  topic?: string;
-  grade?: string;
-  course?: string;
-}) {
+}: DiscoverProps) {
   const initialCourse = courses.find((c) => c.id === course);
-  const [query, setQuery] = useState("");
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q") || "";
   const [level, setLevel] = useState(initialCourse?.grade || grade);
   const [selectedCourse, setCourse] = useState(course);
-  const matching = searchArticles(query).filter((a) => {
+  const requestedSubject = searchParams.get("subject") || "all";
+  const subject = chemistrySubjects.some((item) => item.id === requestedSubject) ? requestedSubject : "all";
+  const updateSearch = (nextQuery: string, nextSubject = subject) => {
+    const url = new URL(window.location.href);
+    if (nextQuery.trim()) url.searchParams.set("q", nextQuery); else url.searchParams.delete("q");
+    if (nextSubject !== "all") url.searchParams.set("subject", nextSubject); else url.searchParams.delete("subject");
+    window.history.replaceState(null, "", url.pathname + url.search);
+  };
+  const activeSubject = chemistrySubjects.find((item) => item.id === subject);
+  const matching = searchContent(query).filter(({ article: a }) => {
     const c = courseForArticle(a);
     return (
       (level === "all" || c.grade === level) &&
       (selectedCourse === "all" || c.id === selectedCourse) &&
-      (topic === "all" || a.topic === topic)
+      (topic === "all" || a.topic === topic) &&
+      (!activeSubject || activeSubject.articleIds.includes(a.id))
     );
   });
   const currentCourse = courses.find((c) => c.id === selectedCourse);
@@ -96,11 +109,11 @@ export function Discover({
         <input
           aria-label="ค้นหาในคลังเนื้อหา"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="ค้นหาชื่อหัวข้อ เช่น พันธะเคมี ความเข้มข้น หรือหมู่ฟังก์ชัน"
+          onChange={(e) => updateSearch(e.target.value)}
+          placeholder="ค้นหาชื่อบท คำศัพท์ไทย–อังกฤษ หรือสูตร เช่น molarity, H₂O, Ksp"
         />
         {query && (
-          <button aria-label="ล้างคำค้น" onClick={() => setQuery("")}>
+          <button aria-label="ล้างคำค้น" onClick={() => updateSearch("")}>
             ล้าง
           </button>
         )}
@@ -136,16 +149,46 @@ export function Discover({
             ))}
         </select>
       </div>
-      <div className="collection-count">
-        <span>{matching.length} หัวข้อเนื้อหา</span>
+      <div className="discovery-subject-filter">
+        <span className="discovery-subject-label">หมวดเนื้อหา</span>
+        <div className="discovery-subject-options" role="group" aria-label="หมวดเนื้อหา">
+          <button aria-pressed={subject === "all"} onClick={() => updateSearch(query, "all")}>ทุกหมวด</button>
+          {chemistrySubjects.map((item) => (
+            <button key={item.id} aria-pressed={subject === item.id} onClick={() => updateSearch(query, item.id)}>{item.title}</button>
+          ))}
+        </div>
+      </div>
+      {activeSubject && <p className="discovery-match-status">{activeSubject.description}</p>}
+      <div className="collection-count" role="status" aria-live="polite">
+        <span>{matching.length} หัวข้อเนื้อหา{query.trim() ? ` สำหรับ “${query.trim()}”` : ""}</span>
         <span>คำอธิบาย · ภาพประกอบ · สูตรสำคัญ</span>
       </div>
       {matching.length ? (
-        <div className="story-grid collection-grid">
-          {matching.map((a) => (
-            <ArticleCard key={a.id} article={a} list={list} />
-          ))}
-        </div>
+        query.trim() ? (
+          <div className="discovery-results">
+            {matching.map(({ article: a, snippet, sectionTitle, sectionIndex }) => {
+              const c = courseForArticle(a);
+              const saved = list.saved.includes(a.id);
+              const href = `/read/${a.id}${sectionIndex !== undefined ? `#section-${sectionIndex}` : ""}`;
+              return (
+                <article className="discovery-result" key={a.id}>
+                  <Link className="discovery-result-art" href={href} aria-label={`อ่าน ${a.title}`}><ArticleArt visual={a.visual} conceptOnly={a.topic === "medicine"} /></Link>
+                  <div>
+                    <span className="discovery-result-meta">ม.{c.grade} · {c.code} · {c.title}</span>
+                    <Link href={href}><h2>{a.title}</h2></Link>
+                    <p><HighlightedText text={snippet} phrases={[query.trim()]} /></p>
+                    {sectionTitle && <Link className="discovery-result-section" href={href}>ในหัวข้อ: {sectionTitle}<ArrowRight size={14} /></Link>}
+                  </div>
+                  <button className="discovery-result-save" disabled={!list.ready} aria-pressed={saved} aria-label={`${saved ? "นำออกจาก" : "เพิ่มใน"}รายการอ่าน: ${a.title}`} onClick={() => list.toggle(a.id)}><Bookmark size={18} fill={saved ? "currentColor" : "none"} /></button>
+                </article>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="story-grid collection-grid">
+            {matching.map(({ article: a }) => <ArticleCard key={a.id} article={a} list={list} />)}
+          </div>
+        )
       ) : (
         <div className="journal-empty">
           <Search size={30} />
@@ -154,7 +197,7 @@ export function Discover({
           <button
             className="journal-button"
             onClick={() => {
-              setQuery("");
+              updateSearch("", "all");
               setLevel("all");
               setCourse("all");
             }}
@@ -273,6 +316,45 @@ export function ArticleReader({
 }) {
   const [highlightsOn, setHighlightsOn] = useState(true);
   const saved = list.saved.includes(a.id);
+  const [activeSection, setActiveSection] = useState("section-0");
+  const [progress, setProgress] = useState(0);
+  const bodyRef = useRef<HTMLElement>(null);
+  const foundations = foundationsFor(a);
+  const linkedTools = toolsForArticle(a);
+  const sectionLinks = [
+    ...a.sections.map((section, i) => ({ id: `section-${i}`, title: section.title })),
+    { id: "article-summary", title: "สรุปท้ายเรื่อง" },
+    ...(linkedTools.length ? [{ id: "article-experiments", title: "ทดลองประกอบเรื่องนี้" }] : []),
+    ...(a.terms?.length ? [{ id: "glossary", title: "คำศัพท์สำคัญ" }] : []),
+    { id: "sources", title: "เอกสารอ้างอิงและแหล่งข้อมูล" },
+  ];
+  useEffect(() => {
+    const body = bodyRef.current;
+    if (!body) return;
+    const sections = Array.from(body.querySelectorAll<HTMLElement>("section[id]"));
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const activeOffset = window.matchMedia("(max-width: 760px)").matches ? 110 : 150;
+      const current = sections.filter((section) => section.getBoundingClientRect().top <= activeOffset).at(-1);
+      setActiveSection(current?.id || "section-0");
+      const top = body.getBoundingClientRect().top + window.scrollY;
+      const available = body.offsetHeight - Math.min(window.innerHeight - 150, body.offsetHeight);
+      setProgress(Math.round(Math.max(0, Math.min(1, (window.scrollY - top + 150) / Math.max(available, 1))) * 100));
+    };
+    const schedule = () => { if (!frame) frame = window.requestAnimationFrame(update); };
+    const observer = new IntersectionObserver(schedule, { rootMargin: "-100px 0px -55% 0px", threshold: [0, 0.1] });
+    sections.forEach((section) => observer.observe(section));
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    update();
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, [a.id]);
   const course = courseForArticle(a);
   const related = articles
     .filter(
@@ -291,7 +373,7 @@ export function ArticleReader({
         <span>/</span>
         <Link href={`/courses/${course.id}`}>{course.code}</Link>
       </div>
-      <header className="reader-heading">
+      <header className="reader-heading reader-heading-refresh">
         <span className="journal-kicker">
           {`ม.${course.grade} / ${course.code} / ${course.title}`}
         </span>
@@ -302,7 +384,7 @@ export function ArticleReader({
             <BookOpen size={16} />
             อ่านประมาณ {readingMinutes(a)} นาที
           </span>
-          <span>เรียบเรียงโดย ChemLab RX</span>
+          <span>ทบทวนหลักเคมี <time dateTime="2026-10-23">23 ต.ค. 2569</time></span>
           <button
             disabled={!list.ready}
             onClick={() => list.toggle(a.id)}
@@ -328,8 +410,26 @@ export function ArticleReader({
           {highlightsOn ? "ปิดไฮไลต์" : "เปิดไฮไลต์"}
         </button>
       </div>
-      <div className="reader-layout">
-        <article className="reader-body">
+      <details className="reader-mobile-directory">
+        <summary><List size={18} /> สารบัญเรื่องนี้ <ChevronDown size={17} /></summary>
+        <nav aria-label="สารบัญบทความบนมือถือ">
+          {sectionLinks.map((section) => (
+            <a key={section.id} href={`#${section.id}`} aria-current={activeSection === section.id ? "location" : undefined}
+              onClick={(event) => { const details = event.currentTarget.closest("details"); if (details) details.open = false; }}>
+              {section.title}
+            </a>
+          ))}
+        </nav>
+      </details>
+      {foundations.length > 0 && (
+        <div className="reader-foundations">
+          <BookOpen size={18} />
+          <div><strong>พื้นฐานที่เกี่ยวข้อง</strong><span>เลือกเปิดอ่านเพิ่มได้ตามต้องการ</span></div>
+          <div>{foundations.map((foundation) => <Link key={foundation.id} href={`/read/${foundation.id}`}>{foundation.title}<ArrowUpRight size={14} /></Link>)}</div>
+        </div>
+      )}
+      <div className="reader-layout reader-layout-refresh">
+        <article className="reader-body" ref={bodyRef}>
           <div className="reader-takeaway">
             <span className="journal-kicker">สรุปสาระสำคัญ</span>
             {a.keyPoints?.length ? (
@@ -355,6 +455,9 @@ export function ArticleReader({
               {contentFigures[a.id]?.section === s.title && (
                 <LearningFigure spec={contentFigures[a.id]} />
               )}
+              {supplementaryFigures[a.id]?.filter((spec) => spec.section === s.title).map((spec) => (
+                <LearningFigure key={spec.kind} spec={spec} />
+              ))}
               {s.formula && (
                 <div className="reader-formula">
                   <span>สูตร / ความสัมพันธ์สำคัญ</span>
@@ -429,29 +532,25 @@ export function ArticleReader({
               )}
             </section>
           ))}
-          {a.tool && (
-            <div className="reader-tool-invite">
-              <span>
-                {a.tool === "explorer" ? (
-                  <Atom size={26} />
-                ) : (
-                  <ChartNoAxesCombined size={26} />
-                )}
-              </span>
-              <div>
-                <h3>เครื่องมือประกอบหัวข้อนี้</h3>
-                <p>
-                  {a.tool === "explorer"
-                    ? "เปิดภาพโมเลกุล แล้วแตะดูส่วนที่เพิ่งอ่าน"
-                    : "ขยับตัวแปร แล้วดูเส้นกราฟเปลี่ยนไป"}
-                </p>
-                <Link
-                  href={a.tool === "explorer" ? "/explorer" : "/tools/kinetics"}
-                >
-                  เปิดเครื่องมือสำรวจ <ArrowRight size={17} />
+          <section className="reader-end-summary" id="article-summary">
+            <span className="journal-kicker">ทบทวนใจความสำคัญ</span>
+            <h2>สรุปท้ายเรื่อง</h2>
+            <p>{a.takeaway}</p>
+            <a href="#section-0">กลับไปต้นเนื้อหา ↑</a>
+          </section>
+          {linkedTools.length > 0 && (
+            <section className="reader-linked-tools" id="article-experiments">
+              <span className="journal-kicker">จากแนวคิดสู่ภาพจำลอง</span>
+              <h2>ทดลองประกอบเรื่องนี้</h2>
+              <p>ปรับตัวแปรและสังเกตผล ควบคู่กับสมมติฐานที่ระบุในแต่ละเครื่องมือ</p>
+              <div>{linkedTools.map((tool) => (
+                <Link href={tool.href} key={tool.href}>
+                  <span><FlaskConical size={21} /></span>
+                  <div><h3>{tool.title}</h3><p>{tool.description}</p></div>
+                  <ArrowUpRight size={18} />
                 </Link>
-              </div>
-            </div>
+              ))}</div>
+            </section>
           )}
           {a.terms?.length && (
             <section className="content-glossary" id="glossary">
@@ -477,8 +576,8 @@ export function ArticleReader({
               </a>
             ))}
             <p>
-              เรียบเรียงเพื่ออธิบายแนวคิดทางเคมี ไม่ใช้แทนคำแนะนำทางการแพทย์
-              หรือข้อมูลสำหรับเลือกใช้และกำหนดขนาดยา
+              ใช้แหล่งข้อมูลเหล่านี้อ่านรายละเอียดและตรวจเงื่อนไขเพิ่มเติม
+              ภาพและตัวอย่างในบทความเป็นสื่ออธิบายแนวคิด ไม่ใช่ผลการทดลองที่วัดจริง
             </p>
           </section>
           <div className="reader-tags">
@@ -487,15 +586,19 @@ export function ArticleReader({
             ))}
           </div>
         </article>
-        <aside className="reader-toc">
+        <aside className="reader-toc reader-toc-refresh">
           <span className="journal-kicker">ในเรื่องนี้</span>
-          {a.sections.map((s, i) => (
-            <a href={`#section-${i}`} key={s.title}>
-              {s.title}
-            </a>
-          ))}
-          {a.terms?.length && <a href="#glossary">คำศัพท์สำคัญ</a>}
-          <a href="#sources">เอกสารอ้างอิงและแหล่งข้อมูล</a>
+          <div className="reader-position">
+            <span>ตำแหน่งการอ่าน <b>{progress}%</b></span>
+            <div role="progressbar" aria-label="ตำแหน่งการอ่าน" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><span style={{ width: `${progress}%` }} /></div>
+          </div>
+          <nav aria-label="สารบัญบทความ">
+            {sectionLinks.map((section, i) => (
+              <a href={`#${section.id}`} key={section.id} aria-current={activeSection === section.id ? "location" : undefined}>
+                <span>{String(i + 1).padStart(2, "0")}</span>{section.title}
+              </a>
+            ))}
+          </nav>
           <div>
             <Bookmark size={20} />
             <h3>บันทึกเนื้อหานี้</h3>

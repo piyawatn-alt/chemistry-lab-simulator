@@ -25,6 +25,12 @@ try {
     path: "/tmp/chemlab-knowledge-desktop.png",
     fullPage: true,
   });
+  await page.getByRole("textbox", { name: "ค้นหาหัวข้อ สูตร หรือคำศัพท์เคมี" }).fill("Ksp");
+  await page.getByRole("button", { name: "ค้นหาในคลัง", exact: true }).click();
+  await page.waitForFunction(() => document.querySelector('[aria-label="ค้นหาในคลังเนื้อหา"]')?.value === "Ksp");
+  assert.equal(new URL(page.url()).searchParams.get("q"), "Ksp");
+  assert.ok((await page.locator(".discovery-result").count()) > 0);
+  await go("/discover");
   await page.getByRole("textbox", { name: "ค้นหาเนื้อหา" }).fill("แอสไพริน");
   await page
     .locator(".journal-search-results")
@@ -83,8 +89,23 @@ try {
   await page
     .getByRole("heading", { level: 1, name: "การบูรณาการทางเคมี", exact: true })
     .waitFor();
+  // Search state survives a shareable URL and same-route Next navigation.
+  await go("/discover?q=H2O");
+  const contentSearch = page.getByRole("textbox", { name: "ค้นหาในคลังเนื้อหา" });
+  await contentSearch.fill("ideal gas ");
+  await page.waitForFunction(() => document.querySelectorAll(".discovery-result").length > 0);
+  assert.equal(await contentSearch.inputValue(), "ideal gas ");
+  assert.equal(new URL(page.url()).searchParams.get("q"), "ideal gas ");
+  await page.getByRole("textbox", { name: "ค้นหาเนื้อหา", exact: true }).fill("NaCl");
+  await page.getByRole("link", { name: "ดูผลการค้นหาทั้งหมด" }).click();
+  await page.waitForFunction(() => document.querySelector('[aria-label="ค้นหาในคลังเนื้อหา"]')?.value === "NaCl");
+  assert.equal(new URL(page.url()).searchParams.get("q"), "NaCl");
+  assert.ok((await page.locator(".discovery-result").count()) > 0);
+  await go("/discover?subject=acids-bases");
+  await page.waitForFunction(() => document.querySelectorAll(".story-card").length === 2);
+  assert.equal(await page.getByRole("button", { name: "กรด–เบส", exact: true }).getAttribute("aria-pressed"), "true");
   await go("/read/why-reactions-slow-down");
-  await page.locator(".reader-tool-invite a").click();
+  await page.locator('#article-experiments a[href="/tools/kinetics"]').click();
   await page
     .getByRole("heading", { level: 1, name: "กราฟความเข้มข้นกับเวลา" })
     .waitFor();

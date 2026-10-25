@@ -10,6 +10,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import type { FigureSpec } from "@/data/knowledge/figures";
+import { SupplementaryDiagram } from "./supplementary-diagrams";
 const green = "#527c65",
   orange = "#db8168",
   blue = "#7897b3";
@@ -1317,6 +1318,7 @@ export function LearningFigure({ spec }: { spec: FigureSpec }) {
           </span>
         </>
       )}
+      <SupplementaryDiagram kind={kind} />
       <figcaption>
         <b>อ่านภาพ:</b> {spec.caption}
       </figcaption>

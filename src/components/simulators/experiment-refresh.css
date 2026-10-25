@@ -1,0 +1,69 @@
+/* Apparatus illustrations are qualitative previews; simulation models stay unchanged. */
+.experiment-preview-diagram {
+  display: block;
+  width: 100%;
+  max-height: 250px;
+  height: auto;
+  color: #244e4a;
+  background: #f0f6f3;
+  border-radius: 14px;
+}
+.experiment-preview-diagram text {
+  font-family: "Inter", "Noto Sans Thai", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  fill: #315d57;
+}
+.experiment-preview-diagram .preview-note { font-size: 11px; font-weight: 400; fill: #56776e; }
+.experiment-preview-diagram .preview-ion { font-size: 12px; fill: #527c70; }
+.experiment-preview-diagram.diagram-neutralization { background: #f5f0f7; }
+.experiment-preview-diagram.diagram-diffusion { background: #edf6f8; }
+.experiment-preview-diagram.diagram-conductivity { background: #f6f5e9; }
+.experiment-preview-diagram.diagram-precipitation { background: #eff4f4; }
+.experiment-preview-diagram.diagram-gas-pressure { background: #f2f6ed; }
+.experiment-preview-diagram.diagram-temperature-rate { background: #fcf3eb; }
+.experiment-gallery .experiment-gallery-heading { align-items: flex-end; margin-bottom: 28px; }
+.experiment-gallery .experiment-gallery-heading h2 { color: #172e32; font-size: clamp(23px, 3vw, 30px); }
+.experiment-gallery .experiment-gallery-heading p { color: #536c66; font-size: 15px; max-width: 660px; }
+.experiment-gallery .experiment-count { background: #edf4ef; border-color: #d5e4da; color: #315d50; font-size: 13px; }
+.experiment-gallery .experiment-cards { gap: 24px; }
+.experiment-gallery .experiment-card {
+  padding: 12px 12px 0;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-color: #dce7e2;
+  border-radius: 20px;
+  box-shadow: 0 3px 12px #17342c03;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+.experiment-gallery .experiment-card:hover { border-color: #7cad9d; box-shadow: 0 8px 22px #17342c0b; transform: translateY(-3px); }
+.experiment-gallery .experiment-card .experiment-card-picture {
+  display: block;
+  height: auto;
+  background: transparent;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.experiment-gallery .experiment-card .experiment-preview-diagram { border-radius: 12px; }
+.experiment-gallery .experiment-card-copy { padding: 20px 12px 23px; flex: 1; display: flex; flex-direction: column; }
+.experiment-gallery .experiment-card-copy > span { color: #536f63; font-size: 12px; }
+.experiment-gallery .experiment-card-copy h3 { color: #172e32; font-size: 20px; margin: 10px 0 8px; }
+.experiment-gallery .experiment-card-copy p { color: #536c66; font-size: 14px; min-height: 0; margin-bottom: 20px; }
+.experiment-gallery .experiment-card-copy > strong { margin-top: auto; color: #0c5e55; font-size: 13px; justify-content: space-between; padding-top: 15px; border-top: 1px solid #e8efeb; }
+.experiment-gallery .experiment-preview-note { font-size: 12px; color: #60796f; margin-top: 20px; line-height: 1.8; }
+@media (max-width: 900px) {
+  .experiment-gallery .experiment-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+}
+@media (max-width: 580px) {
+  .experiment-gallery .experiment-gallery-heading { align-items: flex-start; flex-direction: column; gap: 14px; }
+  .experiment-gallery .experiment-cards { grid-template-columns: minmax(0, 1fr); }
+  .experiment-gallery .experiment-card { padding: 10px 10px 0; }
+  .experiment-gallery .experiment-card-copy { padding: 18px 12px 23px; }
+  .experiment-gallery .experiment-count { padding: 8px 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experiment-gallery .experiment-card { transition: none; }
+  .experiment-gallery .experiment-card:hover { transform: none; }
+}

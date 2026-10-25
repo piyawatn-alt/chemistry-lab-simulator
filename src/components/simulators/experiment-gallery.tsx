@@ -1,13 +1,14 @@
 import Link from "next/link";
-import { ArrowUpRight, Flame, FlaskConical } from "lucide-react";
+import { ArrowUpRight, FlaskConical } from "lucide-react";
 import { experiments } from "@/data/experiments";
+import { ExperimentPreview } from "./experiment-previews";
 
 export function ExperimentGallery() {
   return (
     <section className="experiment-gallery" aria-label="เลือกการทดลองจำลอง">
       <div className="experiment-gallery-heading">
         <div>
-          <span className="journal-kicker">TOUCH · OBSERVE · UNDERSTAND</span>
+          <span className="journal-kicker">INTERACTIVE CHEMISTRY</span>
           <h2>เลือกเรื่องที่อยากลอง</h2>
           <p>ปรับตัวแปร ดูการเปลี่ยนแปลง แล้วอ่านเหตุผลทางเคมีได้ในหน้าเดียว</p>
         </div>
@@ -22,13 +23,7 @@ export function ExperimentGallery() {
           style={{ "--experiment-accent": "#f2bc62" } as React.CSSProperties}
         >
           <div className="experiment-card-picture">
-            <Flame size={64} strokeWidth={1} />
-            <span className="experiment-card-dots">
-              <i />
-              <i />
-              <i />
-            </span>
-            <b>Na · K · Cu</b>
+            <ExperimentPreview id="flame-test" />
           </div>
           <div className="experiment-card-copy">
             <span>ม.4 · โครงสร้างอะตอม</span>
@@ -49,13 +44,7 @@ export function ExperimentGallery() {
             <div
               className={`experiment-card-picture experiment-preview-${e.id}`}
             >
-              <span className="experiment-card-symbol">{e.symbol}</span>
-              <span className="experiment-card-dots">
-                <i />
-                <i />
-                <i />
-              </span>
-              <b>{e.category}</b>
+              <ExperimentPreview id={e.id} />
             </div>
             <div className="experiment-card-copy">
               <span>
@@ -70,6 +59,10 @@ export function ExperimentGallery() {
           </Link>
         ))}
       </div>
+      <p className="experiment-preview-note">
+        ภาพตัวอย่างใช้สื่อแนวคิด สี ขนาด และจำนวนอนุภาคไม่ใช่มาตราส่วนจริง
+        แต่ละการทดลองระบุเงื่อนไขและข้อจำกัดของแบบจำลองไว้ภายใน
+      </p>
     </section>
   );
 }

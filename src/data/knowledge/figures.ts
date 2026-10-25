@@ -22,6 +22,11 @@ export const figureKinds = [
   "safety",
   "aspirin",
   "paracetamol",
+  "periodic-trends",
+  "mole-map",
+  "equilibrium-graphs",
+  "salt-bridge",
+  "polymer-crosslinks",
 ] as const;
 export type FigureKind = (typeof figureKinds)[number];
 export type FigureSpec = {
@@ -199,4 +204,33 @@ export const contentFigures: Record<string, FigureSpec> = {
     caption:
       "แผนภาพสรุปข้อมูลที่ต้องตรวจ ไม่ทดแทน SDS เฉพาะสารหรือคำแนะนำของผู้ควบคุมห้องปฏิบัติการ",
   },
+};
+
+/** Additional explanations attached to existing paragraphs, not decorative cover art. */
+export const supplementaryFigures: Record<string, FigureSpec[]> = {
+  "electrons-periodic-table": [{
+    kind: "periodic-trends", section: "แนวโน้มสมบัติโดยทั่วไป",
+    title: "อ่านแนวโน้มจากตำแหน่งในตารางธาตุ",
+    caption: "แผนผังย่อไม่แสดง f-block ไม่ใช่ตารางข้อมูลธาตุรายตัว ใช้ธาตุหมู่หลักเป็นภาพรวม: รัศมีอะตอมมักเพิ่มลงล่างและไปซ้าย พลังงานไอออไนเซชันครั้งที่หนึ่งมักเพิ่มขึ้นบนและไปขวา ลูกศรไม่ใช่อัตราเพิ่มคงที่ และมีข้อยกเว้น เช่น Be/B และ N/O สำหรับพลังงานไอออไนเซชัน",
+  }],
+  "mole-stoichiometry": [{
+    kind: "mole-map", section: "โมลและจำนวนอนุภาค",
+    title: "ใช้จำนวนโมลเป็นสะพานระหว่างมวลกับอนุภาค",
+    caption: "m คือมวลสารหน่วย g, M คือมวลโมลาร์หน่วย g/mol, n คือจำนวนโมล และ N คือจำนวนอนุภาค ต้องระบุว่าอนุภาคเป็นอะตอม โมเลกุล ไอออน หรือหน่วยสูตร ไม่ใช่เรียกทุกชนิดว่าโมเลกุล",
+  }],
+  "chemical-equilibrium": [{
+    kind: "equilibrium-graphs", section: "สมดุลพลวัตและระบบปิด",
+    title: "ที่สมดุล อัตราเท่ากัน แต่ความเข้มข้นอาจต่างกัน",
+    caption: "กราฟเชิงคุณภาพของระบบ A ⇌ B ที่เริ่มด้วย A ภายใต้ T และปริมาตรคงที่ เส้นประแสดงช่วงที่เข้าใกล้สมดุล สมดุลในแบบจำลองเข้าใกล้ตามเวลา ไม่ใช่หยุดปฏิกิริยาทันที ณ จุดหนึ่ง ความสูงเส้นไม่ใช่ข้อมูลวัดจริง",
+  }],
+  "redox-galvanic-cells": [{
+    kind: "salt-bridge", section: "องค์ประกอบของเซลล์ Zn–Cu",
+    title: "แยกเส้นทางอิเล็กตรอนออกจากเส้นทางไอออน",
+    caption: "ตัวอย่างเซลล์ Zn/Zn²⁺ และ Cu²⁺/Cu ใช้สะพานเกลือ KNO₃: NO₃⁻ เคลื่อนไปฝั่ง Zn ที่สร้างไอออนบวก ส่วน K⁺ ไปฝั่ง Cu ที่ใช้ Cu²⁺ ลูกศรเป็นทิศทางสุทธิ ไม่ใช่เส้นทางของไอออนทุกตัว และไม่ใช่แผนสำหรับประกอบอุปกรณ์จริง",
+  }],
+  "polymers-around-us": [{
+    kind: "polymer-crosslinks", section: "โครงสร้างและการจัดเรียงสายโซ่",
+    title: "จุดเชื่อมขวางจำกัดการเลื่อนผ่านกันของสายโซ่",
+    caption: "เส้นแทนสายโซ่ยาว แต่ละเส้นไม่ใช่พันธะเดี่ยวหนึ่งพันธะ จุดสีส้มแทนการเชื่อมระหว่างสายโซ่ ภาพอธิบายแนวคิดเท่านั้น สมบัติจริงยังขึ้นกับชนิดพอลิเมอร์ ความหนาแน่นจุดเชื่อม และอุณหภูมิ",
+  }],
 };

@@ -11,6 +11,7 @@ import "./globals.css";
 import "./knowledge.css";
 import "./experiments.css";
 import "./formulas.css";
+import "./refresh.css";
 export const metadata: Metadata = {
   title: "ChemLab RX — คลังเนื้อหาเคมี ม.4–ม.6",
   description:

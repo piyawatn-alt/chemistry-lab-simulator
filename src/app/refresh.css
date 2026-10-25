@@ -1,0 +1,286 @@
+/* The library's shared visual system. Scientific diagrams keep their own legends. */
+.knowledge-site {
+  --journal-border: #dce6e2;
+  --journal-muted: #536a67;
+  --journal-teal: #0c5e55;
+  --atlas-ink: #172e32;
+  --atlas-teal: #0c5e55;
+  --atlas-surface: #f0f6f3;
+  background: #f8faf8;
+  color: var(--atlas-ink);
+  font-size: 16px;
+}
+.knowledge-site :is(a,button,input,select,summary):focus-visible { outline: 3px solid #26877a; outline-offset: 4px; }
+.knowledge-site :is(p,h1,h2,h3,h4,a) { overflow-wrap: break-word; }
+.journal-header { background: #fff; }
+.journal-nav-wrap { max-width: 1264px; padding: 20px 40px; gap: 26px; }
+.journal-brand { gap: 11px; }
+.journal-brand > span { background: var(--atlas-teal); width: 43px; height: 43px; border-radius: 13px; }
+.journal-brand strong { font-size: 23px; letter-spacing: -.8px; }
+.journal-brand b { color: var(--atlas-teal); font-weight: 600; }
+.journal-brand small { font-size: 11px; letter-spacing: .15px; color: #536a67; margin-top: 4px; }
+.journal-nav { font-size: 14px; gap: 25px; color: #465d59; }
+.journal-nav a { padding: 12px 0; border-bottom-width: 2px; }
+.journal-nav a[aria-current=page] { color: #0c5e55; font-weight: 600; }
+.journal-nav-actions { padding-left: 15px; }
+.journal-nav-actions > a { color: #345b55; min-width: 44px; min-height: 44px; align-items: center; }
+.journal-nav-actions small { font-size: 11px; padding: 2px 5px; }
+.journal-searchbar { background: #f0f5f2; }
+.journal-searchbar > div { max-width: 1264px; padding: 10px 40px; }
+.journal-searchbar > div > span { font-size: 12px; letter-spacing: 0; color: #526a61; display: flex; align-items: center; gap: 8px; }
+.journal-global-search { width: 340px; padding: 8px 12px; border: 1px solid #d6e2da; border-radius: 8px; background: #fff; color: #526e65; }
+.journal-global-search input { min-height: 24px; font-size: 13px; color: #274a42; min-width: 0; }
+.journal-global-search:focus-within { border-color: #378f7f; outline: 2px solid #378f7f22; }
+.journal-search-results { top: calc(100% + 8px); width: min(460px,calc(100vw - 40px)); max-height: 72vh; overflow-y: auto; border-radius: 12px; box-shadow: 0 16px 45px #183b3020; }
+.journal-search-results a { align-items: start; padding: 14px; font-size: 14px; }
+.journal-search-results a > span { min-width: 0; }
+.journal-search-results strong { display: block; font-weight: 600; }
+.journal-search-results small { font-size: 11px; color: #526d62; }
+.journal-search-results .global-result-section { margin: 6px 0 3px; color: #0c5e55; }
+.global-result-snippet { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 12px; color: #536963; line-height: 1.85; }
+.journal-main { max-width: 1264px; padding: 0 40px; }
+.journal-kicker { font-size: 11px; line-height: 1.7; color: #436a5c; letter-spacing: 1.1px; }
+.journal-button { background: #0c5e55; color: #fff; border: 1px solid #0c5e55; font-size: 14px; min-height: 44px; padding: 12px 20px; border-radius: 9px; }
+.journal-button:hover { background: #08483f; color: white; }
+.journal-section { margin-top: 50px; }
+.journal-section-heading h2 { font-size: 27px; }
+.journal-section-heading a { font-size: 13px; color: #0c5e55; }
+.journal-page-heading { padding: 42px 0 26px; }
+.journal-page-heading h1 { font-size: clamp(27px,3vw,39px); font-weight: 600; line-height: 1.55; letter-spacing: -.8px; }
+.journal-page-heading p { color: #526861; font-size: 16px; }
+.story-grid { gap: 22px; }
+.story-card { border-color: #dce6e2; border-radius: 15px; }
+.story-card:hover { border-color: #72a497; box-shadow: 0 6px 22px #17382a08; }
+.story-art { height: 200px; }
+.art-caption { font-size: 9px; letter-spacing: .7px; color: #47695e; }
+.story-card-content { padding: 17px 22px 20px; }
+.story-card-meta { font-size: 12px; color: #496c60; margin-bottom: 5px; }
+.story-card-meta > button { color: #386b5d; min-width: 44px; min-height: 44px; }
+.story-card h3 { font-size: 20px; line-height: 1.65; font-weight: 600; letter-spacing: -.4px; }
+.story-card-content > a > p { font-size: 14px; color: #556c63; line-height: 1.9; margin-top: 10px; }
+.story-card-bottom { font-size: 12px; color: #38685a; padding-top: 16px; border-color: #e4ece7; }
+.discovery-search { border-color: #c6d9ce; border-radius: 12px; }
+.discovery-search input { font-size: 16px; min-height: 28px; }
+.discovery-search button { font-size: 13px; min-height: 40px; }
+.journal-filters button { font-size: 14px; min-height: 44px; color: #405f51; padding: 10px 20px; }
+.journal-filters button[aria-pressed=true] { background: #0c5e55; border-color: #0c5e55; color: white; }
+.collection-count { font-size: 14px; color: #536b61; }
+.collection-count > span:last-child { font-size: 12px; color: #536b61; }
+.course-filter :is(label,select) { font-size: 14px; }
+.curriculum-note,.shelf-note { font-size: 13px; color: #52695e; }
+.journal-empty p { font-size: 15px; color: #526b5b; }
+.knowledge-tool-copy h2 { font-size: 25px; }
+.knowledge-tool-copy p,.knowledge-about p { font-size: 16px; color: #4e665e; }
+.knowledge-about .about-values p { font-size: 15px; }
+.knowledge-tool-copy a { font-size: 14px; }
+.tool-related { font-size: 15px; }
+.knowledge-storage-error { font-size: 14px; }
+.journal-footer { max-width: 1184px; margin: 60px auto 0; padding: 32px 0; }
+.journal-footer > div > p { font-size: 14px; color: #536b60; }
+.journal-footer > div:nth-child(2) { font-size: 14px; gap: 24px; }
+.journal-footer-bottom { font-size: 12px; color: #526a60; padding-top: 24px; }
+.journal-footer-bottom > span:last-child { font-size: 10px; letter-spacing: 1px; }
+/* Home: a compact visual introduction, then multiple direct ways into content. */
+.atlas-eyebrow { display: inline-flex; align-items: center; gap: 8px; color: #40695e; font-size: 11px; letter-spacing: 1.2px; font-weight: 600; line-height: 1.7; }
+.atlas-eyebrow > span { width: 7px; height: 7px; background: #398e77; border-radius: 50%; }
+.atlas-hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; padding: 44px 0 40px; }
+.atlas-intro h1 { font-size: clamp(38px,4vw,56px); font-weight: 600; line-height: 1.4; letter-spacing: -1.8px; margin: 15px 0 17px; }
+.atlas-intro h1 em { color: #0c5e55; font-style: normal; }
+.atlas-intro > p { font-size: 17px; color: #536a63; line-height: 1.9; }
+.atlas-search { display: flex; align-items: center; gap: 11px; margin-top: 25px; background: white; border: 1px solid #abc9ba; border-radius: 12px; padding: 8px 8px 8px 17px; box-shadow: 0 4px 18px #164a3005; color: #477265; }
+.atlas-search:focus-within { border-color: #0c5e55; box-shadow: 0 0 0 3px #0c5e5512; }
+.atlas-search input { min-width: 0; width: 100%; background: transparent; border: 0; outline: none; font-size: 14px; color: #214c40; min-height: 42px; }
+.atlas-search button { display: grid; place-items: center; background: #0c5e55; color: white; width: 44px; height: 44px; border-radius: 8px; flex-shrink: 0; }
+.atlas-quick-search { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; font-size: 12px; color: #526c60; }
+.atlas-quick-search a { padding: 5px 11px; border: 1px solid #dce7df; background: #f0f5f1; border-radius: 20px; }
+.atlas-quick-search a:hover { background: #e3efe7; }
+.atlas-facts { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 25px; color: #4d695e; font-size: 12px; }
+.atlas-facts span { display: flex; align-items: center; gap: 7px; }
+.atlas-visual-card { min-width: 0; background: #edf4ef; border: 1px solid #d6e5dc; border-radius: 20px; padding: 19px 24px; }
+.atlas-visual-top { display: flex; align-items: center; justify-content: space-between; color: #516e62; font-size: 11px; }
+.atlas-visual-top > span:first-child { display: flex; align-items: center; gap: 7px; }
+.atlas-visual-tabs { display: flex; width: fit-content; gap: 4px; padding: 4px; margin: 15px auto 0; border: 1px solid #d5e3da; border-radius: 25px; background: #e5eee7; }
+.atlas-visual-tabs button { border-radius: 20px; padding: 8px 18px; color: #526c61; font-size: 12px; min-height: 38px; }
+.atlas-visual-tabs button[aria-pressed=true] { background: white; color: #0c5e55; box-shadow: 0 2px 4px #163d2810; }
+.atlas-visual-stage { min-height: 200px; display: grid; place-items: center; }
+.atlas-visual-stage svg { width: 100%; height: auto; max-height: 224px; }
+.atlas-visual-copy { border-top: 1px solid #d5e3da; padding-top: 14px; }
+.atlas-visual-copy h2 { font-size: 18px; letter-spacing: -.2px; }
+.atlas-visual-copy p { font-size: 13px; color: #526b60; margin-top: 5px; min-height: 49px; line-height: 1.85; }
+.atlas-visual-copy a { display: inline-flex; align-items: center; gap: 10px; color: #0c5e55; font-size: 12px; padding: 8px 0 0; font-weight: 600; }
+.atlas-section { padding: 32px 0 15px; }
+.atlas-section-title { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-bottom: 23px; }
+.atlas-section-title h2 { font-size: 26px; line-height: 1.5; letter-spacing: -.6px; font-weight: 600; margin-top: 6px; }
+.atlas-section-title p { font-size: 14px; color: #526b61; margin-top: 8px; }
+.atlas-section-title > a { display: inline-flex; align-items: center; gap: 9px; font-size: 13px; color: #0c5e55; flex-shrink: 0; min-height: 36px; }
+.atlas-section-hint { color: #5b7266; font-size: 12px; }
+.atlas-grade-section { border-top: 1px solid #dce6e0; }
+.atlas-grades { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px; }
+.atlas-grade { display: flex; align-items: center; gap: 16px; border: 1px solid #dce6e2; border-radius: 13px; padding: 22px 18px; background: #fff; }
+.atlas-grade:hover { border-color: #72a497; background: #f3f8f5; }
+.atlas-grade > div:nth-child(2) { flex: 1; min-width: 0; }
+.atlas-grade-number { display: flex; align-items: baseline; color: #0c5e55; font-size: 17px; letter-spacing: -1px; }
+.atlas-grade-number strong { font-size: 39px; font-weight: 500; }
+.atlas-grade-5 .atlas-grade-number { color: #4e6495; }
+.atlas-grade-6 .atlas-grade-number { color: #a56b32; }
+.atlas-grade h3 { font-size: 15px; font-weight: 600; line-height: 1.7; }
+.atlas-grade p { color: #576c63; font-size: 12px; line-height: 1.8; margin-top: 4px; }
+.atlas-grade > svg { width: 17px; color: #506e61; }
+.atlas-scope-note { font-size: 12px; color: #576e63; margin-top: 13px; line-height: 1.8; }
+.atlas-subjects { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0 28px; }
+.atlas-subject { display: flex; align-items: start; gap: 15px; padding: 23px 0; border-bottom: 1px solid #dce6e2; }
+.atlas-subject:hover h3 { color: #0c5e55; text-decoration: underline; text-underline-offset: 4px; }
+.atlas-subject-icon { width: 43px; height: 45px; display: grid; place-items: center; border-radius: 11px; color: #32725f; background: #e8f0e8; flex-shrink: 0; }
+.subject-hue-1 { background: #e8eef7; color: #5779a2; }
+.subject-hue-2 { background: #f6eee2; color: #9d723e; }
+.subject-hue-3 { background: #f0ebf4; color: #846799; }
+.atlas-subject h3 { font-size: 17px; font-weight: 600; margin-bottom: 5px; }
+.atlas-subject p { font-size: 13px; color: #526a60; line-height: 1.8; }
+.atlas-subject small { display: flex; align-items: center; gap: 8px; color: #0c5e55; margin-top: 12px; font-size: 12px; }
+.atlas-lab-section { margin: 35px -24px 0; background: #edf3f0; padding: 29px 24px 23px; border-radius: 18px; }
+.atlas-lab-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
+.atlas-lab-card { min-width: 0; background: white; border: 1px solid #d7e3dc; border-radius: 14px; overflow: hidden; }
+.atlas-lab-card:hover { border-color: #75a99b; }
+.atlas-lab-picture { background: #eff5f1; }
+.atlas-lab-picture svg { display: block; width: 100%; height: auto; }
+.atlas-lab-copy { padding: 20px; }
+.atlas-lab-copy > span { color: #527066; font-size: 12px; }
+.atlas-lab-copy h3 { font-size: 19px; font-weight: 600; margin: 7px 0; line-height: 1.7; }
+.atlas-lab-copy p { font-size: 13px; color: #516a60; line-height: 1.85; }
+.atlas-lab-copy strong { font-size: 12px; display: flex; gap: 8px; align-items: center; color: #0c5e55; margin-top: 18px; font-weight: 600; }
+.atlas-directory { padding-top: 48px; }
+.atlas-course-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 14px 22px; }
+.atlas-course-list details { background: white; border: 1px solid #dce6e0; border-radius: 12px; }
+.atlas-course-list summary { display: flex; align-items: center; gap: 15px; cursor: pointer; list-style: none; padding: 20px; }
+.atlas-course-list summary::-webkit-details-marker { display: none; }
+.atlas-course-grade { border-radius: 8px; background: #edf5ef; color: #287260; padding: 10px; font-size: 13px; }
+.atlas-course-list h3 { font-size: 16px; line-height: 1.6; }
+.atlas-course-list summary div > span { color: #526b60; font-size: 12px; }
+.atlas-expand { font-size: 24px; color: #538070; margin-left: auto; }
+.atlas-course-list details[open] .atlas-expand { transform: rotate(45deg); }
+.atlas-course-articles { border-top: 1px solid #e3ece6; padding: 8px 20px; }
+.atlas-course-articles a { display: flex; align-items: baseline; gap: 11px; padding: 12px 0; font-size: 14px; line-height: 1.8; border-bottom: 1px solid #edf2ef; }
+.atlas-course-articles a > span { color: #638074; font-size: 11px; }
+.atlas-course-articles a > svg { margin-left: auto; align-self: center; }
+.atlas-course-articles a:hover { color: #0c5e55; }
+.atlas-course-articles .atlas-course-all { font-size: 12px; color: #0c5e55; }
+.atlas-editorial-note { display: flex; align-items: center; gap: 15px; border-top: 1px solid #dce6e2; margin-top: 35px; padding-top: 24px; color: #526c60; }
+.atlas-editorial-note p { font-size: 13px; line-height: 1.85; max-width: 700px; }
+.atlas-editorial-note a { font-size: 12px; white-space: nowrap; margin-left: auto; display: flex; align-items: center; gap: 5px; color: #0c5e55; }
+@media(min-width:1600px) { .atlas-hero { padding-top: 55px; } }
+@media(max-width:1100px) {
+  .journal-nav { gap: 17px; font-size: 13px; }
+  .journal-nav-wrap { gap: 15px; }
+  .atlas-hero { gap: 35px; }
+  .atlas-grade { gap: 10px; padding: 19px 14px; }
+  .atlas-grade h3 { font-size: 14px; }
+  .atlas-grade > svg { display: none; }
+  .atlas-subjects { gap: 0 20px; }
+  .atlas-subject { gap: 12px; }
+  .journal-footer { margin-left: 40px; margin-right: 40px; }
+}
+@media(max-width:900px) {
+  .journal-brand small { font-size: 10px; }
+  .journal-brand strong { font-size: 21px; }
+  .journal-nav { gap: 15px; font-size: 12px; }
+  .journal-nav-wrap { padding: 16px 24px; }
+  .journal-nav-actions { padding-left: 9px; }
+  .journal-main { padding: 0 24px; }
+  .journal-searchbar > div { padding: 10px 24px; }
+  .atlas-hero { gap: 25px; padding-top: 30px; }
+  .atlas-intro h1 { font-size: 41px; }
+  .atlas-intro > p { font-size: 15px; }
+  .atlas-visual-card { padding: 15px 18px; }
+  .atlas-search input { font-size: 13px; }
+  .atlas-subjects { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .atlas-section-title h2 { font-size: 23px; }
+  .atlas-grade-number strong { font-size: 32px; }
+  .atlas-grades { gap: 10px; }
+  .atlas-grade { flex-direction: column; align-items: start; gap: 6px; }
+  .atlas-lab-section { margin-left: -10px; margin-right: -10px; padding-left: 15px; padding-right: 15px; }
+  .atlas-lab-copy { padding: 17px; }
+  .atlas-lab-copy h3 { font-size: 17px; }
+  .story-grid { gap: 16px; }
+  .story-card h3 { font-size: 18px; }
+  .story-card-content { padding: 12px 17px 18px; }
+  .journal-footer { margin-left: 24px; margin-right: 24px; }
+}
+@media(max-width:700px) {
+  .journal-nav-wrap { position: relative; padding: 14px 20px; }
+  .journal-nav { display: none; }
+  .journal-nav.is-open { display: flex; position: absolute; top: 100%; left: 0; right: 0; z-index: 60; background: white; padding: 16px 24px; border-bottom: 1px solid #dce6e2; box-shadow: 0 12px 24px #1d352c0c; flex-direction: column; align-items: stretch; gap: 4px; }
+  .journal-nav a { font-size: 15px; padding: 13px 0; }
+  .journal-nav-actions { margin-left: auto; border: none; }
+  .journal-nav-actions > button { display: grid; place-items: center; min-width: 44px; min-height: 44px; color: #0c5e55; }
+  .journal-searchbar > div { padding: 9px 20px; }
+  .journal-searchbar > div > span { display: none; }
+  .journal-global-search { width: 100%; min-width: 0; }
+  .journal-search-results { width: 100%; left: 0; right: 0; }
+  .journal-global-search input { font-size: 14px; min-height: 27px; }
+  .journal-main { padding: 0 20px; }
+  .atlas-hero { grid-template-columns: 1fr; gap: 25px; padding-top: 28px; padding-bottom: 30px; }
+  .atlas-intro h1 { font-size: 43px; line-height: 1.35; margin-top: 12px; }
+  .atlas-intro > p { font-size: 16px; }
+  .atlas-search { margin-top: 20px; }
+  .atlas-search input { font-size: 14px; }
+  .atlas-facts { margin-top: 17px; font-size: 12px; gap: 16px; }
+  .atlas-visual-card { padding: 16px 20px; }
+  .atlas-visual-stage { min-height: 180px; }
+  .atlas-visual-stage svg { max-height: 215px; }
+  .atlas-visual-tabs { margin-top: 12px; }
+  .atlas-visual-tabs button { min-height: 40px; }
+  .atlas-visual-copy p { min-height: 0; font-size: 14px; }
+  .atlas-section { padding-top: 28px; }
+  .atlas-section-title { align-items: start; flex-direction: column; gap: 9px; margin-bottom: 18px; }
+  .atlas-section-title h2 { font-size: 23px; }
+  .atlas-section-title > a { min-height: 30px; }
+  .atlas-section-hint { display: none; }
+  .atlas-grades { grid-template-columns: 1fr; gap: 10px; }
+  .atlas-grade { flex-direction: row; align-items: center; gap: 20px; padding: 18px; }
+  .atlas-grade-number { min-width: 52px; }
+  .atlas-grade-number strong { font-size: 36px; }
+  .atlas-grade h3 { font-size: 16px; }
+  .atlas-grade p { font-size: 12px; }
+  .atlas-grade > svg { display: block; }
+  .atlas-subjects { grid-template-columns: 1fr; }
+  .atlas-subject { padding: 18px 0; gap: 15px; }
+  .atlas-subject h3 { font-size: 18px; }
+  .atlas-subject p { font-size: 14px; }
+  .atlas-subject small { margin-top: 7px; }
+  .story-grid { grid-template-columns: 1fr; gap: 20px; }
+  .story-art { height: 210px; }
+  .story-card-content { padding: 13px 22px 22px; }
+  .story-card h3 { font-size: 22px; }
+  .story-card-content > a > p { font-size: 15px; }
+  .atlas-lab-section { margin: 25px -8px 0; padding: 24px 14px; }
+  .atlas-lab-grid { grid-template-columns: 1fr; gap: 18px; }
+  .atlas-lab-picture svg { max-height: 230px; }
+  .atlas-lab-copy { padding: 18px 21px; }
+  .atlas-lab-copy h3 { font-size: 21px; }
+  .atlas-lab-copy p { font-size: 14px; }
+  .atlas-lab-copy strong { min-height: 30px; margin-top: 12px; }
+  .atlas-course-list { grid-template-columns: 1fr; gap: 10px; }
+  .atlas-editorial-note { align-items: start; flex-wrap: wrap; gap: 11px; }
+  .atlas-editorial-note p { flex: 1; min-width: 210px; }
+  .atlas-editorial-note a { margin-left: 33px; }
+  .journal-section-heading h2 { font-size: 23px; }
+  .journal-page-heading { padding: 30px 0 23px; }
+  .journal-page-heading h1 { font-size: 29px; }
+  .journal-page-heading p { font-size: 15px; }
+  .journal-footer { display: flex; flex-direction: column; margin: 40px 20px 0; padding: 25px 0; gap: 20px; }
+  .journal-footer > div:nth-child(2) { justify-content: start; flex-wrap: wrap; font-size: 13px; gap: 15px; }
+  .journal-footer-bottom { display: flex; flex-wrap: wrap; justify-content: start; font-size: 11px; gap: 12px; }
+  .journal-footer-bottom > span:last-child { display: none; }
+  .collection-count > span:last-child { display: none; }
+}
+@media(prefers-reduced-motion:reduce) { .knowledge-site *, .knowledge-site *::before, .knowledge-site *::after { scroll-behavior: auto!important; transition: none!important; } }
+/* The homepage already has its primary search; other pages keep the global search. */
+.knowledge-site[data-home=true] .journal-searchbar { display: none; }
+.atlas-home-grade-shortcuts { display: none; }
+@media(max-width:700px) {
+  .atlas-home-grade-shortcuts { display: flex; gap: 9px; align-items: center; margin-top: 18px; font-size: 12px; color: #526c60; }
+  .atlas-home-grade-shortcuts a { display: inline-flex; gap: 6px; align-items: center; border: 1px solid #cbded2; background: white; padding: 8px 11px; border-radius: 7px; font-size: 14px; min-height: 42px; color: #0c5e55; }
+  .atlas-visual-stage svg { max-height: 180px; }
+  .atlas-visual-stage { min-height: 150px; }
+  .atlas-facts { font-size: 11px; }
+}

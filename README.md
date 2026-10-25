@@ -128,3 +128,13 @@ The quantitative helpers in `src/lib/chemistry/experiments.ts` are verified agai
 The [23 October 2026 review](docs/content-review-2026-10-23.md) records the scope, corrected omissions, all 24 topic checks, seven experiment assumptions, and the limitation on live reference access. The explorer now covers ten core functional-group families and five explicitly categorized additional structures/groups, with 15 interactive examples. This is a defined reference scope, not every functional group in organic chemistry or a certified complete national syllabus.
 
 `src/data/molecules/functional-group-catalog.json` drives the reference tables and explorer. Run `npm run groups:generate` to verify all 15 SMILES/formulas/SMARTS with RDKit and regenerate the 11 additional diagram datasets plus `verification.json`. Four existing curated layouts remain. Unit tests independently verify all 15 graphs' composition, valence, connectivity, and triple bonds. Browser tests exercise all 15 selections. RDKit is still a development-only dependency.
+
+## Visual library navigation
+
+The redesigned homepage provides direct grade links, seven chemistry subject groups, a searchable content index, concept illustrations, and experiment apparatus previews. `/discover?q=H2O&subject=atoms-bonds` is a shareable text/subject search. Search accepts normalized subscripts/superscripts and explicit Thai–English chemistry aliases, ranks actual content matches, and links snippets to their matching article section. It does not infer arbitrary natural-language intent. Grade/course filters operate within the current collection.
+
+The reader provides a desktop active table of contents, a collapsible mobile directory, a reading-position indicator, optional foundations, and links to relevant existing simulations. Reading position describes scroll location only; it does not record completion. Original article URLs, saved articles and simulation models are preserved.
+
+Five additional explanatory diagrams cover periodic trends, mole conversion, equilibrium rates versus concentrations, the Zn–Cu salt bridge, and polymer crosslinks. The seven experiment cards now use labeled apparatus illustrations rather than abstract symbols. See the [current content inventory and remaining gaps](docs/content-coverage-2026-10-25.md); UI changes do not imply a new expert review of every external reference.
+
+With the app running, `CHROMIUM_PATH=/usr/bin/chromium npm run test:design` checks illustration controls, all subject links, unique accessible SVG IDs, five viewport widths, reduced motion and direct mobile entry points. Screenshots are written to `/tmp`.

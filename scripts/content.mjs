@@ -26,9 +26,11 @@ try {
     await go(path);
     assert.equal(await page.locator("h1").count(), 1, path);
     const figure = page.locator(".learning-figure");
-    assert.equal(await figure.count(), 1, path);
-    assert.ok((await figure.locator("svg,img,[role=img]").count()) > 0, path);
-    await figure.scrollIntoViewIfNeeded();
+    assert.ok((await figure.count()) >= 1, path);
+    for (const panel of await figure.all()) {
+      assert.ok((await panel.locator("svg,img,[role=img],.mole-conversion-map[aria-label]").count()) > 0, path);
+      await panel.scrollIntoViewIfNeeded();
+    }
     await page.waitForFunction(() =>
       Array.from(document.querySelectorAll(".learning-figure img")).every(
         (img) => img.complete && img.naturalWidth > 0,
@@ -55,7 +57,7 @@ try {
   }
   await go("/read/atomic-structure");
   const electronCounts = await page
-    .locator(".learning-figure .learning-panel")
+    .locator(".learning-figure").first().locator(".learning-panel")
     .evaluateAll((panels) =>
       panels.map(
         (p) => p.querySelectorAll('[data-particle="electron"]').length,
@@ -64,7 +66,7 @@ try {
   assert.deepEqual(electronCounts, [11, 10]);
   await go("/read/why-reactions-slow-down");
   const remaining = await page
-    .locator(".learning-figure .learning-panel")
+    .locator(".learning-figure").first().locator(".learning-panel")
     .evaluateAll((panels) =>
       panels.map(
         (p) => p.querySelectorAll('[data-particle="remaining"]').length,
@@ -78,17 +80,17 @@ try {
   );
   await go("/read/aspirin-two-groups");
   await page
-    .locator(".learning-figure")
+    .locator(".learning-figure").first()
     .screenshot({ path: "/tmp/chemlab-aspirin-figure.png" });
   await go("/read/concentration-is-a-ratio");
   const soluteCounts = await page
-    .locator(".learning-figure .learning-panel")
+    .locator(".learning-figure").first().locator(".learning-panel")
     .evaluateAll((panels) =>
       panels.map((p) => p.querySelectorAll('[data-species="solute"]').length),
     );
   assert.deepEqual(soluteCounts, [6, 6]);
   await page
-    .locator(".learning-figure")
+    .locator(".learning-figure").first()
     .screenshot({ path: "/tmp/chemlab-dilution-figure.png" });
   const original = await page
     .locator(".reader-body > section")
@@ -151,7 +153,18 @@ try {
       await page.keyboard.press("ArrowRight");
     }
   }
-  await page.locator(".learning-figure").scrollIntoViewIfNeeded();
+  // Collapsing the mobile directory must still land on and mark the chosen section.
+  await page.locator(".reader-mobile-directory summary").click();
+  await page.locator('.reader-mobile-directory a[href="#section-2"]').click();
+  await page.waitForFunction(() => document.querySelector('.reader-mobile-directory a[href="#section-2"]')?.getAttribute("aria-current") === "location");
+  assert.equal(await page.locator(".reader-mobile-directory").evaluate((element) => element.open), false);
+  assert.equal(new URL(page.url()).hash, "#section-2");
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.locator("#article-summary").evaluate((element) => element.scrollIntoView({ block: "start", behavior: "instant" }));
+  await page.waitForFunction(() => document.querySelector('.reader-toc a[href="#article-summary"]')?.getAttribute("aria-current") === "location");
+  assert.ok(Number(await page.getByRole("progressbar", { name: "ตำแหน่งการอ่าน" }).getAttribute("aria-valuenow")) > 0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator(".learning-figure").first().scrollIntoViewIfNeeded();
   await page.screenshot({ path: "/tmp/chemlab-content-mobile.png" });
   assert.deepEqual(errors, []);
   console.log(
