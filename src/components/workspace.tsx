@@ -15,6 +15,8 @@ import {
 import { useReadingList } from "@/hooks/use-reading-list";
 import { articles, courseForArticle } from "@/data/knowledge";
 import { searchContent } from "@/lib/content/search";
+import { author } from "@/data/site";
+import { FormulaLibrary } from "@/components/knowledge/formula-library";
 import { KnowledgeHome } from "@/components/knowledge/home";
 import {
   ArticleReader,
@@ -34,6 +36,7 @@ const navigation = [
   { href: "/grades/4", label: "ม.4" },
   { href: "/grades/5", label: "ม.5" },
   { href: "/grades/6", label: "ม.6" },
+  { href: "/formulas", label: "สูตรและวิธีจำ" },
   { href: "/tools", label: "ทดลองและเครื่องมือ" },
 ];
 export default function Workspace({ path }: { path: string }) {
@@ -175,6 +178,8 @@ export default function Workspace({ path }: { path: string }) {
             grade={grade}
             course={course}
           />
+        ) : path === "formulas" ? (
+          <FormulaLibrary />
         ) : path === "saved" ? (
           <ReadingShelf list={list} />
         ) : path === "tools" ? (
@@ -247,9 +252,11 @@ export default function Workspace({ path }: { path: string }) {
         </div>
         <div>
           <Link href="/discover">คลังเนื้อหา</Link>
+          <Link href="/formulas">สูตรและวิธีจำ</Link>
           <Link href="/tools">เครื่องมือสำรวจ</Link>
           <Link href="/about">แนวทางและแหล่งข้อมูล</Link>
         </div>
+        <div className="creator-credit"><div className="creator-monogram" aria-hidden="true">ปน</div><div><span>ผู้จัดทำเว็บไซต์</span><strong>{author.name}</strong><p>{author.role} · {author.school}</p></div><Link href="/about">รู้จักผู้จัดทำ <ArrowUpRight size={16} /></Link></div>
         <div className="journal-footer-bottom">
           <span>© {new Date().getFullYear()} ChemLab RX</span>
           <span>ภาพและการทดลองจำลองเพื่ออธิบายหลักเคมี</span>

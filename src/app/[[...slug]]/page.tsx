@@ -27,6 +27,7 @@ const legacy: Record<string, string> = {
 };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug = [] } = await params;
+  if (slug.join("/") === "formulas") return { title: "สูตรเคมีและวิธีจำ — ChemLab RX", description: "รวมสูตร ความหมายของตัวแปร เงื่อนไข ตัวอย่าง และคำช่วยจำเคมี ม.4–ม.6" };
   if (slug.join("/") === "tools/flame-test")
     return {
       title: "ทดลองสีเปลวไฟ — ChemLab RX",
@@ -67,6 +68,7 @@ export default async function Page({ params }: Props) {
     [
       "",
       "discover",
+      "formulas",
       "tools",
       "tools/kinetics",
       "tools/flame-test",

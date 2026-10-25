@@ -148,3 +148,15 @@ Panels combine labeled SVG diagrams, normal chemical notation, examples, explana
 The supplied comparison poster served as a format reference; its image is not redistributed. New drawings and wording are authored in the project. Existing locally generated aspirin/paracetamol structure SVGs are reused where the entire molecule matters. Naming notes explicitly distinguish an alkoxy prefix from a suffix, benzene from phenyl, and generic structural motifs from complete molecules.
 
 Run `CHROMIUM_PATH=/usr/bin/chromium npm run test:atlases` with the app running to inspect all24 sheets, expanded panel counts, diagram labels, modal closing/focus/scroll behavior and mobile/tablet layouts. The [visual-reference review](docs/visual-atlases-2026-10-25.md) records scientific scope and checks.
+
+## Understanding and recall
+
+`/formulas` contains56 formulas/structural relationships and54 original, bounded memory aids drawn from all24 current chapters. Formula cards include symbol definitions, units where relevant, use conditions, cautions and expandable worked examples. Mnemonic cards explain the short phrase and its limits; they do not replace the chemistry or claim to be official memory rules. Qualitative safety/solubility guides avoid inventing equations.
+
+The hub supports shareable `q`, `type=formula|memory`, `grade` and `subject` filters, compact cards, load-more and deep links to exact references in articles. Unicode notation is normalized; Latin token boundaries prevent `pH` from matching `Phenol`. Normal article search remains available separately.
+
+The renovated reader starts with a plain core idea, three reasoning steps and free jump links to narrative, visuals, recall and simulations. Original narrative appears before the long visual reference sheet so readers reach explanations sooner. All108 explanatory panels, previous article anchors, simulations and local bookmarks are retained.
+
+Public attribution is configured in `src/data/site.ts`: ปิยวัฒน์ นิ่มน้อย, นักเรียน · โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย สตูล. It appears on the homepage, shared footer, about page, article byline and metadata. No institutional or professional qualification is inferred.
+
+With the production app running, `CHROMIUM_PATH=/usr/bin/chromium npm run test:recall` verifies attribution, all24 guides, formulas/mnemonics, worked examples, unique anchors, hub filtering/source links and four viewport widths. See [the clarity and recall review](docs/clarity-recall-2026-10-25.md).

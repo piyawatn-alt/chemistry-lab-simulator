@@ -20,7 +20,7 @@ async function go(path) {
 try {
   await go("/");
   assert.equal(await page.getByRole("heading", { level: 1 }).count(), 1);
-  assert.ok(!(await page.locator("nav").innerText()).includes("บทเรียน"));
+  assert.ok(!(await page.getByRole("navigation", { name: "เมนูหลัก", exact: true }).innerText()).includes("บทเรียน"));
   await page.screenshot({
     path: "/tmp/chemlab-knowledge-desktop.png",
     fullPage: true,
@@ -152,7 +152,7 @@ try {
   await go("/");
   await page.getByRole("button", { name: "เปิดเมนู" }).click();
   await page
-    .locator("nav")
+    .getByRole("navigation", { name: "เมนูหลัก", exact: true })
     .getByRole("link", { name: "เนื้อหาทั้งหมด", exact: true })
     .click();
   await page

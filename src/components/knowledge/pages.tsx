@@ -28,6 +28,9 @@ import {
 import type { ReadingList } from "@/hooks/use-reading-list";
 import { ArticleCard } from "./article-card";
 import { ChapterAtlas } from "./atlases/chapter-atlas";
+import { ChapterRecall } from "./recall-guide";
+import { recallGuides } from "@/data/knowledge/recall";
+import { author } from "@/data/site";
 import { LearningFigure } from "./learning-figure";
 import { contentFigures, supplementaryFigures } from "@/data/knowledge/figures";
 import { HighlightedText } from "./highlighted-text";
@@ -36,6 +39,7 @@ import { ArticleArt } from "./article-art";
 import { ExperimentGallery } from "@/components/simulators/experiment-gallery";
 import { foundationsFor, toolsForArticle } from "@/data/knowledge/connections";
 import "@/app/reader-refresh.css";
+import "@/app/reader-clarity.css";
 import { chemistrySubjects, searchContent } from "@/lib/content/search";
 export function JournalHeading({
   eyebrow,
@@ -317,14 +321,17 @@ export function ArticleReader({
 }) {
   const [highlightsOn, setHighlightsOn] = useState(true);
   const saved = list.saved.includes(a.id);
-  const [activeSection, setActiveSection] = useState("visual-reference");
+  const [activeSection, setActiveSection] = useState("chapter-overview");
   const [progress, setProgress] = useState(0);
   const bodyRef = useRef<HTMLElement>(null);
   const foundations = foundationsFor(a);
   const linkedTools = toolsForArticle(a);
+  const guide = recallGuides[a.id];
   const sectionLinks = [
-    { id: "visual-reference", title: "แผ่นภาพสรุปประจำบท" },
+    { id: "chapter-overview", title: "แก่นของบทและลำดับคิด" },
     ...a.sections.map((section, i) => ({ id: `section-${i}`, title: section.title })),
+    { id: "visual-reference", title: "แผ่นภาพสรุปประจำบท" },
+    { id: "memory-guide", title: "สูตรและวิธีจำ" },
     { id: "article-summary", title: "สรุปท้ายเรื่อง" },
     ...(linkedTools.length ? [{ id: "article-experiments", title: "ทดลองประกอบเรื่องนี้" }] : []),
     ...(a.terms?.length ? [{ id: "glossary", title: "คำศัพท์สำคัญ" }] : []),
@@ -333,13 +340,13 @@ export function ArticleReader({
   useEffect(() => {
     const body = bodyRef.current;
     if (!body) return;
-    const sections = Array.from(body.querySelectorAll<HTMLElement>("section[id]"));
+    const sections = Array.from(body.querySelectorAll<HTMLElement>(":scope > section[id]"));
     let frame = 0;
     const update = () => {
       frame = 0;
       const activeOffset = window.matchMedia("(max-width: 760px)").matches ? 110 : 150;
       const current = sections.filter((section) => section.getBoundingClientRect().top <= activeOffset).at(-1);
-      setActiveSection(current?.id || "visual-reference");
+      setActiveSection(current?.id || "chapter-overview");
       const top = body.getBoundingClientRect().top + window.scrollY;
       const available = body.offsetHeight - Math.min(window.innerHeight - 150, body.offsetHeight);
       setProgress(Math.round(Math.max(0, Math.min(1, (window.scrollY - top + 150) / Math.max(available, 1))) * 100));
@@ -375,18 +382,18 @@ export function ArticleReader({
         <span>/</span>
         <Link href={`/courses/${course.id}`}>{course.code}</Link>
       </div>
-      <header className="reader-heading reader-heading-refresh">
+      <header className="reader-heading reader-heading-refresh reader-heading-clarity">
         <span className="journal-kicker">
           {`ม.${course.grade} / ${course.code} / ${course.title}`}
         </span>
         <h1>{a.title}</h1>
-        <p>{a.intro}</p>
+        <p className="reader-plain-intro">{guide?.coreIdea || a.intro}</p>
         <div className="reader-meta">
           <span>
             <BookOpen size={16} />
             อ่านประมาณ {readingMinutes(a)} นาที
           </span>
-          <a className="reader-atlas-jump" href="#visual-reference">ดูแผ่นภาพสรุป <ArrowRight size={14} /></a>
+          <span className="reader-project-credit">โครงการโดย {author.name}</span>
           <span>ทบทวนหลักเคมี <time dateTime="2026-10-23">23 ต.ค. 2569</time></span>
           <button
             disabled={!list.ready}
@@ -398,12 +405,17 @@ export function ArticleReader({
           </button>
         </div>
       </header>
+      <nav className="reader-entry-points" aria-label="เลือกวิธีอ่านบทนี้">
+        <a href="#section-0"><BookOpen size={20} /><span><strong>อ่านเนื้อหา</strong><small>เข้าใจเหตุผลทีละส่วน</small></span><ArrowRight size={16} /></a>
+        <a href="#visual-reference"><Atom size={20} /><span><strong>ดูภาพสรุป</strong><small>เทียบแนวคิดให้เห็นภาพ</small></span><ArrowRight size={16} /></a>
+        <a href="#memory-guide"><Lightbulb size={20} /><span><strong>สูตรและวิธีจำ</strong><small>จำสั้น พร้อมเงื่อนไขใช้</small></span><ArrowRight size={16} /></a>
+        <a href={linkedTools.length ? "#article-experiments" : "/tools"}><FlaskConical size={20} /><span><strong>ทดลอง</strong><small>{linkedTools.length ? "ลองปรับและสังเกตผล" : "สำรวจเครื่องมือเคมี"}</small></span><ArrowRight size={16} /></a>
+      </nav>
       <div className="reader-reading-tools">
         <div>
           <Highlighter size={17} />
-          <span>
-            สีเหลือง: สาระสำคัญ · กรอบเขียว: ตัวอย่าง · กรอบส้ม: ข้อควรระวัง
-          </span>
+          <span className="reader-highlight-description">สีเหลือง: สาระสำคัญ · กรอบเขียว: ตัวอย่าง · กรอบส้ม: ข้อควรระวัง</span>
+          <span className="reader-highlight-short">ไฮไลต์เน้นใจความสำคัญ</span>
         </div>
         <button
           aria-pressed={highlightsOn}
@@ -431,21 +443,26 @@ export function ArticleReader({
           <div>{foundations.map((foundation) => <Link key={foundation.id} href={`/read/${foundation.id}`}>{foundation.title}<ArrowUpRight size={14} /></Link>)}</div>
         </div>
       )}
-      <div className="reader-layout reader-layout-refresh">
+      <div className="reader-layout reader-layout-refresh reader-layout-clarity">
         <article className="reader-body" ref={bodyRef}>
-          <div className="reader-takeaway">
-            <span className="journal-kicker">สรุปสาระสำคัญ</span>
-            {a.keyPoints?.length ? (
-              <ul className="key-point-list">
-                {a.keyPoints.map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
-              </ul>
-            ) : (
-              <p>{a.takeaway}</p>
-            )}
-          </div>
-          <section id="visual-reference" className="reader-atlas-section"><ChapterAtlas articleId={a.id} /></section>
+          <section id="chapter-overview" className="reader-chapter-overview">
+            <div className="reader-core-idea">
+              <span className="journal-kicker">THE BIG IDEA / แก่นของเรื่องนี้</span>
+              <h2>{a.takeaway}</h2>
+            </div>
+            {guide && <div className="reader-thinking-path">
+              <span className="reader-thinking-label">จับหลักให้ได้ 3 ขั้น</span>
+              <ol>{guide.thinkingSteps.map((step, index) => <li key={step}><span>{String(index + 1).padStart(2, "0")}</span><p>{step}</p></li>)}</ol>
+            </div>}
+            <details className="reader-takeaway reader-keypoint-drawer">
+              <summary>สาระสำคัญที่ควรเก็บกลับไป <ChevronDown size={17} /></summary>
+              {a.keyPoints?.length ? (
+                <ul className="key-point-list">
+                  {a.keyPoints.map((point) => <li key={point}>{point}</li>)}
+                </ul>
+              ) : <p>{a.takeaway}</p>}
+            </details>
+          </section>
           {a.sections.map((s, i) => (
             <section id={`section-${i}`} key={s.title}>
               <h2>{s.title}</h2>
@@ -511,7 +528,7 @@ export function ArticleReader({
                 >
                   <div className="content-block-label">
                     <Lightbulb size={18} />
-                    ตัวอย่างประกอบ
+                    ตัวอย่างประกอบ / ดูวิธีคิดทีละขั้น
                   </div>
                   <h3>{s.example.title}</h3>
                   <ol>
@@ -536,6 +553,8 @@ export function ArticleReader({
               )}
             </section>
           ))}
+          <section id="visual-reference" className="reader-atlas-section"><ChapterAtlas articleId={a.id} /></section>
+          <section id="memory-guide" className="reader-recall-section"><ChapterRecall articleId={a.id} /></section>
           <section className="reader-end-summary" id="article-summary">
             <span className="journal-kicker">ทบทวนใจความสำคัญ</span>
             <h2>สรุปท้ายเรื่อง</h2>
@@ -641,6 +660,10 @@ export function KnowledgeAbout() {
         description="แหล่งรวมเนื้อหา ม.4 ม.5 และ ม.6 พร้อมภาพประกอบและเครื่องมือทางเคมี"
       />
       <div className="knowledge-about">
+        <section className="about-creator" aria-labelledby="creator-name">
+          <div className="creator-monogram" aria-hidden="true">ปน</div>
+          <div><span className="journal-kicker">THE CREATOR / ผู้จัดทำ</span><h2 id="creator-name">{author.name}</h2><p>{author.role} · {author.school}</p><p className="creator-purpose">จัดทำ ChemLab RX เพื่อรวบรวมและอธิบายเนื้อหาเคมีให้เข้าถึงได้ง่าย ผ่านภาพประกอบ ตัวอย่าง วิธีจำ และการทดลองจำลอง</p></div>
+        </section>
         <p className="about-lead">
           รวบรวมเนื้อหาโดยจัดตามระดับชั้น รายวิชา และหัวข้อ
           <br />
@@ -660,8 +683,9 @@ export function KnowledgeAbout() {
             <span>02 / สื่อประกอบ</span>
             <h2>ภาพ สูตร และเครื่องมือ</h2>
             <p>
-              หัวข้อเนื้อหามีคำอธิบาย ภาพโครงสร้าง สูตรที่เกี่ยวข้อง
-              และเครื่องมือจำลองในหัวข้อที่รองรับ โดยระบุสมมติฐานและข้อจำกัด
+              แต่ละบทมีแก่นของเรื่อง ลำดับคิด ภาพสรุป และคำช่วยจำ
+              ส่วนสูตรแยกความหมายของตัวแปร หน่วย เงื่อนไข และตัวอย่างการใช้ให้ชัดเจน
+              เครื่องมือจำลองระบุสมมติฐานและข้อจำกัด
             </p>
           </section>
           <section>

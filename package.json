@@ -16,7 +16,8 @@
     "test:experiments": "node scripts/experiments.mjs",
     "groups:generate": "node scripts/generate-functional-groups.cjs",
     "test:design": "node scripts/library-design.mjs",
-    "test:atlases": "node scripts/atlases.mjs"
+    "test:atlases": "node scripts/atlases.mjs",
+    "test:recall": "node scripts/recall.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",
