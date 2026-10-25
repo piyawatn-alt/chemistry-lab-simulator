@@ -15,7 +15,8 @@
     "test:flame-test": "node scripts/flame-test.mjs",
     "test:experiments": "node scripts/experiments.mjs",
     "groups:generate": "node scripts/generate-functional-groups.cjs",
-    "test:design": "node scripts/library-design.mjs"
+    "test:design": "node scripts/library-design.mjs",
+    "test:atlases": "node scripts/atlases.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

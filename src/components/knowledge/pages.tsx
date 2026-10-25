@@ -27,6 +27,7 @@ import {
 } from "@/data/knowledge";
 import type { ReadingList } from "@/hooks/use-reading-list";
 import { ArticleCard } from "./article-card";
+import { ChapterAtlas } from "./atlases/chapter-atlas";
 import { LearningFigure } from "./learning-figure";
 import { contentFigures, supplementaryFigures } from "@/data/knowledge/figures";
 import { HighlightedText } from "./highlighted-text";
@@ -316,12 +317,13 @@ export function ArticleReader({
 }) {
   const [highlightsOn, setHighlightsOn] = useState(true);
   const saved = list.saved.includes(a.id);
-  const [activeSection, setActiveSection] = useState("section-0");
+  const [activeSection, setActiveSection] = useState("visual-reference");
   const [progress, setProgress] = useState(0);
   const bodyRef = useRef<HTMLElement>(null);
   const foundations = foundationsFor(a);
   const linkedTools = toolsForArticle(a);
   const sectionLinks = [
+    { id: "visual-reference", title: "แผ่นภาพสรุปประจำบท" },
     ...a.sections.map((section, i) => ({ id: `section-${i}`, title: section.title })),
     { id: "article-summary", title: "สรุปท้ายเรื่อง" },
     ...(linkedTools.length ? [{ id: "article-experiments", title: "ทดลองประกอบเรื่องนี้" }] : []),
@@ -337,7 +339,7 @@ export function ArticleReader({
       frame = 0;
       const activeOffset = window.matchMedia("(max-width: 760px)").matches ? 110 : 150;
       const current = sections.filter((section) => section.getBoundingClientRect().top <= activeOffset).at(-1);
-      setActiveSection(current?.id || "section-0");
+      setActiveSection(current?.id || "visual-reference");
       const top = body.getBoundingClientRect().top + window.scrollY;
       const available = body.offsetHeight - Math.min(window.innerHeight - 150, body.offsetHeight);
       setProgress(Math.round(Math.max(0, Math.min(1, (window.scrollY - top + 150) / Math.max(available, 1))) * 100));
@@ -384,6 +386,7 @@ export function ArticleReader({
             <BookOpen size={16} />
             อ่านประมาณ {readingMinutes(a)} นาที
           </span>
+          <a className="reader-atlas-jump" href="#visual-reference">ดูแผ่นภาพสรุป <ArrowRight size={14} /></a>
           <span>ทบทวนหลักเคมี <time dateTime="2026-10-23">23 ต.ค. 2569</time></span>
           <button
             disabled={!list.ready}
@@ -442,6 +445,7 @@ export function ArticleReader({
               <p>{a.takeaway}</p>
             )}
           </div>
+          <section id="visual-reference" className="reader-atlas-section"><ChapterAtlas articleId={a.id} /></section>
           {a.sections.map((s, i) => (
             <section id={`section-${i}`} key={s.title}>
               <h2>{s.title}</h2>

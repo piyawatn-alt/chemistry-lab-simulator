@@ -93,7 +93,7 @@ try {
     .locator(".learning-figure").first()
     .screenshot({ path: "/tmp/chemlab-dilution-figure.png" });
   const original = await page
-    .locator(".reader-body > section")
+    .locator(".reader-body > section[id^=section-]")
     .first()
     .locator(":scope > p")
     .innerText();
@@ -103,7 +103,7 @@ try {
   );
   assert.equal(
     await page
-      .locator(".reader-body > section")
+      .locator(".reader-body > section[id^=section-]")
       .first()
       .locator(":scope > p")
       .innerText(),

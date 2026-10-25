@@ -138,3 +138,13 @@ The reader provides a desktop active table of contents, a collapsible mobile dir
 Five additional explanatory diagrams cover periodic trends, mole conversion, equilibrium rates versus concentrations, the Zn–Cu salt bridge, and polymer crosslinks. The seven experiment cards now use labeled apparatus illustrations rather than abstract symbols. See the [current content inventory and remaining gaps](docs/content-coverage-2026-10-25.md); UI changes do not imply a new expert review of every external reference.
 
 With the app running, `CHROMIUM_PATH=/usr/bin/chromium npm run test:design` checks illustration controls, all subject links, unique accessible SVG IDs, five viewport widths, reduced motion and direct mobile entry points. Screenshots are written to `/tmp`.
+
+## Chapter visual reference sheets
+
+Every published article now includes an original chapter-specific infographic sheet near the beginning of the reader, linked from both tables of contents. The 24 sheets contain 108 panels: foundations28, reactions24, organic32, and materials/practice24. The functional-group sheet compares15 catalogued groups/structures plus an explicitly separate alkane reference. It does not claim every organic functional group is covered.
+
+Panels combine labeled SVG diagrams, normal chemical notation, examples, explanations and common pitfalls. The initial preview expands in place; a native modal opens the full sheet with keyboard focus handling and Escape-to-close. Text stays selectable and diagrams stay vector based. Source references remain at the end of each article. Existing primary illustrations, calculations, URLs and simulations remain available.
+
+The supplied comparison poster served as a format reference; its image is not redistributed. New drawings and wording are authored in the project. Existing locally generated aspirin/paracetamol structure SVGs are reused where the entire molecule matters. Naming notes explicitly distinguish an alkoxy prefix from a suffix, benzene from phenyl, and generic structural motifs from complete molecules.
+
+Run `CHROMIUM_PATH=/usr/bin/chromium npm run test:atlases` with the app running to inspect all24 sheets, expanded panel counts, diagram labels, modal closing/focus/scroll behavior and mobile/tablet layouts. The [visual-reference review](docs/visual-atlases-2026-10-25.md) records scientific scope and checks.
